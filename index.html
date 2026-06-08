@@ -305,6 +305,93 @@
     text-transform: uppercase;
   }
 
+  /* ── ADMIN SHORTCUTS ── */
+  .admin-shortcuts {
+    margin-bottom: 20px;
+    animation: fadeIn .25s ease;
+  }
+  .admin-shortcuts-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .admin-shortcuts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .admin-shortcut-tile {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s, background .15s;
+    border: 1.5px solid rgba(200,255,0,0.30);
+    background: rgba(200,255,0,0.07);
+    color: var(--c0);
+    box-shadow: 0 2px 12px rgba(200,255,0,0.10);
+    position: relative;
+    overflow: hidden;
+  }
+  .admin-shortcut-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(200,255,0,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .admin-shortcut-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(200,255,0,0.28);
+    background: rgba(200,255,0,0.12);
+    border-color: rgba(200,255,0,0.55);
+  }
+  .admin-shortcut-tile:active { transform: translateY(0); }
+  .admin-shortcut-tile .tile-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+  .admin-shortcut-tile .tile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .admin-shortcut-tile .tile-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .admin-shortcut-tile .tile-desc {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(200,255,0,0.55);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .admin-shortcut-tile .tile-arrow {
+    margin-left: 4px;
+    font-size: 16px;
+    opacity: 0.6;
+    transition: transform .15s, opacity .15s;
+  }
+  .admin-shortcut-tile:hover .tile-arrow {
+    transform: translateX(3px);
+    opacity: 1;
+  }
+
   /* ── GRID — 3 kolumny jak w szablonie ── */
   .grid {
     display: grid;
@@ -351,7 +438,6 @@
   }
   .card-head-text { flex: 1; }
 
-  /* Duży label dnia — identyczny jak w szablonie (.day-label) */
   .day-label {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 35px;
@@ -361,7 +447,6 @@
     text-shadow: 0 0 15px color-mix(in srgb, var(--accent) 50%, transparent);
   }
 
-  /* Podtytuł — grupy + godzina */
   .day-sub {
     font-family: 'Rajdhani', sans-serif;
     font-size: 17px;
@@ -372,7 +457,6 @@
     text-transform: uppercase;
   }
 
-  /* Poziom zaawansowania — mały badge pod spodem */
   .level-badge {
     display: inline-block;
     margin-top: 6px;
@@ -651,6 +735,18 @@
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkHLvjtq2LegCNM4yETGkzf7rzB6c80Pci5KnYWLFcTFF7qZRJF0tUIDew01oEgnNY/exec";
   const CUTOFF_HOUR = 21;
 
+  // ══ SKRÓTY ADMINA — uzupełnij link i opis ══
+  const ADMIN_SHORTCUTS = [
+    {
+      icon:  "⚙️",
+      title: "Panel zarządzania",
+      desc:  "Arkusz Google / Admin",
+      url:   "https://script.google.com/macros/s/AKfycbx6KT5-zY2QfdN472kR7oHMMtPCxWUUuOVUvymdHy1PFowzEfO5ee3zx5C7eXLilr75VQ/exec?liga=odlewnicza",   // <-- wstaw swój link
+    },
+    // Możesz dodać więcej kafelków, np.:
+    // { icon: "📊", title: "Statystyki", desc: "Google Sheets", url: "https://..." },
+  ];
+
   const today = new Date();
   const todayDateStr = today.toLocaleDateString("pl-PL", {
     day: "2-digit",
@@ -680,6 +776,7 @@
   <div class="top-bar" id="topBar"></div>
   <div id="loginBox"></div>
   <div id="adminBar"></div>
+  <div id="adminShortcuts"></div>
   <div class="grid" id="grid"></div>
 
   <footer>Administratorem danych jest Karol Kreczmański. Dane (imię i nazwisko) są zbierane w celu organizacji ligi i będą publicznie widoczne na liście uczestników. Uczestnik może żądać ich usunięcia. <br> Made by Karol Kreczmański</footer>
@@ -692,7 +789,7 @@
 const SECTIONS = [
   {
     key:    "sun_ab",
-    label:  "Niedziela · 20:00",         // duży napis w card-head (jak "Poniedziałek" w szablonie)
+    label:  "Niedziela · 20:00",
     sub:    "Grupy A / B",
     level:  "Zaawansowani",
     color:  "#c8ff00",
@@ -818,7 +915,7 @@ async function toggleLocked(key) {
 
 // ── Render ─────────────────────────────────────────────────────
 function render() {
-  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid(); renderTodayDate();
+  renderTopBar(); renderLoginBox(); renderAdminBar(); renderAdminShortcuts(); renderGrid(); renderTodayDate();
 }
 
 function renderTodayDate() {
@@ -866,6 +963,43 @@ function renderAdminBar() {
     : "";
 }
 
+// ── Kafelki skrótów admina ──────────────────────────────────────
+function renderAdminShortcuts() {
+  const el = document.getElementById("adminShortcuts");
+  if (!state.adminMode || !ADMIN_SHORTCUTS.length) { el.innerHTML = ""; return; }
+
+  const wrap = document.createElement("div");
+  wrap.className = "admin-shortcuts";
+
+  const lbl = document.createElement("div");
+  lbl.className = "admin-shortcuts-label";
+  lbl.textContent = "Skróty";
+  wrap.appendChild(lbl);
+
+  const grid = document.createElement("div");
+  grid.className = "admin-shortcuts-grid";
+
+  for (const s of ADMIN_SHORTCUTS) {
+    const a = document.createElement("a");
+    a.className = "admin-shortcut-tile";
+    a.href      = s.url;
+    a.target    = "_blank";
+    a.rel       = "noopener noreferrer";
+    a.innerHTML = `
+      <span class="tile-icon">${s.icon}</span>
+      <span class="tile-text">
+        <span class="tile-title">${esc(s.title)}</span>
+        <span class="tile-desc">${esc(s.desc)}</span>
+      </span>
+      <span class="tile-arrow">→</span>`;
+    grid.appendChild(a);
+  }
+
+  wrap.appendChild(grid);
+  el.innerHTML = "";
+  el.appendChild(wrap);
+}
+
 function renderGrid() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
@@ -874,7 +1008,7 @@ function renderGrid() {
   }
 }
 
-// ── mkCard — identyczna struktura jak w szablonie WPC ──────────
+// ── mkCard ──────────────────────────────────────────────────────
 function mkCard(sec) {
   const players  = state.lists[sec.key] || [];
   const loading  = state.loading[sec.key];
@@ -885,30 +1019,25 @@ function mkCard(sec) {
   card.className = "card";
   card.style.setProperty("--accent", sec.color);
 
-  // ── Head ──
   const headDiv = document.createElement("div");
   headDiv.className = "card-head";
 
   const textDiv = document.createElement("div");
   textDiv.className = "card-head-text";
 
-  // Duży napis dnia (jak "Poniedziałek" / "Wtorek" w szablonie)
   const dayEl = document.createElement("div");
   dayEl.className = "day-label";
   dayEl.textContent = sec.label;
 
-  // Grupy + godzina pod spodem
   const subEl = document.createElement("div");
   subEl.className = "day-sub";
   subEl.textContent = sec.sub;
 
-  // Badge poziomu
   const badge = document.createElement("span");
   badge.className = "level-badge";
   badge.textContent = sec.level;
   badge.style.cssText = `background:${sec.color}20;color:${sec.color};border:1px solid ${sec.color}50;`;
 
-  // Data (jak w szablonie)
   const dateEl = document.createElement("div");
   dateEl.className = "date-label";
   dateEl.textContent = formatPL(state.date);
@@ -928,7 +1057,6 @@ function mkCard(sec) {
   }
   card.appendChild(headDiv);
 
-  // ── Player list ──
   const list = document.createElement("div");
   list.className = "player-list";
 
@@ -996,7 +1124,6 @@ function mkCard(sec) {
   }
   card.appendChild(list);
 
-  // ── Input row ──
   const inputRow = document.createElement("div");
   inputRow.className = "input-row" + (isClosed ? " closed" : "");
   const inp = document.createElement("input");
@@ -1014,7 +1141,6 @@ function mkCard(sec) {
   inputRow.appendChild(inp); inputRow.appendChild(addB);
   card.appendChild(inputRow);
 
-  // ── Błąd ──
   const err = state.errors[sec.key];
   if (err) {
     const errDiv = document.createElement("div");
