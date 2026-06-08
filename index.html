@@ -1001,7 +1001,7 @@ function mkCard(sec) {
   inputRow.className = "input-row" + (isClosed ? " closed" : "");
   const inp = document.createElement("input");
   inp.className   = "field"; inp.type = "text";
-  inp.placeholder = isClosed ? "Zapisy zamknięte" : "Imię i nazwisko…";
+  inp.placeholder = isClosed ? "Zapisy zamknięte" : "Nazwisko i Imię";
   inp.value       = state.inputs[sec.key] || "";
   inp.disabled    = isClosed;
   inp.addEventListener("input",   e => state.inputs[sec.key] = e.target.value);
