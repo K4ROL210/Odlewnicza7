@@ -94,7 +94,6 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
-
   .nav-inner {
     max-width: 1200px;
     margin: 0 auto;
@@ -106,7 +105,6 @@
     padding: 0 16px;
   }
   .nav-inner::-webkit-scrollbar { display: none; }
-
   .nav-logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
@@ -119,7 +117,6 @@
     flex-shrink: 0;
     text-shadow: 0 0 20px rgba(200,255,0,0.4);
   }
-
   .nav-link {
     display: flex;
     align-items: center;
@@ -196,7 +193,6 @@
     flex-wrap: wrap;
     margin-top: 16px;
   }
-
   .contact-btn {
     display: inline-flex;
     align-items: center;
@@ -214,14 +210,12 @@
   }
   .contact-btn:hover { transform: translateY(-2px); }
   .contact-btn:active { transform: translateY(0); }
-
   .contact-btn-fb {
     background: var(--c0);
     color: #0a0f08;
     box-shadow: 0 4px 20px rgba(200,255,0,0.3);
   }
   .contact-btn-fb:hover { box-shadow: 0 6px 30px rgba(200,255,0,0.5); }
-
   .contact-btn-sms {
     background: transparent;
     color: var(--c2);
@@ -256,7 +250,6 @@
     border: none;
   }
   .btn:hover { transform: translateY(-1px); }
-
   .btn-dark {
     background: var(--glass);
     color: var(--text);
@@ -264,14 +257,12 @@
     backdrop-filter: blur(8px);
   }
   .btn-dark:hover { border-color: var(--border-hi); background: rgba(255,255,255,0.09); }
-
   .btn-yellow {
     background: var(--c0);
     color: #0a0f08;
     box-shadow: 0 4px 16px rgba(200,255,0,0.3);
   }
   .btn-yellow:hover { box-shadow: 0 6px 24px rgba(200,255,0,0.5); }
-
   .btn-red {
     background: rgba(255,77,77,0.1);
     color: var(--red);
@@ -314,56 +305,14 @@
     text-transform: uppercase;
   }
 
-  /* ── LEVEL SECTION ── */
-  .level-section {
-    margin-bottom: 28px;
-  }
-
-  .level-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
-    padding: 14px 18px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.025);
-    backdrop-filter: blur(8px);
-  }
-
-  .level-badge {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    padding: 4px 12px;
-    border-radius: 100px;
-    flex-shrink: 0;
-  }
-
-  .level-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 1px;
-    line-height: 1;
-  }
-
-  .level-time {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--muted);
-    margin-left: auto;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  /* ── GRID ── */
+  /* ── GRID — 3 kolumny jak w szablonie ── */
   .grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
   }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
 
   /* ── CARD ── */
   .card {
@@ -378,7 +327,6 @@
     transition: border-color .2s, box-shadow .2s;
     position: relative;
   }
-
   .card::before {
     content: '';
     position: absolute;
@@ -387,7 +335,6 @@
     background: var(--accent);
     opacity: 0.7;
   }
-
   .card:hover {
     border-color: rgba(255,255,255,0.18);
     box-shadow: 0 8px 40px rgba(0,0,0,0.4);
@@ -402,34 +349,48 @@
     justify-content: space-between;
     align-items: flex-start;
   }
-
   .card-head-text { flex: 1; }
 
-  .group-label {
+  /* Duży label dnia — identyczny jak w szablonie (.day-label) */
+  .day-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
+    font-size: 35px;
     color: var(--accent);
     letter-spacing: 1px;
-    line-height: 1.0;
+    line-height: 1.1;
     text-shadow: 0 0 15px color-mix(in srgb, var(--accent) 50%, transparent);
   }
 
-  .group-sublabel {
+  /* Podtytuł — grupy + godzina */
+  .day-sub {
     font-family: 'Rajdhani', sans-serif;
     font-size: 13px;
     font-weight: 700;
     color: var(--muted);
-    margin-top: 2px;
+    margin-top: 3px;
     letter-spacing: 1px;
     text-transform: uppercase;
   }
 
+  /* Poziom zaawansowania — mały badge pod spodem */
+  .level-badge {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 100px;
+  }
+
   .date-label {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
+    font-size: 35px;
     font-weight: 600;
     color: var(--muted);
-    margin-top: 4px;
+    margin-top: 2px;
     letter-spacing: 0.3px;
   }
 
@@ -447,7 +408,6 @@
 
   /* ── PLAYER LIST ── */
   .player-list { flex: 1; min-height: 60px; }
-
   .player-row {
     display: flex;
     align-items: center;
@@ -473,7 +433,6 @@
     text-align: right;
     opacity: 0.6;
   }
-
   .pname {
     flex: 1;
     font-size: 16px;
@@ -503,7 +462,6 @@
     font-weight: 700;
   }
   .icon-btn:hover { opacity: .75; transform: scale(1.1); }
-
   .icon-edit { color: var(--c0);  border: 1px solid rgba(200,255,0,0.4); }
   .icon-del  { color: var(--red); border: 1px solid rgba(255,77,77,0.4); }
   .icon-ok   { color: var(--c1);  border: 1px solid rgba(0,229,255,0.4); }
@@ -556,7 +514,7 @@
     align-items: center;
     justify-content: center;
   }
-  .add-btn:hover   { box-shadow: 0 4px 20px rgba(200,255,0,0.45); transform: translateY(-1px); }
+  .add-btn:hover    { box-shadow: 0 4px 20px rgba(200,255,0,0.45); transform: translateY(-1px); }
   .add-btn:disabled { opacity: .35; cursor: default; transform: none; box-shadow: none; }
 
   /* ── FOOTER ── */
@@ -573,8 +531,7 @@
   /* ── SPINNER ── */
   .spinner {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 14px; height: 14px;
     border: 2px solid rgba(10,15,8,0.3);
     border-top-color: #0a0f08;
     border-radius: 50%;
@@ -605,6 +562,7 @@
     box-shadow: 0 0 14px rgba(0,229,255,0.25);
   }
 
+  /* ── MODAL ── */
   .modal-overlay {
     position: fixed; inset: 0; z-index: 999;
     background: rgba(0,0,0,0.7);
@@ -690,12 +648,8 @@
 
 <!-- ═══ KONFIGURACJA ════════════════════════════════════════════ -->
 <script>
-  // ╔══════════════════════════════════════════════════════════╗
-  // ║  ZMIEŃ TEN URL po wdrożeniu nowego Apps Script           ║
-  // ╚══════════════════════════════════════════════════════════╝
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkHLvjtq2LegCNM4yETGkzf7rzB6c80Pci5KnYWLFcTFF7qZRJF0tUIDew01oEgnNY/exec";
-
-  const CUTOFF_HOUR = 21; // po tej godzinie zapisy przeskakują na kolejną niedzielę
+  const CUTOFF_HOUR = 21;
 
   const today = new Date();
   const todayDateStr = today.toLocaleDateString("pl-PL", {
@@ -715,7 +669,7 @@
           @ &nbsp;Napisz do nas
         </a>
         <a href="tel:888222811" class="contact-btn contact-btn-sms">
-         📞 &nbsp;888 222 811
+          📞 &nbsp;888 222 811
         </a>
       </div>
       <br>
@@ -726,56 +680,45 @@
   <div class="top-bar" id="topBar"></div>
   <div id="loginBox"></div>
   <div id="adminBar"></div>
-  <div id="sections"></div>
+  <div class="grid" id="grid"></div>
 
   <footer>Administratorem danych jest Karol Kreczmański. Dane (imię i nazwisko) są zbierane w celu organizacji ligi i będą publicznie widoczne na liście uczestników. Uczestnik może żądać ich usunięcia. <br> Made by Karol Kreczmański</footer>
 </div>
 
 <script>
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  GRUPY — definicja sekcji                                    ║
-// ║  key      → unikalny klucz (trafi do nazwy zakładki Sheets)  ║
-// ║  label    → nagłówek sekcji                                  ║
-// ║  time     → godzina wyświetlana informacyjnie                ║
-// ║  groups   → grupy w tej sekcji (np. "A i B")                 ║
-// ║  level    → opis poziomu (badge)                             ║
-// ║  color    → kolor akcentu karty                              ║
-// ╚══════════════════════════════════════════════════════════════╝
+// ══════════════════════════════════════════════════════════════
+//  SEKCJE — każda to jedna karta w gridzie
+// ══════════════════════════════════════════════════════════════
 const SECTIONS = [
   {
     key:    "sun_ab",
-    label:  "Grupy A i B",
-    time:   "20:00",
-    groups: "A / B",
+    label:  "Niedziela",         // duży napis w card-head (jak "Poniedziałek" w szablonie)
+    sub:    "Grupy A / B · 20:00",
     level:  "Zaawansowani",
-    color:  "#c8ff00",   // żółto-zielony
+    color:  "#c8ff00",
   },
   {
     key:    "sun_cd",
-    label:  "Grupy C i D",
-    time:   "17:30",
-    groups: "C / D",
+    label:  "Niedziela",
+    sub:    "Grupy C / D · 17:30",
     level:  "Średniozaawansowani",
-    color:  "#00e5ff",   // cyan
+    color:  "#00e5ff",
   },
   {
     key:    "sun_ef",
-    label:  "Grupy E i F",
-    time:   "15:00",
-    groups: "E / F",
+    label:  "Niedziela",
+    sub:    "Grupy E / F · 15:00",
     level:  "Początkujący",
-    color:  "#b06aff",   // fioletowy
+    color:  "#b06aff",
   },
 ];
 
-// Stała niedziela (dow=0)
-const SUNDAY_DOW = 0;
-
+const SUNDAY_DOW    = 0;
 const REZERWA_MARKER = "REZERWA";
 
 function getNextSunday() {
   const now   = new Date();
-  const today = now.getDay(); // 0=niedziela
+  const today = now.getDay();
   const hour  = parseInt(new Date().toLocaleString("pl-PL", {
     hour: "2-digit", hour12: false, timeZone: "Europe/Warsaw"
   }));
@@ -788,33 +731,29 @@ function getNextSunday() {
 }
 
 function dateKey(d) {
-  const day   = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year  = d.getFullYear();
-  return `${year}-${month}-${day}`;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
 function formatPL(d) {
-  return d.toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric" });
+  return d.toLocaleDateString("pl-PL", { day:"2-digit", month:"2-digit", year:"numeric" });
 }
 
-// ── State ──────────────────────────────────────────────────────
 const nextSunday = getNextSunday();
 
 let state = {
-  date:       nextSunday,
-  lists:      {},   // key → string[]
-  loading:    {},   // key → bool
-  inputs:     {},   // key → string
-  saving:     {},   // key → bool
-  editing:    null, // { key, idx }
-  editVal:    "",
-  errors:     {},   // key → string|null
-  locked:     {},   // key → bool
-  adminMode:  false,
-  showLogin:  false,
-  passInput:  "",
-  passErr:    false,
+  date:          nextSunday,
+  lists:         {},
+  loading:       {},
+  inputs:        {},
+  saving:        {},
+  editing:       null,
+  editVal:       "",
+  errors:        {},
+  locked:        {},
+  adminMode:     false,
+  showLogin:     false,
+  passInput:     "",
+  passErr:       false,
   adminPassword: "",
 };
 
@@ -824,38 +763,28 @@ function api(params) {
     const cbName = "jsonp_" + Math.random().toString(36).slice(2);
     let script;
     const timeout = setTimeout(() => {
-      delete window[cbName];
-      if (script) script.remove();
+      delete window[cbName]; if (script) script.remove();
       reject(new Error("timeout"));
     }, 10000);
     window[cbName] = (data) => {
-      clearTimeout(timeout);
-      delete window[cbName];
-      if (script) script.remove();
+      clearTimeout(timeout); delete window[cbName]; if (script) script.remove();
       resolve(data);
     };
     script = document.createElement("script");
     const p = { ...params, callback: cbName };
     script.src = APPS_SCRIPT_URL + "?" + new URLSearchParams(p).toString();
-    script.onerror = () => {
-      clearTimeout(timeout);
-      delete window[cbName];
-      reject(new Error("script error"));
-    };
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; reject(new Error("script error")); };
     document.head.appendChild(script);
   });
 }
 
-// ── Load / add / remove / edit / lock ─────────────────────────
+// ── Akcje ──────────────────────────────────────────────────────
 async function loadSection(sec) {
   state.loading[sec.key] = true; render();
   try {
-    const res = await api({ action:"list", dayKey: sec.key, dateStr: dateKey(state.date) });
-    if (res.ok) {
-      state.lists[sec.key]  = res.players;
-      state.locked[sec.key] = res.locked;
-    }
-  } catch(e) { /* ignoruj timeout */ }
+    const res = await api({ action:"list", dayKey:sec.key, dateStr:dateKey(state.date) });
+    if (res.ok) { state.lists[sec.key] = res.players; state.locked[sec.key] = res.locked; }
+  } catch(e) {}
   state.loading[sec.key] = false; render();
 }
 
@@ -863,45 +792,33 @@ async function addPlayer(key) {
   if (state.locked[key]) return;
   const name = (state.inputs[key] || "").trim();
   if (!name) return;
-  state.saving[key] = true;
-  state.errors[key] = null;
-  render();
-  const res = await api({ action:"add", dayKey: key, dateStr: dateKey(state.date), name });
-  if (res.ok) {
-    state.lists[key]  = res.players;
-    state.inputs[key] = "";
-    state.errors[key] = null;
-  } else {
-    state.errors[key] = res.error;
-  }
-  state.saving[key] = false;
-  render();
+  state.saving[key] = true; state.errors[key] = null; render();
+  const res = await api({ action:"add", dayKey:key, dateStr:dateKey(state.date), name });
+  if (res.ok) { state.lists[key] = res.players; state.inputs[key] = ""; state.errors[key] = null; }
+  else { state.errors[key] = res.error; }
+  state.saving[key] = false; render();
 }
 
 async function removePlayer(key, idx) {
-  const res = await api({ action:"remove", dayKey: key, dateStr: dateKey(state.date), idx, password: state.adminPassword });
+  const res = await api({ action:"remove", dayKey:key, dateStr:dateKey(state.date), idx, password:state.adminPassword });
   if (res.ok) { state.lists[key] = res.players; render(); }
 }
 
 async function saveEdit(key) {
   if (!state.editing) return;
-  const res = await api({ action:"edit", dayKey: key, dateStr: dateKey(state.date), idx: state.editing.idx, newName: state.editVal, password: state.adminPassword });
+  const res = await api({ action:"edit", dayKey:key, dateStr:dateKey(state.date), idx:state.editing.idx, newName:state.editVal, password:state.adminPassword });
   if (res.ok) { state.lists[key] = res.players; state.editing = null; render(); }
 }
 
 async function toggleLocked(key) {
   const action = state.locked[key] ? "unlock" : "lock";
-  const res    = await api({ action, dayKey: key, dateStr: dateKey(state.date), password: state.adminPassword });
+  const res    = await api({ action, dayKey:key, dateStr:dateKey(state.date), password:state.adminPassword });
   if (res.ok) { state.locked[key] = res.locked; render(); }
 }
 
 // ── Render ─────────────────────────────────────────────────────
 function render() {
-  renderTopBar();
-  renderLoginBox();
-  renderAdminBar();
-  renderSections();
-  renderTodayDate();
+  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid(); renderTodayDate();
 }
 
 function renderTodayDate() {
@@ -915,30 +832,30 @@ function renderTopBar() {
   const el = document.getElementById("topBar");
   el.innerHTML = "";
   if (state.adminMode) {
-    el.appendChild(mkBtn("Wyłącz admina", "btn btn-red", () => { state.adminMode = false; render(); }));
+    el.appendChild(mkBtn("Wyłącz admina","btn btn-red", () => { state.adminMode=false; render(); }));
   } else {
-    el.appendChild(mkBtn("🔐 Admin", "btn btn-dark", () => { state.showLogin = !state.showLogin; render(); }));
+    el.appendChild(mkBtn("🔐 Admin","btn btn-dark", () => { state.showLogin=!state.showLogin; render(); }));
   }
 }
 
 function renderLoginBox() {
   const el = document.getElementById("loginBox");
-  if (!state.showLogin || state.adminMode) { el.innerHTML = ""; return; }
+  if (!state.showLogin || state.adminMode) { el.innerHTML=""; return; }
   el.innerHTML = `
     <div class="login-box">
       <p>Hasło administratora:</p>
       <div class="login-row">
-        <input class="field${state.passErr ? " err" : ""}" id="passInp" type="password" placeholder="Wpisz hasło…" value="${esc(state.passInput)}" />
+        <input class="field${state.passErr?" err":""}" id="passInp" type="password" placeholder="Wpisz hasło…" value="${esc(state.passInput)}" />
         <button class="btn btn-yellow" id="passOk">OK</button>
         <button class="btn btn-dark"   id="passX">✕</button>
       </div>
       ${state.passErr ? '<p class="err-msg">Błędne hasło</p>' : ""}
     </div>`;
   const inp = el.querySelector("#passInp");
-  inp.addEventListener("input",   e => { state.passInput = e.target.value; state.passErr = false; });
-  inp.addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+  inp.addEventListener("input",   e => { state.passInput=e.target.value; state.passErr=false; });
+  inp.addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
   el.querySelector("#passOk").addEventListener("click", tryLogin);
-  el.querySelector("#passX").addEventListener("click", () => { state.showLogin = false; state.passInput = ""; state.passErr = false; render(); });
+  el.querySelector("#passX").addEventListener("click",  () => { state.showLogin=false; state.passInput=""; state.passErr=false; render(); });
   inp.focus();
 }
 
@@ -949,59 +866,15 @@ function renderAdminBar() {
     : "";
 }
 
-function renderSections() {
-  const wrap = document.getElementById("sections");
-  wrap.innerHTML = "";
+function renderGrid() {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
   for (const sec of SECTIONS) {
-    wrap.appendChild(mkSection(sec));
+    grid.appendChild(mkCard(sec));
   }
 }
 
-function mkSection(sec) {
-  const section = document.createElement("div");
-  section.className = "level-section";
-
-  // Nagłówek sekcji
-  const header = document.createElement("div");
-  header.className = "level-header";
-  header.style.borderColor = sec.color + "33";
-  header.style.background  = `linear-gradient(135deg, ${sec.color}0a 0%, transparent 70%)`;
-
-  const badge = document.createElement("span");
-  badge.className = "level-badge";
-  badge.textContent = sec.groups;
-  badge.style.background = sec.color + "22";
-  badge.style.color      = sec.color;
-  badge.style.border     = `1px solid ${sec.color}55`;
-
-  const title = document.createElement("span");
-  title.className = "level-title";
-  title.textContent = sec.label;
-  title.style.color = sec.color;
-
-  const time = document.createElement("span");
-  time.className = "level-time";
-  time.textContent = "🕐 " + sec.time;
-
-  const levelSpan = document.createElement("span");
-  levelSpan.style.cssText = `font-size:12px;font-weight:700;color:${sec.color};opacity:.6;letter-spacing:1px;text-transform:uppercase;margin-left:8px;`;
-  levelSpan.textContent = sec.level;
-
-  header.appendChild(badge);
-  header.appendChild(title);
-  header.appendChild(levelSpan);
-  header.appendChild(time);
-  section.appendChild(header);
-
-  // Karta z listą graczy
-  const grid = document.createElement("div");
-  grid.className = "grid";
-  grid.appendChild(mkCard(sec));
-  section.appendChild(grid);
-
-  return section;
-}
-
+// ── mkCard — identyczna struktura jak w szablonie WPC ──────────
 function mkCard(sec) {
   const players  = state.lists[sec.key] || [];
   const loading  = state.loading[sec.key];
@@ -1012,20 +885,43 @@ function mkCard(sec) {
   card.className = "card";
   card.style.setProperty("--accent", sec.color);
 
-  // ── Card head ──
+  // ── Head ──
   const headDiv = document.createElement("div");
   headDiv.className = "card-head";
+
   const textDiv = document.createElement("div");
   textDiv.className = "card-head-text";
-  textDiv.innerHTML = `
-    <div class="group-label">Niedziela</div>
-    <div class="group-sublabel">Grupy ${sec.groups} &middot; ${sec.time}</div>
-    <div class="date-label">${formatPL(state.date)}</div>`;
+
+  // Duży napis dnia (jak "Poniedziałek" / "Wtorek" w szablonie)
+  const dayEl = document.createElement("div");
+  dayEl.className = "day-label";
+  dayEl.textContent = sec.label;
+
+  // Grupy + godzina pod spodem
+  const subEl = document.createElement("div");
+  subEl.className = "day-sub";
+  subEl.textContent = sec.sub;
+
+  // Badge poziomu
+  const badge = document.createElement("span");
+  badge.className = "level-badge";
+  badge.textContent = sec.level;
+  badge.style.cssText = `background:${sec.color}20;color:${sec.color};border:1px solid ${sec.color}50;`;
+
+  // Data (jak w szablonie)
+  const dateEl = document.createElement("div");
+  dateEl.className = "date-label";
+  dateEl.textContent = formatPL(state.date);
+
+  textDiv.appendChild(dayEl);
+  textDiv.appendChild(subEl);
+  textDiv.appendChild(badge);
+  textDiv.appendChild(dateEl);
   headDiv.appendChild(textDiv);
 
   if (state.adminMode) {
     const lockBtn = document.createElement("button");
-    lockBtn.className = "lock-btn";
+    lockBtn.className   = "lock-btn";
     lockBtn.textContent = isClosed ? "🔒" : "🔓";
     lockBtn.addEventListener("click", () => toggleLocked(sec.key));
     headDiv.appendChild(lockBtn);
@@ -1049,7 +945,7 @@ function mkCard(sec) {
         sep.className = "rezerwa-separator";
         sep.textContent = "▼  REZERWA  ▼";
         if (state.adminMode) {
-          const btnDel = mkIconBtn("✕", "icon-btn icon-del", () => removePlayer(sec.key, i));
+          const btnDel = mkIconBtn("✕","icon-btn icon-del", () => removePlayer(sec.key, i));
           btnDel.style.marginLeft = "4px";
           sep.appendChild(btnDel);
         }
@@ -1072,12 +968,12 @@ function mkCard(sec) {
         inp.className = "field"; inp.value = state.editVal; inp.style.flex = "1";
         inp.addEventListener("input",   e => state.editVal = e.target.value);
         inp.addEventListener("keydown", e => {
-          if (e.key === "Enter")  saveEdit(sec.key);
-          if (e.key === "Escape") { state.editing = null; render(); }
+          if (e.key==="Enter")  saveEdit(sec.key);
+          if (e.key==="Escape") { state.editing=null; render(); }
         });
         row.appendChild(inp);
         setTimeout(() => inp.focus(), 0);
-        row.appendChild(mkIconBtn("✓", "icon-btn icon-ok", () => saveEdit(sec.key)));
+        row.appendChild(mkIconBtn("✓","icon-btn icon-ok", () => saveEdit(sec.key)));
       } else {
         const span = document.createElement("span");
         span.className   = "pname";
@@ -1087,12 +983,11 @@ function mkCard(sec) {
         if (state.adminMode) {
           const wrap = document.createElement("div");
           wrap.style.display = "flex"; wrap.style.gap = "4px";
-          wrap.appendChild(mkIconBtn("✎", "icon-btn icon-edit", () => {
+          wrap.appendChild(mkIconBtn("✎","icon-btn icon-edit", () => {
             state.editing = { key: sec.key, idx: i };
-            state.editVal = name;
-            render();
+            state.editVal = name; render();
           }));
-          wrap.appendChild(mkIconBtn("✕", "icon-btn icon-del", () => removePlayer(sec.key, i)));
+          wrap.appendChild(mkIconBtn("✕","icon-btn icon-del", () => removePlayer(sec.key, i)));
           row.appendChild(wrap);
         }
       }
@@ -1110,7 +1005,7 @@ function mkCard(sec) {
   inp.value       = state.inputs[sec.key] || "";
   inp.disabled    = isClosed;
   inp.addEventListener("input",   e => state.inputs[sec.key] = e.target.value);
-  inp.addEventListener("keydown", e => { if (e.key === "Enter" && !isClosed) addPlayer(sec.key); });
+  inp.addEventListener("keydown", e => { if(e.key==="Enter" && !isClosed) addPlayer(sec.key); });
   const addB = document.createElement("button");
   addB.className = "add-btn"; addB.style.background = sec.color;
   addB.disabled  = !!saving || isClosed;
@@ -1119,7 +1014,7 @@ function mkCard(sec) {
   inputRow.appendChild(inp); inputRow.appendChild(addB);
   card.appendChild(inputRow);
 
-  // Komunikat błędu
+  // ── Błąd ──
   const err = state.errors[sec.key];
   if (err) {
     const errDiv = document.createElement("div");
@@ -1128,7 +1023,7 @@ function mkCard(sec) {
       errDiv.innerHTML = `⚠️ Nie znaleziono Cię na liście graczy!<br>
         Pierwszy raz na lidze?
         <a href="mailto:kontakt@odlewnicza7.pl">Napisz do nas ✉️</a>
-        lub zadzwoń <a href="tel:+48511915628">511 915 628</a>`;
+        lub zadzwoń <a href="tel:888222811">888 222 811</a>`;
     } else {
       errDiv.textContent = "⚠️ " + err;
     }
@@ -1142,36 +1037,29 @@ function mkCard(sec) {
   return card;
 }
 
-// ── Helpers ────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────────
 function mkBtn(label, cls, onClick) {
   const b = document.createElement("button");
   b.className = cls; b.textContent = label;
-  b.addEventListener("click", onClick);
-  return b;
+  b.addEventListener("click", onClick); return b;
 }
 function mkIconBtn(label, cls, onClick) {
   const b = document.createElement("button");
   b.className = cls; b.textContent = label;
-  b.addEventListener("click", onClick);
-  return b;
+  b.addEventListener("click", onClick); return b;
 }
 function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;"); }
 
 async function tryLogin() {
-  const res = await api({ action: "checkPassword", password: state.passInput });
+  const res = await api({ action:"checkPassword", password:state.passInput });
   if (res.ok) {
-    state.adminMode     = true;
-    state.adminPassword = state.passInput;
-    state.showLogin     = false;
-    state.passInput     = "";
-    state.passErr       = false;
-  } else {
-    state.passErr = true;
-  }
+    state.adminMode=true; state.adminPassword=state.passInput;
+    state.showLogin=false; state.passInput=""; state.passErr=false;
+  } else { state.passErr=true; }
   render();
 }
 
-// ── Init ───────────────────────────────────────────────────────
+// ── Init ─────────────────────────────────────────────────────────
 render();
 Promise.all(SECTIONS.map(loadSection));
 </script>
@@ -1213,7 +1101,7 @@ Promise.all(SECTIONS.map(loadSection));
 <script>
   function openModal()  { document.getElementById("infoModal").style.display = "flex"; }
   function closeModal() { document.getElementById("infoModal").style.display = "none"; }
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+  document.addEventListener("keydown", e => { if(e.key==="Escape") closeModal(); });
 </script>
 
 </body>
