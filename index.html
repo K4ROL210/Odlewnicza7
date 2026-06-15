@@ -723,7 +723,7 @@
 <!-- ═══ NAV ════════════════════════════════════════════════════ -->
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-logo">🎾 Odlewnicza</div>
+    <div class="nav-logo" id="navLogo" style="cursor:default;touch-action:manipulation;">🎾 Odlewnicza</div>
     <a class="nav-link active" href="index.html">📋 Zapisy</a>
     <a class="nav-link"        href="wyniki.html">🏆 Wyniki</a>
     <a class="nav-link"        href="ranking.html">📊 Ranking</a>
@@ -735,19 +735,7 @@
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkHLvjtq2LegCNM4yETGkzf7rzB6c80Pci5KnYWLFcTFF7qZRJF0tUIDew01oEgnNY/exec";
   const CUTOFF_HOUR = 21;
 
-  // ══ SKRÓTY ADMINA — uzupełnij link i opis ══
-  const ADMIN_SHORTCUTS = [
-    {
-      icon:  "⚙️",
-      title: "Panel zarządzania",
-      desc:  "Arkusz Google / Admin",
-      url:   "https://script.google.com/macros/s/AKfycbwCGx8QaRz0gAs0ps4gj-d_6vwyxMplll_P4r0yzgf8TWPf-NxeErOnMGg8aIX3qRf67A/exec?liga=odlewnicza",   // <-- wstaw swój link
-    },
-    // Możesz dodać więcej kafelków, np.:
-    // { icon: "📊", title: "Statystyki", desc: "Google Sheets", url: "https://..." },
-  ];
-
-  const today = new Date();
+ const today = new Date();
   const todayDateStr = today.toLocaleDateString("pl-PL", {
     day: "2-digit",
     month: "2-digit",
@@ -776,7 +764,6 @@
   <div class="top-bar" id="topBar"></div>
   <div id="loginBox"></div>
   <div id="adminBar"></div>
-  <div id="adminShortcuts"></div>
   <div class="grid" id="grid"></div>
 
   <footer>Administratorem danych jest Karol Kreczmański. Dane (imię i nazwisko) są zbierane w celu organizacji ligi i będą publicznie widoczne na liście uczestników. Uczestnik może żądać ich usunięcia. <br> Made by Karol Kreczmański</footer>
@@ -915,7 +902,7 @@ async function toggleLocked(key) {
 
 // ── Render ─────────────────────────────────────────────────────
 function render() {
-  renderTopBar(); renderLoginBox(); renderAdminBar(); renderAdminShortcuts(); renderGrid(); renderTodayDate();
+  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid(); renderTodayDate();
 }
 
 function renderTodayDate() {
@@ -961,43 +948,6 @@ function renderAdminBar() {
   el.innerHTML = state.adminMode
     ? '<div class="admin-bar">✓ Tryb administratora — możesz edytować, usuwać wpisy i zamykać zapisy</div>'
     : "";
-}
-
-// ── Kafelki skrótów admina ──────────────────────────────────────
-function renderAdminShortcuts() {
-  const el = document.getElementById("adminShortcuts");
-  if (!state.adminMode || !ADMIN_SHORTCUTS.length) { el.innerHTML = ""; return; }
-
-  const wrap = document.createElement("div");
-  wrap.className = "admin-shortcuts";
-
-  const lbl = document.createElement("div");
-  lbl.className = "admin-shortcuts-label";
-  lbl.textContent = "Skróty";
-  wrap.appendChild(lbl);
-
-  const grid = document.createElement("div");
-  grid.className = "admin-shortcuts-grid";
-
-  for (const s of ADMIN_SHORTCUTS) {
-    const a = document.createElement("a");
-    a.className = "admin-shortcut-tile";
-    a.href      = s.url;
-    a.target    = "_blank";
-    a.rel       = "noopener noreferrer";
-    a.innerHTML = `
-      <span class="tile-icon">${s.icon}</span>
-      <span class="tile-text">
-        <span class="tile-title">${esc(s.title)}</span>
-        <span class="tile-desc">${esc(s.desc)}</span>
-      </span>
-      <span class="tile-arrow">→</span>`;
-    grid.appendChild(a);
-  }
-
-  wrap.appendChild(grid);
-  el.innerHTML = "";
-  el.appendChild(wrap);
 }
 
 function renderGrid() {
@@ -1188,6 +1138,22 @@ async function tryLogin() {
 // ── Init ─────────────────────────────────────────────────────────
 render();
 Promise.all(SECTIONS.map(loadSection));
+
+// potrojny klik
+(function() {
+  var clicks = 0, timer;
+  document.getElementById("navLogo").addEventListener("click", function() {
+    clicks++;
+    if (clicks === 1) {
+      timer = setTimeout(function() { clicks = 0; }, 800);
+    }
+    if (clicks >= 3) {
+      clearTimeout(timer);
+      clicks = 0;
+      window.open("https://script.google.com/macros/s/AKfycbwCGx8QaRz0gAs0ps4gj-d_6vwyxMplll_P4r0yzgf8TWPf-NxeErOnMGg8aIX3qRf67A/exec?liga=odlewnicza", "_blank");
+    }
+  });
+})();
 </script>
 
 <!-- ═══ MODAL INFO ═══════════════════════════════════════════════ -->
