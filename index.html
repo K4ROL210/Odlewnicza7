@@ -5,26 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Niedzielna Liga Squasha — Zapisy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:        #080c10;
-    --surface:   rgba(255,255,255,0.04);
-    --glass:     rgba(255,255,255,0.06);
-    --border:    rgba(255,255,255,0.10);
-    --border-hi: rgba(255,255,255,0.18);
-    --muted:     #5a6680;
-    --text:      #dde4f0;
-    --accent:    #c8ff00;
-    --accent2:   #00e5ff;
-    --green:     #c8ff00;
-    --red:       #ff4d4d;
-    --c0: #c8ff00;
-    --c1: #00e5ff;
-    --c2: #ff8c42;
-    --c3: #b06aff;
+    --bg:        #ffffff;
+    --surface:   rgba(0,0,0,0.03);
+    --glass:     rgba(0,0,0,0.04);
+    --border:    rgba(0,0,0,0.12);
+    --border-hi: rgba(0,0,0,0.24);
+    --muted:     #7b7b7b;
+    --text:      #242424;
+    --accent:    #fab400;
+    --accent-dk: #c96f00;
+    --accent2:   #1a1a1a;
+    --green:     #1a1a1a;
+    --red:       #d64545;
+    --c0: #fab400;
+    --c1: #1a1a1a;
+    --c2: #fab400;
+    --c3: #1a1a1a;
   }
 
   html { scroll-behavior: smooth; }
@@ -32,7 +33,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Rajdhani', 'Arial', sans-serif;
+    font-family: 'Poppins', 'Arial', sans-serif;
     min-height: 100vh;
     padding: 0 0 80px;
     position: relative;
@@ -43,21 +44,7 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 90% 50% at 50% -5%, rgba(200,255,0,0.10) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 95% 95%,  rgba(0,229,255,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 40% 30% at 5%  70%,  rgba(176,106,255,0.05) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(200,255,0,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,255,0,0.022) 1px, transparent 1px);
-    background-size: 48px 48px;
+      radial-gradient(ellipse 90% 45% at 50% -5%, rgba(250,180,0,0.07) 0%, transparent 55%);
     pointer-events: none;
     z-index: 0;
   }
@@ -67,13 +54,14 @@
     align-items: center;
     gap: 10px;
     padding: 8px 16px;
-    color: var(--c2);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px;
+    color: var(--accent);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
     letter-spacing: 2px;
-    border-top: 1px dashed rgba(255,140,66,0.3);
-    border-bottom: 1px dashed rgba(255,140,66,0.3);
-    background: rgba(255,140,66,0.05);
+    border-top: 1px dashed rgba(250,180,0,0.35);
+    border-bottom: 1px dashed rgba(250,180,0,0.35);
+    background: rgba(250,180,0,0.06);
     user-select: none;
   }
   .rezerwa-separator::before,
@@ -81,13 +69,13 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255,140,66,0.25);
+    background: rgba(250,180,0,0.3);
   }
 
   /* ── NAV ── */
   .nav {
-    background: rgba(8,12,16,0.85);
-    border-bottom: 1px solid var(--border);
+    background: rgba(255,241,214,0.94);
+    border-bottom: 1px solid rgba(250,180,0,0.3);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -106,24 +94,24 @@
   }
   .nav-inner::-webkit-scrollbar { display: none; }
   .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 2px;
-    color: var(--c0);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--accent2);
     padding: 14px 16px 14px 0;
     margin-right: 8px;
     border-right: 1px solid var(--border);
     white-space: nowrap;
     flex-shrink: 0;
-    text-shadow: 0 0 20px rgba(200,255,0,0.4);
   }
   .nav-link {
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 14px 16px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.5px;
     color: var(--muted);
@@ -134,11 +122,10 @@
     flex-shrink: 0;
     text-transform: uppercase;
   }
-  .nav-link:hover { color: var(--text); }
+  .nav-link:hover { color: var(--accent2); }
   .nav-link.active {
-    color: var(--c0);
-    border-bottom-color: var(--c0);
-    text-shadow: 0 0 12px rgba(200,255,0,0.3);
+    color: var(--accent-dk);
+    border-bottom-color: var(--accent-dk);
   }
 
   /* ── PAGE WRAP ── */
@@ -153,36 +140,37 @@
 
   .pill {
     display: inline-block;
-    background: var(--c0);
-    color: #0a0f08;
-    font-family: 'Rajdhani', sans-serif;
+    background: var(--accent);
+    color: #1a1200;
+    font-family: 'Montserrat', sans-serif;
     font-size: 11px;
-    font-weight: 900;
+    font-weight: 800;
     letter-spacing: 3px;
-    padding: 4px 14px;
+    padding: 5px 14px;
     border-radius: 100px;
     margin-bottom: 14px;
     text-transform: uppercase;
   }
 
   h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(42px, 9vw, 76px);
-    line-height: .92;
-    letter-spacing: 2px;
-    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 6.5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent2);
   }
   h1 span {
-    color: var(--c0);
-    text-shadow: 0 0 30px rgba(200,255,0,0.4), 0 0 60px rgba(200,255,0,0.15);
+    color: var(--accent);
   }
 
   .sub {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--muted);
     margin-top: 12px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
   }
 
   /* ── CONTACT BUTTONS ── */
@@ -198,11 +186,12 @@
     align-items: center;
     gap: 10px;
     padding: 12px 22px;
-    border-radius: 10px;
-    font-family: 'Rajdhani', sans-serif;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.3px;
+    text-transform: uppercase;
     text-decoration: none;
     transition: transform .15s, box-shadow .15s, opacity .15s;
     cursor: pointer;
@@ -211,22 +200,21 @@
   .contact-btn:hover { transform: translateY(-2px); }
   .contact-btn:active { transform: translateY(0); }
   .contact-btn-fb {
-    background: var(--c0);
-    color: #0a0f08;
-    box-shadow: 0 4px 20px rgba(200,255,0,0.3);
+    background: var(--accent);
+    color: #1a1200;
+    box-shadow: 0 4px 20px rgba(250,180,0,0.3);
   }
-  .contact-btn-fb:hover { box-shadow: 0 6px 30px rgba(200,255,0,0.5); }
+  .contact-btn-fb:hover { box-shadow: 0 6px 30px rgba(250,180,0,0.45); }
   .contact-btn-sms {
     background: transparent;
-    color: var(--c2);
-    border: 1.5px solid var(--c2);
-    box-shadow: 0 4px 16px rgba(255,140,66,0.12);
+    color: var(--accent2);
+    border: 1.5px solid var(--accent2);
   }
-  .contact-btn-sms:hover { box-shadow: 0 6px 24px rgba(255,140,66,0.3); background: rgba(255,140,66,0.07); }
+  .contact-btn-sms:hover { background: rgba(0,0,0,0.05); }
 
   /* ── TODAY LABEL ── */
-  .today-label { font-family: 'Bebas Neue', sans-serif; color: var(--muted); font-size: 42px; letter-spacing: 2px; }
-  .today-date  { font-family: 'Bebas Neue', sans-serif; color: var(--c0); font-size: 42px; letter-spacing: 1px; text-shadow: 0 0 20px rgba(200,255,0,0.4); }
+  .today-label { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--muted); font-size: 30px; letter-spacing: 1px; }
+  .today-date  { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--accent); font-size: 30px; letter-spacing: 0.5px; }
 
   /* ── TOP BAR ── */
   .top-bar {
@@ -240,9 +228,9 @@
   .btn {
     border-radius: 8px;
     cursor: pointer;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 0.5px;
     padding: 8px 16px;
     transition: all .15s;
@@ -256,23 +244,23 @@
     border: 1.5px solid var(--border);
     backdrop-filter: blur(8px);
   }
-  .btn-dark:hover { border-color: var(--border-hi); background: rgba(255,255,255,0.09); }
+  .btn-dark:hover { border-color: var(--border-hi); background: rgba(0,0,0,0.08); }
   .btn-yellow {
-    background: var(--c0);
-    color: #0a0f08;
-    box-shadow: 0 4px 16px rgba(200,255,0,0.3);
+    background: var(--accent);
+    color: #1a1200;
+    box-shadow: 0 4px 16px rgba(250,180,0,0.3);
   }
-  .btn-yellow:hover { box-shadow: 0 6px 24px rgba(200,255,0,0.5); }
+  .btn-yellow:hover { box-shadow: 0 6px 24px rgba(250,180,0,0.45); }
   .btn-red {
-    background: rgba(255,77,77,0.1);
+    background: rgba(214,69,69,0.08);
     color: var(--red);
-    border: 1.5px solid rgba(255,77,77,0.35);
+    border: 1.5px solid rgba(214,69,69,0.35);
   }
-  .btn-red:hover { background: rgba(255,77,77,0.18); }
+  .btn-red:hover { background: rgba(214,69,69,0.15); }
 
   /* ── LOGIN BOX ── */
   .login-box {
-    background: rgba(255,255,255,0.04);
+    background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: 14px;
     padding: 18px;
@@ -293,14 +281,14 @@
 
   /* ── ADMIN BAR ── */
   .admin-bar {
-    background: rgba(200,255,0,0.06);
-    border: 1.5px solid rgba(200,255,0,0.25);
+    background: rgba(250,180,0,0.08);
+    border: 1.5px solid rgba(250,180,0,0.3);
     border-radius: 10px;
     padding: 10px 16px;
     margin-bottom: 16px;
     font-size: 13px;
     font-weight: 700;
-    color: var(--c0);
+    color: #a06400;
     letter-spacing: 0.3px;
     text-transform: uppercase;
   }
@@ -311,8 +299,9 @@
     animation: fadeIn .25s ease;
   }
   .admin-shortcuts-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
     letter-spacing: 3px;
     color: var(--muted);
     margin-bottom: 10px;
@@ -329,17 +318,17 @@
     gap: 10px;
     padding: 12px 20px;
     border-radius: 12px;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.3px;
     text-decoration: none;
     cursor: pointer;
     transition: transform .15s, box-shadow .15s, background .15s;
-    border: 1.5px solid rgba(200,255,0,0.30);
-    background: rgba(200,255,0,0.07);
-    color: var(--c0);
-    box-shadow: 0 2px 12px rgba(200,255,0,0.10);
+    border: 1.5px solid rgba(250,180,0,0.35);
+    background: rgba(250,180,0,0.07);
+    color: #a06400;
+    box-shadow: 0 2px 12px rgba(250,180,0,0.10);
     position: relative;
     overflow: hidden;
   }
@@ -347,14 +336,14 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, rgba(200,255,0,0.08) 0%, transparent 60%);
+    background: linear-gradient(120deg, rgba(250,180,0,0.08) 0%, transparent 60%);
     pointer-events: none;
   }
   .admin-shortcut-tile:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(200,255,0,0.28);
-    background: rgba(200,255,0,0.12);
-    border-color: rgba(200,255,0,0.55);
+    box-shadow: 0 6px 24px rgba(250,180,0,0.25);
+    background: rgba(250,180,0,0.13);
+    border-color: rgba(250,180,0,0.6);
   }
   .admin-shortcut-tile:active { transform: translateY(0); }
   .admin-shortcut-tile .tile-icon {
@@ -367,7 +356,7 @@
     gap: 1px;
   }
   .admin-shortcut-tile .tile-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -376,7 +365,7 @@
   .admin-shortcut-tile .tile-desc {
     font-size: 11px;
     font-weight: 600;
-    color: rgba(200,255,0,0.55);
+    color: rgba(160,100,0,0.65);
     letter-spacing: 1px;
     text-transform: uppercase;
     line-height: 1;
@@ -403,14 +392,13 @@
 
   /* ── CARD ── */
   .card {
-    background: rgba(255,255,255,0.035);
+    background: #ffffff;
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: 16px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 14px rgba(0,0,0,0.05);
     transition: border-color .2s, box-shadow .2s;
     position: relative;
   }
@@ -418,13 +406,12 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 2px;
+    height: 3px;
     background: var(--accent);
-    opacity: 0.7;
   }
   .card:hover {
-    border-color: rgba(255,255,255,0.18);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    border-color: rgba(0,0,0,0.2);
+    box-shadow: 0 10px 34px rgba(0,0,0,0.12);
   }
 
   /* ── CARD HEAD ── */
@@ -439,42 +426,46 @@
   .card-head-text { flex: 1; }
 
   .day-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 35px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
     color: var(--accent);
-    letter-spacing: 1px;
+    letter-spacing: 0.3px;
     line-height: 1.1;
-    text-shadow: 0 0 15px color-mix(in srgb, var(--accent) 50%, transparent);
   }
 
   .day-sub {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 17px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
     font-weight: 700;
     color: var(--muted);
-    margin-top: 3px;
-    letter-spacing: 1px;
+    margin-top: 4px;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
+  }
+  .day-sub-groups {
+    color: var(--accent);
+    font-weight: 800;
   }
 
   .level-badge {
     display: inline-block;
-    margin-top: 6px;
-    font-family: 'Rajdhani', sans-serif;
+    margin-top: 8px;
+    font-family: 'Poppins', sans-serif;
     font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 2px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 2px 10px;
+    padding: 3px 11px;
     border-radius: 100px;
   }
 
   .date-label {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 35px;
-    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
     color: var(--muted);
-    margin-top: 2px;
+    margin-top: 6px;
     letter-spacing: 0.3px;
   }
 
@@ -497,12 +488,12 @@
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
     animation: fadeIn .2s ease;
     transition: background .15s;
   }
   .player-row:last-child { border-bottom: none; }
-  .player-row:hover { background: rgba(255,255,255,0.03); }
+  .player-row:hover { background: rgba(0,0,0,0.02); }
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
@@ -510,17 +501,18 @@
   }
 
   .num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
     color: var(--accent);
     min-width: 18px;
     text-align: right;
-    opacity: 0.6;
+    opacity: 0.7;
   }
   .pname {
     flex: 1;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     color: var(--text);
     letter-spacing: 0.2px;
   }
@@ -546,9 +538,9 @@
     font-weight: 700;
   }
   .icon-btn:hover { opacity: .75; transform: scale(1.1); }
-  .icon-edit { color: var(--c0);  border: 1px solid rgba(200,255,0,0.4); }
-  .icon-del  { color: var(--red); border: 1px solid rgba(255,77,77,0.4); }
-  .icon-ok   { color: var(--c1);  border: 1px solid rgba(0,229,255,0.4); }
+  .icon-edit { color: var(--accent);  border: 1px solid rgba(250,180,0,0.4); }
+  .icon-del  { color: var(--red); border: 1px solid rgba(214,69,69,0.4); }
+  .icon-ok   { color: var(--accent2);  border: 1px solid rgba(0,0,0,0.3); }
 
   /* ── INPUT ROW ── */
   .input-row {
@@ -556,59 +548,59 @@
     border-top: 1px solid var(--border);
     display: flex;
     gap: 8px;
-    background: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.02);
   }
   .input-row.closed { opacity: 0.4; pointer-events: none; }
 
   .field {
     flex: 1;
-    background: rgba(255,255,255,0.05);
+    background: #ffffff;
     border: 1.5px solid var(--border);
     border-radius: 8px;
     color: var(--text);
     padding: 9px 12px;
-    font-size: 15px;
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     outline: none;
     transition: border-color .15s, box-shadow .15s;
   }
   .field::placeholder { color: var(--muted); }
   .field:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(200,255,0,0.12);
+    box-shadow: 0 0 0 2px rgba(250,180,0,0.15);
   }
-  .field.err { border-color: var(--red); box-shadow: 0 0 0 2px rgba(255,77,77,0.15); }
+  .field.err { border-color: var(--red); box-shadow: 0 0 0 2px rgba(214,69,69,0.15); }
 
   .add-btn {
     background: var(--accent);
-    color: #0a0f08;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     padding: 8px 14px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
     cursor: pointer;
     transition: all .15s;
     line-height: 1;
-    box-shadow: 0 2px 12px rgba(200,255,0,0.25);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 35%, transparent);
     min-width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .add-btn:hover    { box-shadow: 0 4px 20px rgba(200,255,0,0.45); transform: translateY(-1px); }
+  .add-btn:hover    { box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 50%, transparent); transform: translateY(-1px); }
   .add-btn:disabled { opacity: .35; cursor: default; transform: none; box-shadow: none; }
 
   /* ── FOOTER ── */
   footer {
     text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.1);
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.32);
     margin-top: 40px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
   }
 
@@ -616,10 +608,14 @@
   .spinner {
     display: inline-block;
     width: 14px; height: 14px;
-    border: 2px solid rgba(10,15,8,0.3);
-    border-top-color: #0a0f08;
+    border: 2px solid rgba(26,18,0,0.3);
+    border-top-color: #1a1200;
     border-radius: 50%;
     animation: spin .6s linear infinite;
+  }
+  .add-btn .spinner {
+    border-color: rgba(255,255,255,0.35);
+    border-top-color: #ffffff;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -628,22 +624,21 @@
     align-items: center;
     padding: 4px 14px;
     border-radius: 100px;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
     background: transparent;
-    color: var(--c1);
-    border: 1.5px solid var(--c1);
+    color: var(--accent2);
+    border: 1.5px solid var(--accent2);
     cursor: pointer;
     transition: background .15s, box-shadow .15s;
     vertical-align: middle;
     margin-left: 10px;
   }
   .info-btn:hover {
-    background: rgba(0,229,255,0.08);
-    box-shadow: 0 0 14px rgba(0,229,255,0.25);
+    background: rgba(0,0,0,0.05);
   }
 
   /* ── MODAL ── */
@@ -656,14 +651,14 @@
     animation: fadeIn .2s ease;
   }
   .modal {
-    background: #0e1318;
-    border: 1.5px solid var(--border-hi);
+    background: #ffffff;
+    border: 1px solid var(--border);
     border-radius: 18px;
     max-width: 520px; width: 100%;
     max-height: 90vh; overflow-y: auto;
     padding: 28px 24px 24px;
     position: relative;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
   }
   .modal-close {
     position: absolute; top: 14px; right: 16px;
@@ -674,24 +669,26 @@
   }
   .modal-close:hover { color: var(--text); }
   .modal h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px; letter-spacing: 2px;
-    color: var(--c0); margin-bottom: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 22px; letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 16px;
   }
   .modal-section { margin-bottom: 16px; }
   .modal-section h3 {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px; font-weight: 900;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 800;
     letter-spacing: 2px; text-transform: uppercase;
-    color: var(--c1); margin-bottom: 6px;
+    color: var(--accent); margin-bottom: 6px;
   }
   .modal-section p, .modal-section li {
-    font-size: 15px; font-weight: 500;
+    font-size: 15px; font-weight: 400;
     color: var(--text); line-height: 1.6;
   }
   .modal-section ul { list-style: none; padding: 0; }
-  .modal-section ul li::before { content: "— "; color: var(--c0); }
-  .modal-section a { color: var(--c0); text-decoration: none; word-break: break-all; }
+  .modal-section ul li::before { content: "— "; color: var(--accent); }
+  .modal-section a { color: var(--accent2); text-decoration: none; word-break: break-all; font-weight: 600; }
   .modal-section a:hover { text-decoration: underline; }
   .modal-note {
     font-size: 12px; color: var(--muted);
@@ -701,20 +698,21 @@
   }
 
   .input-error {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--red);
     padding: 8px 14px 10px;
-    border-top: 1px solid rgba(255,77,77,0.15);
-    background: rgba(255,77,77,0.06);
+    border-top: 1px solid rgba(214,69,69,0.15);
+    background: rgba(214,69,69,0.05);
     line-height: 1.4;
     animation: fadeIn .2s ease;
   }
   .input-error a {
-    color: var(--c0);
+    color: var(--accent2);
     text-decoration: underline;
     cursor: pointer;
+    font-weight: 600;
   }
 </style>
 </head>
@@ -777,23 +775,23 @@ const SECTIONS = [
   {
     key:    "sun_ab",
     label:  "Niedziela · 20:00",
-    sub:    "Grupy A / B",
+    sub:    "A / B",
     level:  "Zaawansowani",
-    color:  "#c8ff00",
+    color:  "#c2680a",
   },
   {
     key:    "sun_cd",
     label:  "Niedziela · 17:30",
-    sub:    "Grupy C / D ",
+    sub:    "C / D",
     level:  "Średniozaawansowani",
-    color:  "#00e5ff",
+    color:  "#1a1a1a",
   },
   {
     key:    "sun_ef",
     label:  "Niedziela · 15:00",
-    sub:    "Grupy E / F",
+    sub:    "E / F",
     level:  "Początkujący",
-    color:  "#b06aff",
+    color:  "#a13d2b",
   },
 ];
 
@@ -981,12 +979,12 @@ function mkCard(sec) {
 
   const subEl = document.createElement("div");
   subEl.className = "day-sub";
-  subEl.textContent = sec.sub;
+  subEl.innerHTML = `Grupy <span class="day-sub-groups">${esc(sec.sub)}</span>`;
 
   const badge = document.createElement("span");
   badge.className = "level-badge";
   badge.textContent = sec.level;
-  badge.style.cssText = `background:${sec.color}20;color:${sec.color};border:1px solid ${sec.color}50;`;
+  badge.style.cssText = `background:${sec.color}22;color:#1a1200;border:1px solid ${sec.color}80;`;
 
   const dateEl = document.createElement("div");
   dateEl.className = "date-label";
