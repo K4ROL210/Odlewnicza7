@@ -399,6 +399,31 @@
   @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
 
+  .grid.grid-tenis {
+    grid-template-columns: minmax(0, 360px);
+    justify-content: center;
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin: 30px 0 14px;
+  }
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
   /* ── CARD ── */
   .card {
     background: #ffffff;
@@ -769,10 +794,13 @@
   </div>
 
   <div id="gate"></div>
-  <div class="top-bar" id="topBar"></div>
-  <div id="loginBox"></div>
-  <div id="adminBar"></div>
-  <div class="grid" id="grid"></div>
+  <div class="top-bar gated" id="topBar"></div>
+  <div id="loginBox" class="gated"></div>
+  <div id="adminBar" class="gated"></div>
+  <div class="section-heading gated">Squash</div>
+  <div class="grid gated" id="gridSquash"></div>
+  <div class="section-heading gated">Tenis stołowy</div>
+  <div class="grid grid-tenis gated" id="gridTenis"></div>
 
   <footer>Administratorem danych jest Karol Kreczmański. Dane (imię i nazwisko) są zbierane w celu organizacji ligi i będą publicznie widoczne na liście uczestników. Uczestnik może żądać ich usunięcia. <br> Made by Karol Kreczmański</footer>
 </div>
@@ -788,6 +816,8 @@ const SECTIONS = [
     sub:    "A / B",
     level:  "Zaawansowani",
     color:  "#c2680a",
+    group:  "squash",
+    dow:    0,
   },
   {
     key:    "sun_cd",
@@ -795,6 +825,8 @@ const SECTIONS = [
     sub:    "C / D",
     level:  "Średniozaawansowani",
     color:  "#1a1a1a",
+    group:  "squash",
+    dow:    0,
   },
   {
     key:    "sun_ef",
@@ -802,19 +834,29 @@ const SECTIONS = [
     sub:    "E / F",
     level:  "Początkujący",
     color:  "#a13d2b",
+    group:  "squash",
+    dow:    0,
+  },
+  {
+    key:    "sr_tenis",
+    label:  "Środa · 18:30 i 20:00",
+    sub:    "",
+    level:  "Zapisy otwarte",
+    color:  "#2f7d5c",
+    group:  "tenis",
+    dow:    3,
   },
 ];
 
-const SUNDAY_DOW    = 0;
 const REZERWA_MARKER = "REZERWA";
 
-function getNextSunday() {
+function getNextDow(dow) {
   const now   = new Date();
   const today = now.getDay();
   const hour  = parseInt(new Date().toLocaleString("pl-PL", {
     hour: "2-digit", hour12: false, timeZone: "Europe/Warsaw"
   }));
-  let diff = (SUNDAY_DOW - today + 7) % 7;
+  let diff = (dow - today + 7) % 7;
   if (diff === 0 && hour >= CUTOFF_HOUR) diff = 7;
   const d = new Date(now);
   d.setDate(d.getDate() + diff);
@@ -830,10 +872,11 @@ function formatPL(d) {
   return d.toLocaleDateString("pl-PL", { day:"2-digit", month:"2-digit", year:"numeric" });
 }
 
-const nextSunday = getNextSunday();
+for (const sec of SECTIONS) { sec.date = getNextDow(sec.dow); }
+
+function sectionOf(key) { return SECTIONS.find(s => s.key === key); }
 
 let state = {
-  date:          nextSunday,
   lists:         {},
   loading:       {},
   inputs:        {},
@@ -877,7 +920,7 @@ function api(params) {
 async function loadSection(sec) {
   state.loading[sec.key] = true; render();
   try {
-    const res = await api({ action:"list", dayKey:sec.key, dateStr:dateKey(state.date) });
+    const res = await api({ action:"list", dayKey:sec.key, dateStr:dateKey(sec.date) });
     if (res.ok) { state.lists[sec.key] = res.players; state.locked[sec.key] = res.locked; }
   } catch(e) {}
   state.loading[sec.key] = false; render();
@@ -888,26 +931,26 @@ async function addPlayer(key) {
   const name = (state.inputs[key] || "").trim();
   if (!name) return;
   state.saving[key] = true; state.errors[key] = null; render();
-  const res = await api({ action:"add", dayKey:key, dateStr:dateKey(state.date), name });
+  const res = await api({ action:"add", dayKey:key, dateStr:dateKey(sectionOf(key).date), name });
   if (res.ok) { state.lists[key] = res.players; state.inputs[key] = ""; state.errors[key] = null; }
   else { state.errors[key] = res.error; }
   state.saving[key] = false; render();
 }
 
 async function removePlayer(key, idx) {
-  const res = await api({ action:"remove", dayKey:key, dateStr:dateKey(state.date), idx, password:state.adminPassword });
+  const res = await api({ action:"remove", dayKey:key, dateStr:dateKey(sectionOf(key).date), idx, password:state.adminPassword });
   if (res.ok) { state.lists[key] = res.players; render(); }
 }
 
 async function saveEdit(key) {
   if (!state.editing) return;
-  const res = await api({ action:"edit", dayKey:key, dateStr:dateKey(state.date), idx:state.editing.idx, newName:state.editVal, password:state.adminPassword });
+  const res = await api({ action:"edit", dayKey:key, dateStr:dateKey(sectionOf(key).date), idx:state.editing.idx, newName:state.editVal, password:state.adminPassword });
   if (res.ok) { state.lists[key] = res.players; state.editing = null; render(); }
 }
 
 async function toggleLocked(key) {
   const action = state.locked[key] ? "unlock" : "lock";
-  const res    = await api({ action, dayKey:key, dateStr:dateKey(state.date), password:state.adminPassword });
+  const res    = await api({ action, dayKey:key, dateStr:dateKey(sectionOf(key).date), password:state.adminPassword });
   if (res.ok) { state.locked[key] = res.locked; render(); }
 }
 
@@ -920,19 +963,15 @@ function render() {
 }
 
 function renderGate() {
-  const gate    = document.getElementById("gate");
-  const topBar  = document.getElementById("topBar");
-  const loginBox= document.getElementById("loginBox");
-  const adminBar= document.getElementById("adminBar");
-  const grid    = document.getElementById("grid");
+  const gate = document.getElementById("gate");
 
   if (state.viewUnlocked) {
     gate.innerHTML = "";
-    topBar.style.display = ""; loginBox.style.display = ""; adminBar.style.display = ""; grid.style.display = "";
+    document.querySelectorAll(".gated").forEach(el => { el.style.display = ""; });
     return;
   }
 
-  topBar.style.display = "none"; loginBox.style.display = "none"; adminBar.style.display = "none"; grid.style.display = "none";
+  document.querySelectorAll(".gated").forEach(el => { el.style.display = "none"; });
 
   gate.innerHTML = `
     <div class="login-box gate-box">
@@ -1009,10 +1048,12 @@ function renderAdminBar() {
 }
 
 function renderGrid() {
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
+  const gridSquash = document.getElementById("gridSquash");
+  const gridTenis  = document.getElementById("gridTenis");
+  gridSquash.innerHTML = ""; gridTenis.innerHTML = "";
   for (const sec of SECTIONS) {
-    grid.appendChild(mkCard(sec));
+    const target = sec.group === "tenis" ? gridTenis : gridSquash;
+    target.appendChild(mkCard(sec));
   }
 }
 
@@ -1037,10 +1078,6 @@ function mkCard(sec) {
   dayEl.className = "day-label";
   dayEl.textContent = sec.label;
 
-  const subEl = document.createElement("div");
-  subEl.className = "day-sub";
-  subEl.innerHTML = `Grupy <span class="day-sub-groups">${esc(sec.sub)}</span>`;
-
   const badge = document.createElement("span");
   badge.className = "level-badge";
   badge.textContent = sec.level;
@@ -1048,10 +1085,15 @@ function mkCard(sec) {
 
   const dateEl = document.createElement("div");
   dateEl.className = "date-label";
-  dateEl.textContent = formatPL(state.date);
+  dateEl.textContent = formatPL(sec.date);
 
   textDiv.appendChild(dayEl);
-  textDiv.appendChild(subEl);
+  if (sec.sub) {
+    const subEl = document.createElement("div");
+    subEl.className = "day-sub";
+    subEl.innerHTML = `Grupy <span class="day-sub-groups">${esc(sec.sub)}</span>`;
+    textDiv.appendChild(subEl);
+  }
   textDiv.appendChild(badge);
   textDiv.appendChild(dateEl);
   headDiv.appendChild(textDiv);
