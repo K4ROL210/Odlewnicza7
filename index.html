@@ -279,6 +279,15 @@
   .login-row { display: flex; gap: 8px; }
   .err-msg { font-size: 12px; color: var(--red); margin-top: 8px; font-weight: 600; }
 
+  .gate-box {
+    max-width: 380px;
+    margin: 40px auto;
+    text-align: center;
+    padding: 28px 22px;
+  }
+  .gate-box p { text-align: center; }
+  .gate-box .login-row { flex-direction: column; }
+
   /* ── ADMIN BAR ── */
   .admin-bar {
     background: rgba(250,180,0,0.08);
@@ -759,6 +768,7 @@
     </p>
   </div>
 
+  <div id="gate"></div>
   <div class="top-bar" id="topBar"></div>
   <div id="loginBox"></div>
   <div id="adminBar"></div>
@@ -837,6 +847,9 @@ let state = {
   passInput:     "",
   passErr:       false,
   adminPassword: "",
+  viewUnlocked:  false,
+  gateInput:     "",
+  gateErr:       false,
 };
 
 // ── API (JSONP) ─────────────────────────────────────────────────
@@ -900,7 +913,56 @@ async function toggleLocked(key) {
 
 // ── Render ─────────────────────────────────────────────────────
 function render() {
-  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid(); renderTodayDate();
+  renderTodayDate();
+  renderGate();
+  if (!state.viewUnlocked) return;
+  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid();
+}
+
+function renderGate() {
+  const gate    = document.getElementById("gate");
+  const topBar  = document.getElementById("topBar");
+  const loginBox= document.getElementById("loginBox");
+  const adminBar= document.getElementById("adminBar");
+  const grid    = document.getElementById("grid");
+
+  if (state.viewUnlocked) {
+    gate.innerHTML = "";
+    topBar.style.display = ""; loginBox.style.display = ""; adminBar.style.display = ""; grid.style.display = "";
+    return;
+  }
+
+  topBar.style.display = "none"; loginBox.style.display = "none"; adminBar.style.display = "none"; grid.style.display = "none";
+
+  gate.innerHTML = `
+    <div class="login-box gate-box">
+      <p>Podaj hasło administratora, aby zobaczyć zapisy:</p>
+      <div class="login-row">
+        <input class="field${state.gateErr?" err":""}" id="gateInp" type="password" placeholder="Wpisz hasło…" value="${esc(state.gateInput)}" />
+        <button class="btn btn-yellow" id="gateOk">Odblokuj</button>
+      </div>
+      ${state.gateErr ? '<p class="err-msg">Błędne hasło</p>' : ""}
+    </div>`;
+  const inp = gate.querySelector("#gateInp");
+  inp.addEventListener("input",   e => { state.gateInput = e.target.value; state.gateErr = false; });
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
+  gate.querySelector("#gateOk").addEventListener("click", tryUnlock);
+  inp.focus();
+}
+
+async function tryUnlock() {
+  const res = await api({ action: "checkPassword", password: state.gateInput });
+  if (res.ok) {
+    state.viewUnlocked  = true;
+    state.adminMode     = true;
+    state.adminPassword = state.gateInput;
+    state.gateInput = ""; state.gateErr = false;
+    render();
+    Promise.all(SECTIONS.map(loadSection));
+  } else {
+    state.gateErr = true;
+    render();
+  }
 }
 
 function renderTodayDate() {
@@ -1135,7 +1197,6 @@ async function tryLogin() {
 
 // ── Init ─────────────────────────────────────────────────────────
 render();
-Promise.all(SECTIONS.map(loadSection));
 
 // potrojny klik
 (function() {
