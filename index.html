@@ -953,9 +953,7 @@ function renderGate() {
 async function tryUnlock() {
   const res = await api({ action: "checkPassword", password: state.gateInput });
   if (res.ok) {
-    state.viewUnlocked  = true;
-    state.adminMode     = true;
-    state.adminPassword = state.gateInput;
+    state.viewUnlocked = true;
     state.gateInput = ""; state.gateErr = false;
     render();
     Promise.all(SECTIONS.map(loadSection));
