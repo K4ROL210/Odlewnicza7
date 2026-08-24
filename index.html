@@ -893,6 +893,8 @@ let state = {
   viewUnlocked:  false,
   gateInput:     "",
   gateErr:       false,
+  addListConfirm: null,
+  addListSaving:  false,
 };
 
 // ── API (JSONP) ─────────────────────────────────────────────────
@@ -959,7 +961,7 @@ function render() {
   renderTodayDate();
   renderGate();
   if (!state.viewUnlocked) return;
-  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid();
+  renderTopBar(); renderLoginBox(); renderAdminBar(); renderGrid(); renderAddListModal();
 }
 
 function renderGate() {
@@ -1055,6 +1057,57 @@ function renderGrid() {
     const target = sec.group === "tenis" ? gridTenis : gridSquash;
     target.appendChild(mkCard(sec));
   }
+}
+
+// ── Modal: dodaj do listy graczy ──────────────────────────────
+function renderAddListModal() {
+  const existing = document.getElementById("addListModal");
+  if (existing) existing.remove();
+  if (!state.addListConfirm) return;
+
+  const overlay = document.createElement("div");
+  overlay.id = "addListModal";
+  overlay.className = "modal-overlay";
+  overlay.addEventListener("click", e => { if (e.target === overlay) { state.addListConfirm = null; render(); } });
+
+  const saving = state.addListSaving;
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:400px;text-align:center;">
+      <h2>Potwierdź dane</h2>
+      <p>Dodajemy Cię do listy graczy jako:</p>
+      <p style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:22px;color:var(--accent2);margin:14px 0 18px;">${esc(state.addListConfirm.name)}</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:22px;">Sprawdź, czy imię i nazwisko są zapisane poprawnie (Nazwisko Imię), zanim potwierdzisz.</p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn btn-dark" id="addListCancel" ${saving?"disabled":""}>Anuluj</button>
+        <button class="btn btn-yellow" id="addListOk" ${saving?"disabled":""}>${saving ? '<span class="spinner"></span>' : "Tak, dodaj mnie"}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#addListCancel").addEventListener("click", () => { state.addListConfirm = null; render(); });
+  overlay.querySelector("#addListOk").addEventListener("click", confirmAddToList);
+}
+
+async function confirmAddToList() {
+  if (!state.addListConfirm || state.addListSaving) return;
+  const { key, name } = state.addListConfirm;
+  state.addListSaving = true; render();
+  try {
+    const res = await api({ action: "addToAllowedList", name });
+    if (res.ok) {
+      state.addListConfirm = null;
+      state.addListSaving  = false;
+      await addPlayer(key);
+      return;
+    } else {
+      state.errors[key] = res.error || "Nie udało się dodać do listy";
+    }
+  } catch (e) {
+    state.errors[key] = "Błąd połączenia, spróbuj ponownie";
+  }
+  state.addListConfirm = null;
+  state.addListSaving  = false;
+  render();
 }
 
 // ── mkCard ──────────────────────────────────────────────────────
@@ -1200,6 +1253,17 @@ function mkCard(sec) {
         Pierwszy raz na lidze?
         <a href="mailto:kontakt@odlewnicza7.pl">Napisz do nas @</a>
         lub zadzwoń <a href="tel:888222811">888 222 811</a>`;
+      const addListBtn = document.createElement("button");
+      addListBtn.className   = "btn btn-yellow";
+      addListBtn.style.cssText = "margin-top:10px;width:100%;";
+      addListBtn.textContent = "DODAJ DO LISTY GRACZY";
+      addListBtn.addEventListener("click", () => {
+        const name = (state.inputs[sec.key] || "").trim();
+        if (!name) return;
+        state.addListConfirm = { key: sec.key, name };
+        render();
+      });
+      errDiv.appendChild(addListBtn);
     } else {
       errDiv.textContent = "⚠️ " + err;
     }
