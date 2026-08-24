@@ -257,6 +257,13 @@
     border: 1.5px solid rgba(214,69,69,0.35);
   }
   .btn-red:hover { background: rgba(214,69,69,0.15); }
+  .btn-addlist {
+    background: #fab400;
+    color: #1a1200;
+    border: none;
+    box-shadow: 0 4px 16px rgba(250,180,0,0.3);
+  }
+  .btn-addlist:hover { box-shadow: 0 6px 24px rgba(250,180,0,0.45); }
 
   /* ── LOGIN BOX ── */
   .login-box {
@@ -1253,12 +1260,9 @@ function mkCard(sec) {
     const errDiv = document.createElement("div");
     errDiv.className = "input-error";
     if (err === "NOT_ON_LIST") {
-      errDiv.innerHTML = `⚠️ Nie znaleziono Cię na liście graczy! Poprawne wpisywanie: Nazwisko + Imie (np. Kowalski Jan)<br>
-        Pierwszy raz na lidze?
-        <a href="mailto:kontakt@odlewnicza7.pl">Napisz do nas @</a>
-        lub zadzwoń <a href="tel:888222811">888 222 811</a>`;
+      errDiv.innerHTML = `⚠️ Nie znaleziono Cię na liście graczy!`;
       const addListBtn = document.createElement("button");
-      addListBtn.className   = "btn btn-yellow";
+      addListBtn.className   = "btn btn-addlist";
       addListBtn.style.cssText = "margin-top:10px;width:100%;";
       addListBtn.textContent = "DODAJ DO LISTY GRACZY";
       addListBtn.addEventListener("click", () => {
