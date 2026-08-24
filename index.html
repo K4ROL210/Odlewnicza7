@@ -991,15 +991,19 @@ function renderGate() {
   inp.focus();
 }
 
+const GATE_STORAGE_KEY = "wpc_view_password";
+
 async function tryUnlock() {
   const res = await api({ action: "checkPassword", password: state.gateInput });
   if (res.ok) {
     state.viewUnlocked = true;
+    try { localStorage.setItem(GATE_STORAGE_KEY, state.gateInput); } catch(e) {}
     state.gateInput = ""; state.gateErr = false;
     render();
     Promise.all(SECTIONS.map(loadSection));
   } else {
     state.gateErr = true;
+    try { localStorage.removeItem(GATE_STORAGE_KEY); } catch(e) {}
     render();
   }
 }
@@ -1300,6 +1304,7 @@ async function tryLogin() {
 }
 
 // ── Init ─────────────────────────────────────────────────────────
+try { state.gateInput = localStorage.getItem(GATE_STORAGE_KEY) || ""; } catch(e) {}
 render();
 
 // potrojny klik
