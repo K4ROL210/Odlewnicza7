@@ -522,6 +522,28 @@
   }
   .lock-btn:hover { opacity: .75; transform: scale(1.15); }
 
+  .panel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity .15s, transform .15s;
+  }
+  .panel-btn:hover  { opacity: .85; transform: translateY(-1px); }
+  .panel-btn:active { transform: translateY(0); }
+
   /* ── PLAYER LIST ── */
   .player-list { flex: 1; min-height: 60px; }
   .player-row {
@@ -852,6 +874,7 @@ const SECTIONS = [
     color:  "#2f7d5c",
     group:  "tenis",
     dow:    3,
+    panelUrl: "https://script.google.com/macros/s/AKfycbwCGx8QaRz0gAs0ps4gj-d_6vwyxMplll_P4r0yzgf8TWPf-NxeErOnMGg8aIX3qRf67A/exec?liga=pingpong",
   },
 ];
 
@@ -1160,6 +1183,17 @@ function mkCard(sec) {
   }
   textDiv.appendChild(badge);
   textDiv.appendChild(dateEl);
+
+  if (sec.panelUrl) {
+    const panelBtn = document.createElement("a");
+    panelBtn.className = "panel-btn";
+    panelBtn.href = sec.panelUrl;
+    panelBtn.target = "_blank";
+    panelBtn.rel = "noopener";
+    panelBtn.textContent = "🖥 PANEL";
+    textDiv.appendChild(panelBtn);
+  }
+
   headDiv.appendChild(textDiv);
 
   if (state.adminMode) {
