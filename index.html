@@ -647,9 +647,7 @@
 
   .suggest-box {
     display: none;
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0; right: 0;
+    position: fixed;
     background: #ffffff;
     border: 1.5px solid var(--border);
     border-radius: 8px;
@@ -1349,44 +1347,12 @@ function mkCard(sec) {
   const inputRow = document.createElement("div");
   inputRow.className = "input-row" + (isClosed ? " closed" : "");
 
-  const fieldWrap = document.createElement("div");
-  fieldWrap.style.cssText = "position:relative;flex:1;";
-
   const inp = document.createElement("input");
   inp.className   = "field"; inp.type = "text";
   inp.placeholder = isClosed ? "Zapisy zamknięte" : "Nazwisko i Imię lub nr tel.";
   inp.value       = state.inputs[sec.key] || "";
   inp.disabled    = isClosed;
   inp.autocomplete = "off";
-
-  const suggestBox = document.createElement("div");
-  suggestBox.className = "suggest-box";
-
-  function hideSuggestions() { suggestBox.style.display = "none"; suggestBox.innerHTML = ""; }
-
-  function updateSuggestions(query) {
-    const q = query.trim().toLowerCase();
-    if (!q || isClosed) { hideSuggestions(); return; }
-    const matches = (state.allowedPlayers || []).filter(n => {
-      const nl = n.toLowerCase();
-      return nl.startsWith(q) || nl.split(/\s+/).some(w => w.startsWith(q));
-    }).slice(0, 8);
-    if (!matches.length) { hideSuggestions(); return; }
-    suggestBox.innerHTML = "";
-    matches.forEach(n => {
-      const item = document.createElement("div");
-      item.className = "suggest-item";
-      item.textContent = n;
-      item.addEventListener("mousedown", ev => {
-        ev.preventDefault();
-        inp.value = n;
-        state.inputs[sec.key] = n;
-        hideSuggestions();
-      });
-      suggestBox.appendChild(item);
-    });
-    suggestBox.style.display = "block";
-  }
 
   let lastPhoneLookup = "";
   inp.addEventListener("input", async e => {
@@ -1410,25 +1376,22 @@ function mkCard(sec) {
         } catch (err) {}
       }
     } else {
-      updateSuggestions(trimmed);
+      showSuggestions(inp, sec.key, trimmed, isClosed);
     }
   });
-  inp.addEventListener("focus", () => { if (state.inputs[sec.key]) updateSuggestions(state.inputs[sec.key]); });
+  inp.addEventListener("focus", () => { if (state.inputs[sec.key]) showSuggestions(inp, sec.key, state.inputs[sec.key], isClosed); });
   inp.addEventListener("blur",  () => { setTimeout(hideSuggestions, 150); });
   inp.addEventListener("keydown", e => {
     if (e.key === "Enter" && !isClosed) addPlayer(sec.key);
     if (e.key === "Escape") hideSuggestions();
   });
 
-  fieldWrap.appendChild(inp);
-  fieldWrap.appendChild(suggestBox);
-
   const addB = document.createElement("button");
   addB.className = "add-btn"; addB.style.background = sec.color;
   addB.disabled  = !!saving || isClosed;
   addB.innerHTML = saving ? '<span class="spinner"></span>' : "+";
   addB.addEventListener("click", () => addPlayer(sec.key));
-  inputRow.appendChild(fieldWrap); inputRow.appendChild(addB);
+  inputRow.appendChild(inp); inputRow.appendChild(addB);
   card.appendChild(inputRow);
 
   const err = state.errors[sec.key];
@@ -1473,6 +1436,46 @@ function mkIconBtn(label, cls, onClick) {
   b.addEventListener("click", onClick); return b;
 }
 function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;"); }
+
+// ── Podpowiedzi nazwisk (globalny box, żeby nie ucinał go .card { overflow:hidden }) ──
+const suggestBox = document.createElement("div");
+suggestBox.className = "suggest-box";
+suggestBox.style.position = "fixed";
+document.body.appendChild(suggestBox);
+
+function hideSuggestions() { suggestBox.style.display = "none"; suggestBox.innerHTML = ""; }
+
+function showSuggestions(inputEl, key, query, isClosed) {
+  const q = query.trim().toLowerCase();
+  if (!q || isClosed) { hideSuggestions(); return; }
+  const matches = (state.allowedPlayers || []).filter(n => {
+    const nl = n.toLowerCase();
+    return nl.startsWith(q) || nl.split(/\s+/).some(w => w.startsWith(q));
+  }).slice(0, 8);
+  if (!matches.length) { hideSuggestions(); return; }
+
+  const rect = inputEl.getBoundingClientRect();
+  suggestBox.style.left  = rect.left + "px";
+  suggestBox.style.top   = (rect.bottom + 4) + "px";
+  suggestBox.style.width = rect.width + "px";
+
+  suggestBox.innerHTML = "";
+  matches.forEach(n => {
+    const item = document.createElement("div");
+    item.className = "suggest-item";
+    item.textContent = n;
+    item.addEventListener("mousedown", ev => {
+      ev.preventDefault();
+      inputEl.value = n;
+      state.inputs[key] = n;
+      hideSuggestions();
+    });
+    suggestBox.appendChild(item);
+  });
+  suggestBox.style.display = "block";
+}
+window.addEventListener("scroll", hideSuggestions, true);
+window.addEventListener("resize", hideSuggestions);
 
 async function tryLogin() {
   const res = await api({ action:"checkPassword", password:state.passInput });
