@@ -1119,9 +1119,17 @@ function renderAddListModal() {
   overlay.innerHTML = `
     <div class="modal" style="max-width:400px;text-align:center;">
       <h2>Potwierdź dane</h2>
-      <p>Dodajemy Cię do listy graczy jako:</p>
-      <p style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:22px;color:var(--accent2);margin:14px 0 18px;">${esc(state.addListConfirm.name)}</p>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:22px;">Sprawdź, czy imię i nazwisko są zapisane poprawnie (Nazwisko Imię), zanim potwierdzisz.</p>
+      <p style="margin-bottom:14px;">Podaj dane, aby dodać się do listy graczy:</p>
+      <div style="text-align:left;margin-bottom:12px;">
+        <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Nazwisko i Imię</label>
+        <input class="field" id="addListName" type="text" value="${esc(state.addListConfirm.name)}" ${saving?"disabled":""} />
+      </div>
+      <div style="text-align:left;margin-bottom:8px;">
+        <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Numer telefonu</label>
+        <input class="field" id="addListPhone" type="tel" placeholder="np. 888 222 811" value="${esc(state.addListConfirm.phone || "")}" ${saving?"disabled":""} />
+      </div>
+      <p class="err-msg" id="addListErr" style="display:none;text-align:left;margin-bottom:8px;"></p>
+      <p style="font-size:13px;color:var(--muted);margin:10px 0 18px;">Sprawdź, czy dane są poprawne (Nazwisko Imię), zanim potwierdzisz.</p>
       <div style="display:flex;gap:10px;justify-content:center;">
         <button class="btn btn-dark" id="addListCancel" ${saving?"disabled":""}>Anuluj</button>
         <button class="btn btn-yellow" id="addListOk" ${saving?"disabled":""}>${saving ? '<span class="spinner"></span>' : "Tak, dodaj mnie"}</button>
@@ -1129,19 +1137,41 @@ function renderAddListModal() {
     </div>`;
   document.body.appendChild(overlay);
 
+  const nameInp  = overlay.querySelector("#addListName");
+  const phoneInp = overlay.querySelector("#addListPhone");
+  nameInp.addEventListener("input",  e => { state.addListConfirm.name  = e.target.value; });
+  phoneInp.addEventListener("input", e => { state.addListConfirm.phone = e.target.value; });
+
   overlay.querySelector("#addListCancel").addEventListener("click", () => { state.addListConfirm = null; render(); });
   overlay.querySelector("#addListOk").addEventListener("click", confirmAddToList);
+  if (!saving) nameInp.focus();
 }
 
 async function confirmAddToList() {
   if (!state.addListConfirm || state.addListSaving) return;
-  const { key, name } = state.addListConfirm;
+  const { key } = state.addListConfirm;
+  const name  = (state.addListConfirm.name  || "").trim();
+  const phone = (state.addListConfirm.phone || "").trim();
+  const phoneDigits = phone.replace(/\D/g, "");
+
+  const errEl = document.getElementById("addListErr");
+  let errMsg = "";
+  if (!name) errMsg = "Podaj nazwisko i imię";
+  else if (phoneDigits.length < 9) errMsg = "Podaj poprawny numer telefonu (min. 9 cyfr)";
+  if (errMsg) {
+    if (errEl) { errEl.textContent = errMsg; errEl.style.display = "block"; }
+    return;
+  }
+
+  state.addListConfirm.name  = name;
+  state.addListConfirm.phone = phone;
   state.addListSaving = true; render();
   try {
-    const res = await api({ action: "addToAllowedList", name });
+    const res = await api({ action: "addToAllowedList", name, phone });
     if (res.ok) {
       state.addListConfirm = null;
       state.addListSaving  = false;
+      state.inputs[key] = name;
       await addPlayer(key);
       return;
     } else {
@@ -1330,7 +1360,7 @@ function mkCard(sec) {
       addListBtn.addEventListener("click", () => {
         const name = (state.inputs[sec.key] || "").trim();
         if (!name) return;
-        state.addListConfirm = { key: sec.key, name };
+        state.addListConfirm = { key: sec.key, name, phone: "" };
         render();
       });
       errDiv.appendChild(addListBtn);
