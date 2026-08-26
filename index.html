@@ -645,6 +645,30 @@
   }
   .field.err { border-color: var(--red); box-shadow: 0 0 0 2px rgba(214,69,69,0.15); }
 
+  .suggest-box {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 50;
+  }
+  .suggest-item {
+    padding: 9px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .suggest-item:last-child { border-bottom: none; }
+  .suggest-item:hover { background: rgba(250,180,0,0.12); }
+
   .add-btn {
     background: var(--accent);
     color: #ffffff;
@@ -935,6 +959,7 @@ let state = {
   gateErr:       false,
   addListConfirm: null,
   addListSaving:  false,
+  allowedPlayers: [],
 };
 
 // ── API (JSONP) ─────────────────────────────────────────────────
@@ -1042,11 +1067,19 @@ async function tryUnlock() {
     state.gateInput = ""; state.gateErr = false;
     render();
     Promise.all(SECTIONS.map(loadSection));
+    loadAllowedPlayers();
   } else {
     state.gateErr = true;
     try { localStorage.removeItem(GATE_STORAGE_KEY); } catch(e) {}
     render();
   }
+}
+
+async function loadAllowedPlayers() {
+  try {
+    const res = await api({ action: "getAllowedPlayers" });
+    if (res.ok) state.allowedPlayers = res.players || [];
+  } catch (e) {}
 }
 
 function renderTodayDate() {
@@ -1315,36 +1348,87 @@ function mkCard(sec) {
 
   const inputRow = document.createElement("div");
   inputRow.className = "input-row" + (isClosed ? " closed" : "");
+
+  const fieldWrap = document.createElement("div");
+  fieldWrap.style.cssText = "position:relative;flex:1;";
+
   const inp = document.createElement("input");
   inp.className   = "field"; inp.type = "text";
   inp.placeholder = isClosed ? "Zapisy zamknięte" : "Nazwisko i Imię";
   inp.value       = state.inputs[sec.key] || "";
   inp.disabled    = isClosed;
+  inp.autocomplete = "off";
+
+  const suggestBox = document.createElement("div");
+  suggestBox.className = "suggest-box";
+
+  function hideSuggestions() { suggestBox.style.display = "none"; suggestBox.innerHTML = ""; }
+
+  function updateSuggestions(query) {
+    const q = query.trim().toLowerCase();
+    if (!q || isClosed) { hideSuggestions(); return; }
+    const matches = (state.allowedPlayers || []).filter(n => {
+      const nl = n.toLowerCase();
+      return nl.startsWith(q) || nl.split(/\s+/).some(w => w.startsWith(q));
+    }).slice(0, 8);
+    if (!matches.length) { hideSuggestions(); return; }
+    suggestBox.innerHTML = "";
+    matches.forEach(n => {
+      const item = document.createElement("div");
+      item.className = "suggest-item";
+      item.textContent = n;
+      item.addEventListener("mousedown", ev => {
+        ev.preventDefault();
+        inp.value = n;
+        state.inputs[sec.key] = n;
+        hideSuggestions();
+      });
+      suggestBox.appendChild(item);
+    });
+    suggestBox.style.display = "block";
+  }
+
   let lastPhoneLookup = "";
   inp.addEventListener("input", async e => {
     const val = e.target.value;
     state.inputs[sec.key] = val;
+    const trimmed = val.trim();
     const digits = val.replace(/\D/g, "");
-    const looksLikePhone = digits.length >= 9 && /^[+\d\s()-]+$/.test(val.trim());
-    if (looksLikePhone && digits !== lastPhoneLookup) {
-      lastPhoneLookup = digits;
-      const core = digits.slice(-9);
-      try {
-        const res = await api({ action: "lookupPhone", phone: core });
-        if (res.ok && (state.inputs[sec.key] || "").replace(/\D/g, "") === digits) {
-          inp.value = res.name;
-          state.inputs[sec.key] = res.name;
-        }
-      } catch (err) {}
+    const isNumericish = trimmed !== "" && /^[+\d\s()-]+$/.test(trimmed);
+
+    if (isNumericish) {
+      hideSuggestions();
+      if (digits.length >= 9 && digits !== lastPhoneLookup) {
+        lastPhoneLookup = digits;
+        const core = digits.slice(-9);
+        try {
+          const res = await api({ action: "lookupPhone", phone: core });
+          if (res.ok && (state.inputs[sec.key] || "").replace(/\D/g, "") === digits) {
+            inp.value = res.name;
+            state.inputs[sec.key] = res.name;
+          }
+        } catch (err) {}
+      }
+    } else {
+      updateSuggestions(trimmed);
     }
   });
-  inp.addEventListener("keydown", e => { if(e.key==="Enter" && !isClosed) addPlayer(sec.key); });
+  inp.addEventListener("focus", () => { if (state.inputs[sec.key]) updateSuggestions(state.inputs[sec.key]); });
+  inp.addEventListener("blur",  () => { setTimeout(hideSuggestions, 150); });
+  inp.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !isClosed) addPlayer(sec.key);
+    if (e.key === "Escape") hideSuggestions();
+  });
+
+  fieldWrap.appendChild(inp);
+  fieldWrap.appendChild(suggestBox);
+
   const addB = document.createElement("button");
   addB.className = "add-btn"; addB.style.background = sec.color;
   addB.disabled  = !!saving || isClosed;
   addB.innerHTML = saving ? '<span class="spinner"></span>' : "+";
   addB.addEventListener("click", () => addPlayer(sec.key));
-  inputRow.appendChild(inp); inputRow.appendChild(addB);
+  inputRow.appendChild(fieldWrap); inputRow.appendChild(addB);
   card.appendChild(inputRow);
 
   const err = state.errors[sec.key];
