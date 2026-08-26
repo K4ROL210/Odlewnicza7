@@ -5,86 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Liga Squasha — Wyniki</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:        #080c10;
-    --surface:   rgba(255,255,255,0.04);
-    --glass:     rgba(255,255,255,0.06);
-    --border:    rgba(255,255,255,0.10);
-    --border-hi: rgba(255,255,255,0.18);
-    --muted:     #5a6680;
-    --text:      #dde4f0;
-    --c0: #c8ff00;
-    --c1: #00e5ff;
-    --c2: #ff8c42;
-    --c3: #b06aff;
-    --red: #ff4d4d;
+    --bg:        #ffffff;
+    --surface:   rgba(0,0,0,0.03);
+    --glass:     rgba(0,0,0,0.04);
+    --border:    rgba(0,0,0,0.12);
+    --border-hi: rgba(0,0,0,0.24);
+    --muted:     #7b7b7b;
+    --text:      #242424;
+    --accent:    #fab400;
+    --accent-dk: #c96f00;
+    --accent2:   #1a1a1a;
+    --c0: #fab400;
+    --c1: #1a1a1a;
+    --c2: #fab400;
+    --c3: #1a1a1a;
+    --red: #d64545;
   }
 
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg); color: var(--text);
-    font-family: 'Rajdhani', 'Arial', sans-serif;
+    font-family: 'Poppins', 'Arial', sans-serif;
     min-height: 100vh; padding: 0 0 80px; position: relative;
   }
   body::before {
     content: ''; position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse 90% 50% at 50% -5%, rgba(200,255,0,0.10) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 95% 95%,  rgba(0,229,255,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 40% 30% at 5%  70%,  rgba(176,106,255,0.05) 0%, transparent 50%);
+    background: radial-gradient(ellipse 90% 45% at 50% -5%, rgba(250,180,0,0.07) 0%, transparent 55%);
     pointer-events: none; z-index: 0;
-  }
-  body::after {
-    content: ''; position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(200,255,0,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,255,0,0.022) 1px, transparent 1px);
-    background-size: 48px 48px; pointer-events: none; z-index: 0;
   }
 
   /* ── NAV ── */
-  .nav { background: rgba(8,12,16,0.85); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav { background: rgba(255,241,214,0.94); border-bottom: 1px solid rgba(250,180,0,0.3); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
   .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
   .nav-inner::-webkit-scrollbar { display: none; }
-  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--c0); padding: 14px 16px 14px 0; margin-right: 8px; border-right: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; text-shadow: 0 0 20px rgba(200,255,0,0.4); }
-  .nav-link { display: flex; align-items: center; gap: 6px; padding: 14px 16px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; }
-  .nav-link:hover { color: var(--text); }
-  .nav-link.active { color: var(--c0); border-bottom-color: var(--c0); text-shadow: 0 0 12px rgba(200,255,0,0.3); }
+  .nav-logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 1px; color: var(--accent2); padding: 14px 16px 14px 0; margin-right: 8px; border-right: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
+  .nav-link { display: flex; align-items: center; gap: 6px; padding: 14px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; }
+  .nav-link:hover { color: var(--accent2); }
+  .nav-link.active { color: var(--accent-dk); border-bottom-color: var(--accent-dk); }
 
   /* ── PAGE ── */
   .page-wrap { padding: 36px 16px 0; position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
 
   /* ── HEADER ── */
   .header { text-align: center; margin-bottom: 36px; }
-  .pill { display: inline-block; background: var(--c0); color: #0a0f08; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 3px; padding: 4px 14px; border-radius: 100px; margin-bottom: 14px; text-transform: uppercase; }
-  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 9vw, 76px); line-height: .92; letter-spacing: 2px; color: #fff; }
-  h1 span { color: var(--c0); text-shadow: 0 0 30px rgba(200,255,0,0.4), 0 0 60px rgba(200,255,0,0.15); }
-  .sub { font-size: 16px; font-weight: 600; color: var(--muted); margin-top: 10px; }
+  .pill { display: inline-block; background: var(--accent); color: #1a1200; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 3px; padding: 5px 14px; border-radius: 100px; margin-bottom: 14px; text-transform: uppercase; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(32px, 6.5vw, 54px); line-height: 1.05; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent2); }
+  h1 span { color: var(--accent); }
+  .sub { font-size: 15px; font-weight: 500; color: var(--muted); margin-top: 10px; }
 
   /* ── SELECTOR ROWS ── */
   .selector-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
-  .selector-label { font-size: 11px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-right: 4px; white-space: nowrap; }
+  .selector-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-right: 4px; white-space: nowrap; font-family: 'Poppins', sans-serif; }
 
   /* ── TABS ── */
   .tab-btn {
-    font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700;
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
     letter-spacing: 0.5px; text-transform: uppercase;
     padding: 7px 16px; border-radius: 9px; cursor: pointer;
     border: 1.5px solid var(--border);
     background: transparent; color: var(--muted);
     transition: all .15s; white-space: nowrap;
   }
-  .tab-btn:hover { color: var(--text); border-color: var(--border-hi); }
-  .tab-btn.active { color: #0a0f08; border-color: transparent; }
-  .tab-btn.latest::after { content: " ●"; font-size: 9px; color: var(--c0); }
+  .tab-btn:hover { color: var(--accent2); border-color: var(--border-hi); }
+  .tab-btn.active { color: #ffffff; border-color: transparent; }
+  .tab-btn.latest::after { content: " ●"; font-size: 9px; color: var(--accent); }
 
   /* Przyciski kolejek */
   .round-btn {
-    font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700;
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
     letter-spacing: 0.3px; text-transform: uppercase;
     padding: 6px 12px; border-radius: 8px; cursor: pointer;
     border: 1.5px solid var(--border);
@@ -94,24 +87,25 @@
   }
   .round-btn .r-num  { font-size: 14px; }
   .round-btn .r-date { font-size: 10px; opacity: .7; }
-  .round-btn:hover   { color: var(--text); border-color: var(--border-hi); }
-  .round-btn.active  { color: #0a0f08; border-color: transparent; }
+  .round-btn:hover   { color: var(--accent2); border-color: var(--border-hi); }
+  .round-btn.active  { color: #ffffff; border-color: transparent; }
 
   /* Przyciski grup */
   .group-btn {
-    font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; letter-spacing: 0.3px;
     padding: 6px 18px; border-radius: 9px; cursor: pointer;
     border: 1.5px solid var(--border);
     background: transparent; color: var(--muted);
     transition: all .15s;
   }
-  .group-btn:hover  { color: var(--text); border-color: var(--border-hi); }
-  .group-btn.active { color: #0a0f08; border-color: transparent; }
+  .group-btn:hover  { color: var(--accent2); border-color: var(--border-hi); }
+  .group-btn.active { color: #ffffff; border-color: transparent; }
 
   /* ── SEKCJA WYNIKÓW ── */
   .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px; letter-spacing: 2px; color: var(--muted);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 16px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted);
     margin: 28px 0 12px;
     display: flex; align-items: center; gap: 10px;
   }
@@ -119,49 +113,49 @@
 
   /* ── TABLE CARD ── */
   .table-card {
-    background: rgba(255,255,255,0.035);
+    background: #ffffff;
     border: 1px solid var(--border);
     border-radius: 16px; overflow: hidden;
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 14px rgba(0,0,0,0.05);
     position: relative; margin-bottom: 20px;
   }
-  .table-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent-day); opacity: 0.7; }
+  .table-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-day); }
   .table-scroll { overflow-x: auto; }
 
   /* ── RANKING TABLE ── */
   .rank-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .rank-table th { padding: 11px 13px; text-align: left; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); white-space: nowrap; }
+  .rank-table th { padding: 11px 13px; text-align: left; font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.02); white-space: nowrap; }
   .rank-table th.c { text-align: center; }
-  .rank-table td { padding: 10px 13px; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; white-space: nowrap; }
+  .rank-table td { padding: 10px 13px; border-bottom: 1px solid rgba(0,0,0,0.05); font-weight: 500; white-space: nowrap; color: var(--text); }
   .rank-table tr:last-child td { border-bottom: none; }
-  .rank-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .rank-table tr:hover td { background: rgba(0,0,0,0.015); }
   .rank-table td.c { text-align: center; }
-  .pos-1 { font-family:'Bebas Neue',sans-serif; font-size:17px; color:#ffd700; }
-  .pos-2 { font-family:'Bebas Neue',sans-serif; font-size:17px; color:#c0c0c0; }
-  .pos-3 { font-family:'Bebas Neue',sans-serif; font-size:17px; color:#cd7f32; }
-  .pos-n { font-family:'Bebas Neue',sans-serif; font-size:15px; color:var(--muted); }
-  .pname { font-size:15px; font-weight:700; }
-  .pname.t1 { color:#ffd700; text-shadow:0 0 10px rgba(255,215,0,.3); }
-  .pname.t2 { color:#c0c0c0; }
-  .pname.t3 { color:#cd7f32; }
+  .pos-1 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#c9960a; }
+  .pos-2 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#8a8a8a; }
+  .pos-3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#a05a2c; }
+  .pos-n { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; color:var(--muted); }
+  .pname { font-size:14px; font-weight:600; }
+  .pname.t1 { color:#c9960a; }
+  .pname.t2 { color:#7c7c7c; }
+  .pname.t3 { color:#a05a2c; }
   .pts-cell { font-weight:800; text-align:center; }
 
   /* ── LOADING / ERROR ── */
   .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
   .state-box .icon { font-size: 48px; margin-bottom: 14px; }
-  .state-box p { font-size: 14px; font-weight: 600; }
-  .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid rgba(200,255,0,0.15); border-top-color: var(--c0); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 14px; }
+  .state-box p { font-size: 14px; font-weight: 500; }
+  .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid rgba(250,180,0,0.15); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 14px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ── FOOTER ── */
-  footer { text-align: center; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.1); margin-top: 40px; letter-spacing: 0.5px; text-transform: uppercase; }
+  footer { text-align: center; font-size: 11px; font-weight: 500; color: rgba(0,0,0,0.32); margin-top: 40px; letter-spacing: 0.4px; text-transform: uppercase; }
 
   /* ── MATCH GRID (siatka meczów) ─────────────────────────────
      Klasy pomocnicze używane przez renderMatchGrid()
   ── */
   .match-grid-table {
     border-collapse: collapse;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 13px;
     min-width: 100%;
   }
@@ -172,10 +166,10 @@
  /* PO */
 .mg-header-player {
   padding: 8px 4px;
-  font-size: 13px; font-weight: 900; font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 0.5px; text-transform: uppercase; text-align: center;
-  background: rgba(0,0,0,0.28);
-  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 12px; font-weight: 800; font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.3px; text-transform: uppercase; text-align: center;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid var(--border);
   white-space: pre-line;
   word-break: break-word;
   width: 88px;
@@ -191,10 +185,10 @@
   /* PO */
 .mg-sub-header {
   padding: 4px 2px;
-  font-size: 10px; font-weight: 900; letter-spacing: 1px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
   text-align: center; color: var(--muted);
-  background: rgba(0,0,0,0.2);
-  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.02);
+  border: 1px solid var(--border);
   text-transform: uppercase;
   width: 20px;
   min-width: 20px;
@@ -204,23 +198,23 @@
   /* PO */
 .mg-row-player {
   padding: 8px 14px;
-  font-size: 16px; font-weight: 900;
+  font-size: 15px; font-weight: 800;
   white-space: nowrap; vertical-align: middle;
-  border: 1px solid rgba(255,255,255,0.08);
-  font-family: 'Rajdhani', sans-serif;
+  border: 1px solid var(--border);
+  font-family: 'Poppins', sans-serif;
   width: 1%; /* kurczy się do minimalnej potrzebnej szerokości */
 }
   /* Przekątna (gracz vs siebie) */
   .mg-diagonal {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
   }
   /* Wynik pojedynczego seta (liczby punktów) */
   .mg-score {
   padding: 6px 4px;
   text-align: center; font-weight: 600;
-  background: rgba(0,0,0,0.18);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.015);
+  border: 1px solid var(--border);
   color: var(--text);
   width: 20px;
   min-width: 20px;
@@ -229,8 +223,8 @@
 .mg-result {
   padding: 6px 4px;
   text-align: center; font-weight: 800;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.045);
+  border: 1px solid var(--border-hi);
   width: 20px;
   min-width: 20px;
 }
@@ -239,18 +233,18 @@
     padding: 8px;
     text-align: center; color: var(--muted);
     font-size: 18px;
-    background: rgba(0,0,0,0.10);
-    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(0,0,0,0.02);
+    border: 1px solid var(--border);
     vertical-align: middle;
   }
   /* Narożnik nagłówka */
   /* PO */
 .mg-corner {
   padding: 8px 12px;
-  font-size: 11px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+  font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
   color: var(--muted); text-align: center; vertical-align: middle;
-  background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
   width: 1%;
 }
  .pill-btn {
@@ -261,113 +255,28 @@
 }
 .pill-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(200,255,0,0.35);
+  box-shadow: 0 4px 20px rgba(250,180,0,0.35);
 }
 
 .group-entry-btn {
   display: inline-flex;
   align-items: center;
   padding: 10px 28px;
-  border-radius: 10px;
-  font-family: 'Rajdhani', sans-serif;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 1px;
+  font-size: 14px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   text-decoration: none;
-  color: #0a0f08;
-  background: var(--c0);
-  box-shadow: 0 4px 16px rgba(200,255,0,0.3);
+  color: #1a1200;
+  background: var(--accent);
+  box-shadow: 0 4px 16px rgba(250,180,0,0.3);
   transition: transform .15s, box-shadow .15s;
 }
 .group-entry-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(200,255,0,0.5);
-}
-
-/* ── DRABINKA TURNIEJU (zakładka Turniej) ───────────────────── */
-.bracket-group { margin-bottom: 40px; }
-
-/* Poziomy scroll na małych ekranach — drzewko się nie ściska */
-.bracket-scroll { overflow-x: auto; padding-bottom: 8px; }
-
-/* Runda 1 w pierwszej kolumnie, wygrani → prawo (ta sama wysokość),
-   przegrani → prawo, niżej — dokładnie jak w arkuszu xlsx.
-   Linie łączące rysowane są dynamicznie (SVG) w drawBracketConnectors(). */
-.bracket-tree {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 72px;
-  padding: 6px 4px;
-  width: max-content;
-}
-
-.bracket-column {
-  display: flex; flex-direction: column; gap: 24px;
-  flex-shrink: 0;
-}
-
-/* Odstęp oddzielający sekcję "walka o górne miejsca" od "walka o dolne miejsca" */
-.bracket-gap { height: 40px; flex-shrink: 0; }
-
-.bracket-lines {
-  position: absolute; top: 0; left: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-.bracket-line {
-  fill: none;
-  stroke-width: 2;
-}
-.bracket-line-win { stroke: var(--c0); }
-
-.match-card {
-  background: rgba(255,255,255,0.035);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  width: 230px;
-  padding: 8px 12px;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  position: relative; z-index: 1;
-}
-
-.match-card-label {
-  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-  padding-bottom: 6px; margin-bottom: 6px;
-  border-bottom: 1px solid var(--border);
-}
-.mcl-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 900;
-  letter-spacing: 1.2px; color: var(--muted);
-}
-.mcl-sub {
-  font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 600;
-  color: var(--muted); opacity: 0.7;
-}
-
-.match-card-player {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 10px; padding: 4px 0; font-weight: 700; font-size: 14px;
-}
-.match-card-player.winner { font-weight: 900; }
-
-.mcp-name { display: flex; align-items: center; gap: 6px; min-width: 0; }
-.mcp-name > span:last-child {
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.mcp-seed {
-  font-family: 'Bebas Neue', sans-serif; font-size: 11px; color: var(--muted);
-  border: 1px solid var(--border); border-radius: 5px;
-  padding: 0 4px; flex-shrink: 0;
-}
-
-.mcp-sets { display: flex; gap: 3px; flex-shrink: 0; }
-.mcp-set {
-  min-width: 16px; text-align: center;
-  font-size: 12px; font-weight: 800;
-  background: rgba(0,0,0,0.25); border-radius: 4px; padding: 1px 3px;
-  color: var(--text);
+  box-shadow: 0 6px 24px rgba(250,180,0,0.45);
 }
 </style>
 </head>
@@ -376,27 +285,28 @@
 <!-- ═══ KONFIGURACJA ══════════════════════════════════════════ -->
 <script>
   // ⬇ Wklej URL swojego Web Appa (Kod_Wyniki.gs)
-  const WYNIKI_URL = "https://script.google.com/macros/s/AKfycbw3N6sNxh4YZi0yapOlh_G288wln4kF-IGVyGHtpEFQDcJD9-gRgZV0ZZbb9pDV8tFhMw/exec";
-
-  // ⬇ Wklej URL Web Appa wdrożonego z TurniejWyniki.gs
-  const TURNIEJ_URL = "https://script.google.com/macros/s/AKfycbyJG7w7mdjuj8EC5CPsQpnkTOL0lde1kEPJcREBlqq_Cnq42jap_H-__0fHmMjqil2IcA/exec";
+  const WYNIKI_URL = "https://script.google.com/macros/s/AKfycbyVYHCw_Wz3Grbyt5P14Bt-x6ScrpaQ2oPT12ybPJ5G2tyttTIqOFcXlMhZ47jjVL2Yiw/exec";
 
   const DAY_CONFIG = {
-    thu: { label: "Czwartek",     color: "#c8ff00" },
-    tue: { label: "Wtorek",       color: "#00e5ff" },
-    sat: { label: "Sobota",       color: "#ff8c42" },
-    mon: { label: "Poniedziałek", color: "#b06aff" },
+     sun: { label: "Niedziela", color: "#c96f00" },
   };
 
-  const DAY_ORDER = ["thu", "tue", "sat", "mon"]; // kolejność zakładek
+  const DAY_ORDER = ["sun"]; // kolejność zakładek
 
-  const TOURNAMENT_COLOR = "#ffd700"; // kolor zakładki Turniej
+  // Numer sezonu = ROK*10 + PORA_ROKU (1=Zima,2=Wiosna,3=Lato,4=Jesień)
+  // — patrz komentarz w Kod wyniki.gs. Etykieta liczona automatycznie.
+  const SEASON_QUARTERS = ["", "Zima", "Wiosna", "Lato", "Jesień"];
+  function seasonLabel(season) {
+    const year = Math.floor(season / 10);
+    const q = season % 10;
+    return (SEASON_QUARTERS[q] || "Sezon") + " " + year;
+  }
 </script>
 <!-- ══════════════════════════════════════════════════════════ -->
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-logo">🎾 WPC</div>
+    <div class="nav-logo">🎾 Odlewnicza</div>
     <a class="nav-link"        href="index.html">📋 Zapisy</a>
     <a class="nav-link active" href="wyniki.html">🏆 Wyniki</a>
     <a class="nav-link"        href="ranking.html">📊 Ranking</a>
@@ -408,12 +318,18 @@
  <div class="pill">✏️ Wprowadzanie wyników</div>
 <div id="wprowadzaniePanel" style="margin-bottom:14px;">
   <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
-    <a href="https://script.google.com/macros/s/AKfycbxLKh0eSjjVcyDXhfEr_8rjg2z2Gl0T90uctq1-Haq67TJE77DDp9CAYxLjrrBDRaNCrg/exec?group=A"
+    <a href="https://script.google.com/macros/s/AKfycbxS6mSQiSZRWy8B9TRce0DsY11pdHNxBIleZiWfmmHqlLkSKxXxdon9ijmr2iXcfrb4/exec?group=A"
        target="_blank" class="group-entry-btn">Grupa A</a>
-    <a href="https://script.google.com/macros/s/AKfycbxLKh0eSjjVcyDXhfEr_8rjg2z2Gl0T90uctq1-Haq67TJE77DDp9CAYxLjrrBDRaNCrg/exec?group=B"
+    <a href="https://script.google.com/macros/s/AKfycbxS6mSQiSZRWy8B9TRce0DsY11pdHNxBIleZiWfmmHqlLkSKxXxdon9ijmr2iXcfrb4/exec?group=B"
        target="_blank" class="group-entry-btn">Grupa B</a>
-    <a href="https://script.google.com/macros/s/AKfycbxLKh0eSjjVcyDXhfEr_8rjg2z2Gl0T90uctq1-Haq67TJE77DDp9CAYxLjrrBDRaNCrg/exec?group=C"
+    <a href="https://script.google.com/macros/s/AKfycbxS6mSQiSZRWy8B9TRce0DsY11pdHNxBIleZiWfmmHqlLkSKxXxdon9ijmr2iXcfrb4/exec?group=C"
        target="_blank" class="group-entry-btn">Grupa C</a>
+    <a href="https://script.google.com/macros/s/AKfycbxS6mSQiSZRWy8B9TRce0DsY11pdHNxBIleZiWfmmHqlLkSKxXxdon9ijmr2iXcfrb4/exec?group=D"
+       target="_blank" class="group-entry-btn">Grupa D</a>
+    <a href="https://script.google.com/macros/s/AKfycbxS6mSQiSZRWy8B9TRce0DsY11pdHNxBIleZiWfmmHqlLkSKxXxdon9ijmr2iXcfrb4/exec?group=E"
+       target="_blank" class="group-entry-btn">Grupa E</a>
+    <a href="https://script.google.com/macros/s/AKfycbxS6mSQiSZRWy8B9TRce0DsY11pdHNxBIleZiWfmmHqlLkSKxXxdon9ijmr2iXcfrb4/exec?group=F"
+       target="_blank" class="group-entry-btn">Grupa F</a>
   </div>
 </div>
     <h1>WYNIKI <span>KOLEJEK</span></h1>
@@ -460,7 +376,6 @@
 //  STATE
 // ══════════════════════════════════════════════════════════════
 let state = {
-  mode:         "days", // "days" | "tournament"
   meta:         {},    // { thu: { seasons:[], latest:4 }, ... }
   activeDay:    null,
   activeSeason: null,
@@ -472,7 +387,7 @@ let state = {
 // ══════════════════════════════════════════════════════════════
 //  API (JSONP — omija CORS przy wywołaniu z pliku lokalnego)
 // ══════════════════════════════════════════════════════════════
-function jsonp(url, params) {
+function api(params) {
   return new Promise((resolve, reject) => {
     const cb = "jsonp_" + Math.random().toString(36).slice(2);
     let script;
@@ -488,14 +403,11 @@ function jsonp(url, params) {
       resolve(data);
     };
     script = document.createElement("script");
-    script.src = url + "?" + new URLSearchParams({ ...params, callback: cb });
+    script.src = WYNIKI_URL + "?" + new URLSearchParams({ ...params, callback: cb });
     script.onerror = () => { clearTimeout(t); delete window[cb]; reject(new Error("błąd sieci")); };
     document.head.appendChild(script);
   });
 }
-
-function api(params) { return jsonp(WYNIKI_URL, params); }
-function apiTurniej(params) { return jsonp(TURNIEJ_URL, params); }
 
 // ══════════════════════════════════════════════════════════════
 //  INIT
@@ -508,10 +420,7 @@ async function init() {
 
    // Kolejność dni ligi (bez poniedziałku — to trening)
 const LEAGUE_DAYS = [
-  { key: "mon", dow: 1 },
-  { key: "tue", dow: 2 },
-  { key: "thu", dow: 4 },
-  { key: "sat", dow: 6 },
+  { key: "sun", dow: 0 }
 ];
 
 const todayDow = new Date().getDay(); // 0=nd, 1=pn, 2=wt, 3=śr, 4=czw, 5=pt, 6=sob
@@ -548,11 +457,10 @@ function renderDayTabs() {
     if (!state.meta[key]) continue;
     const cfg = DAY_CONFIG[key];
     const btn = document.createElement("button");
-    btn.className = "tab-btn" + (state.mode === "days" && key === state.activeDay ? " active" : "");
+    btn.className = "tab-btn" + (key === state.activeDay ? " active" : "");
     btn.textContent = cfg.label;
-    if (state.mode === "days" && key === state.activeDay) btn.style.background = cfg.color;
+    if (key === state.activeDay) btn.style.background = cfg.color;
     btn.addEventListener("click", async () => {
-      state.mode         = "days";
       state.activeDay    = key;
       state.activeSeason = state.meta[key].latest;
       state.activeRound  = null;
@@ -565,25 +473,6 @@ function renderDayTabs() {
     });
     el.appendChild(btn);
   }
-
-  // Zakładka Turniej — osobny tryb widoku (drabinka), bez sezonu/kolejki/grupy
-  const tourBtn = document.createElement("button");
-  tourBtn.className = "tab-btn" + (state.mode === "tournament" ? " active" : "");
-  tourBtn.textContent = "🏆 Turniej";
-  if (state.mode === "tournament") tourBtn.style.background = TOURNAMENT_COLOR;
-  tourBtn.addEventListener("click", async () => {
-    state.mode = "tournament";
-    renderDayTabs();
-    hideSelectorRows();
-    await loadTournament();
-  });
-  el.appendChild(tourBtn);
-}
-
-function hideSelectorRows() {
-  document.getElementById("seasonRow").style.display = "none";
-  document.getElementById("roundRow").style.display  = "none";
-  document.getElementById("groupRow").style.display  = "none";
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -600,14 +489,14 @@ function renderSeasonTabs() {
 
   const seasons = [...state.meta[state.activeDay].seasons].sort((a,b) => b - a);
   const latest  = state.meta[state.activeDay].latest;
-  const color   = DAY_CONFIG[state.activeDay]?.color || "#c8ff00";
+  const color   = DAY_CONFIG[state.activeDay]?.color || "#c96f00";
 
   for (const s of seasons) {
     const btn = document.createElement("button");
     btn.className = "tab-btn"
       + (s === state.activeSeason ? " active" : "")
       + (s === latest ? " latest" : "");
-    btn.textContent = "Sezon " + s;
+    btn.textContent = seasonLabel(s);
     if (s === state.activeSeason) btn.style.background = color;
     btn.addEventListener("click", async () => {
       state.activeSeason = s;
@@ -662,7 +551,7 @@ async function loadRounds() {
 function renderRoundTabs() {
   const row   = document.getElementById("roundRow");
   const el    = document.getElementById("roundTabs");
-  const color = DAY_CONFIG[state.activeDay]?.color || "#c8ff00";
+  const color = DAY_CONFIG[state.activeDay]?.color || "#c96f00";
   el.innerHTML = "";
   row.style.display = "flex";
 
@@ -688,7 +577,7 @@ function renderRoundTabs() {
 function renderGroupTabs(groups) {
   const row   = document.getElementById("groupRow");
   const el    = document.getElementById("groupTabs");
-  const color = DAY_CONFIG[state.activeDay]?.color || "#c8ff00";
+  const color = DAY_CONFIG[state.activeDay]?.color || "#c96f00";
   el.style.display = "flex"; el.style.gap = "6px";
   el.innerHTML = "";
 
@@ -739,7 +628,7 @@ async function loadResults(silent = false) {
 // ══════════════════════════════════════════════════════════════
 function renderResults(data) {
   const area  = document.getElementById("contentArea");
-  const color = DAY_CONFIG[state.activeDay]?.color || "#c8ff00";
+  const color = DAY_CONFIG[state.activeDay]?.color || "#c96f00";
   area.innerHTML = "";
 
   // ── Ranking kolejki ──────────────────────────────────────────
@@ -942,7 +831,7 @@ th.appendChild(inner);
 
     // ── Górny wiersz gracza i ──
     const tr1 = document.createElement("tr");
-    tr1.style.borderTop = "2px solid rgba(255,255,255,0.18)";
+    tr1.style.borderTop = "2px solid rgba(0,0,0,0.15)";
 
     // Pierwsza kolumna — imię i nazwisko w jednej linii, stała szerokość
     const nameTd = document.createElement("td");
@@ -982,8 +871,8 @@ nameTd.style.fontWeight = "900";
           ph.rowSpan = 2;
           ph.textContent = "—";
           ph.style.background = isEven
-            ? "rgba(255,255,255,0.03)"
-            : "rgba(0,0,0,0.30)";
+            ? "rgba(0,0,0,0.015)"
+            : "rgba(0,0,0,0.05)";
           tr1.appendChild(ph);
         } else {
           for (let c = 0; c < 3; c++) {
@@ -992,8 +881,8 @@ nameTd.style.fontWeight = "900";
             td.textContent = fmtVal(rowA[colStart + c]);
             td.style.width = "22px";
             td.style.background = isEven
-              ? "rgba(255,255,255,0.06)"
-              : "rgba(0,0,0,0.35)";
+              ? "rgba(0,0,0,0.02)"
+              : "rgba(0,0,0,0.05)";
             tr1.appendChild(td);
           }
           const wTd = document.createElement("td");
@@ -1002,8 +891,8 @@ nameTd.style.fontWeight = "900";
           wTd.style.width = "22px";
           wTd.textContent = fmtVal(rowA[colStart + 3]);
           wTd.style.background = isEven
-            ? "rgba(255,255,255,0.13)"
-            : "rgba(0,0,0,0.22)";
+            ? "rgba(0,0,0,0.045)"
+            : "rgba(0,0,0,0.08)";
           tr1.appendChild(wTd);
         }
       }
@@ -1027,8 +916,8 @@ nameTd.style.fontWeight = "900";
         td.textContent = fmtVal(rowB[colStart + c]);
         td.style.width = "22px";
         td.style.background = isEven
-          ? "rgba(255,255,255,0.06)"
-          : "rgba(0,0,0,0.35)";
+          ? "rgba(0,0,0,0.02)"
+          : "rgba(0,0,0,0.05)";
         tr2.appendChild(td);
       }
       const wTd = document.createElement("td");
@@ -1037,8 +926,8 @@ nameTd.style.fontWeight = "900";
       wTd.style.width = "22px";
       wTd.textContent = fmtVal(rowB[colStart + 3]);
       wTd.style.background = isEven
-        ? "rgba(255,255,255,0.13)"
-        : "rgba(0,0,0,0.22)";
+        ? "rgba(0,0,0,0.045)"
+        : "rgba(0,0,0,0.08)";
       tr2.appendChild(wTd);
     }
     tbody.appendChild(tr2);
@@ -1047,347 +936,6 @@ nameTd.style.fontWeight = "900";
   tbl.appendChild(tbody);
   return tbl;
 }
-
-// ══════════════════════════════════════════════════════════════
-//  TURNIEJ — drabinka (zakładka "Turniej")
-// ══════════════════════════════════════════════════════════════
-async function loadTournament(silent = false) {
-  if (!silent) showContentLoading();
-  try {
-    const res = await apiTurniej({ action: "bracket" });
-    if (!res.ok) { if (!silent) showError(res.error); return; }
-    renderTournament(res);
-  } catch (e) {
-    if (!silent) showError("Błąd ładowania turnieju: " + e.message);
-  }
-}
-
-// Etykiety meczów rundy 2 i fazy finałowej — miejsca liczone względem
-// bazy grupy (0 dla "1-8", 8 dla "9-16").
-const TOUR_LABELS = {
-  final:            n => ({ title: "FINAŁ",              sub: `miejsca ${n+1}-${n+2}` }),
-  trzecie:          n => ({ title: `MECZ O ${n+3}. MIEJSCE`, sub: `miejsca ${n+3}-${n+4}` }),
-  piate:            n => ({ title: `MECZ O ${n+5}. MIEJSCE`, sub: `miejsca ${n+5}-${n+6}` }),
-  siodme:           n => ({ title: `MECZ O ${n+7}. MIEJSCE`, sub: `miejsca ${n+7}-${n+8}` }),
-  "polfinalA_1-4":  n => ({ title: "PÓŁFINAŁ A", sub: `walka o miejsca ${n+1}-${n+4}` }),
-  "polfinalB_1-4":  n => ({ title: "PÓŁFINAŁ B", sub: `walka o miejsca ${n+1}-${n+4}` }),
-  "polfinalA_5-8":  n => ({ title: "PÓŁFINAŁ A", sub: `walka o miejsca ${n+5}-${n+8}` }),
-  "polfinalB_5-8":  n => ({ title: "PÓŁFINAŁ B", sub: `walka o miejsca ${n+5}-${n+8}` }),
-};
-
-// Czy mecz ma już wpisany choć jeden set?
-function tourMatchPlayed(m) {
-  return m.player1.sets.some(v => v !== "") || m.player2.sets.some(v => v !== "");
-}
-
-// Liczba wygranych setów jednego gracza (na podstawie surowych wyników, nie formuł arkusza).
-function tourSetsWon(sets, opp) {
-  let w = 0;
-  for (let i = 0; i < sets.length; i++) {
-    if (sets[i] === "" || opp[i] === "") continue;
-    if (Number(sets[i]) > Number(opp[i])) w++;
-  }
-  return w;
-}
-
-// Zwraca 1, 2 lub null (mecz nierozstrzygnięty / nierozegrany).
-function tourWinnerSide(m) {
-  if (!tourMatchPlayed(m)) return null;
-  const w1 = tourSetsWon(m.player1.sets, m.player2.sets);
-  const w2 = tourSetsWon(m.player2.sets, m.player1.sets);
-  if (w1 === w2) return null;
-  return w1 > w2 ? 1 : 2;
-}
-
-// Buduje kartę pojedynczego meczu drabinki.
-function mkMatchCard(m, color, labelInfo, matchKey) {
-  const card = document.createElement("div");
-  card.className = "match-card";
-  if (matchKey) card.dataset.matchKey = matchKey;
-
-  if (labelInfo) {
-    const lbl = document.createElement("div");
-    lbl.className = "match-card-label";
-    lbl.innerHTML = `<span class="mcl-title">${labelInfo.title}</span>` +
-      (labelInfo.sub ? `<span class="mcl-sub">${labelInfo.sub}</span>` : "");
-    card.appendChild(lbl);
-  }
-
-  const winner = tourWinnerSide(m);
-  const played = tourMatchPlayed(m);
-
-  [m.player1, m.player2].forEach((p, idx) => {
-    const isWinner = winner === idx + 1;
-    const row = document.createElement("div");
-    row.className = "match-card-player" + (isWinner ? " winner" : "");
-    if (isWinner) row.style.color = color;
-
-    const nameSpan = document.createElement("span");
-    nameSpan.className = "mcp-name";
-    if (p.seed !== null && p.seed !== undefined) {
-      const seedSpan = document.createElement("span");
-      seedSpan.className = "mcp-seed";
-      seedSpan.textContent = p.seed;
-      nameSpan.appendChild(seedSpan);
-    }
-    const txt = document.createElement("span");
-    txt.textContent = p.name || "—";
-    if (!p.name) txt.style.opacity = "0.4";
-    nameSpan.appendChild(txt);
-    row.appendChild(nameSpan);
-
-    if (played) {
-      const setsSpan = document.createElement("span");
-      setsSpan.className = "mcp-sets";
-      p.sets.forEach(v => {
-        const s = document.createElement("span");
-        s.className = "mcp-set";
-        s.textContent = v === "" ? "" : v;
-        setsSpan.appendChild(s);
-      });
-      row.appendChild(setsSpan);
-    }
-
-    card.appendChild(row);
-  });
-
-  return card;
-}
-
-// Buduje osobne okienko dla jednego miejsca (kolumna po prawej od fazy finałowej),
-// z wartością odczytaną wprost z arkusza (kol. X — patrz backend, pole "standings").
-function mkPlaceCard(placeNum, name, color, matchKey) {
-  const card = document.createElement("div");
-  card.className = "match-card place-card";
-  if (matchKey) card.dataset.matchKey = matchKey;
-
-  const lbl = document.createElement("div");
-  lbl.className = "match-card-label";
-  lbl.innerHTML = `<span class="mcl-title">MIEJSCE ${placeNum}</span>`;
-  card.appendChild(lbl);
-
-  const row = document.createElement("div");
-  row.className = "match-card-player";
-  row.style.color = color;
-
-  const nameSpan = document.createElement("span");
-  nameSpan.className = "mcp-name";
-  const txt = document.createElement("span");
-  txt.textContent = name || "—";
-  if (!name) txt.style.opacity = "0.4";
-  nameSpan.appendChild(txt);
-  row.appendChild(nameSpan);
-
-  card.appendChild(row);
-  return card;
-}
-
-// Trasy meczów — który mecz dostaje zwycięzcę, a który przegranego.
-// Indeksy 0-3 dla Rundy 1 odpowiadają kolejności meczów zwróconej przez backend (M1..M4).
-const R1_ROUTES = [
-  { win: "polfinalA_1-4", lose: "polfinalA_5-8" }, // M1
-  { win: "polfinalA_1-4", lose: "polfinalA_5-8" }, // M2
-  { win: "polfinalB_1-4", lose: "polfinalB_5-8" }, // M3
-  { win: "polfinalB_1-4", lose: "polfinalB_5-8" }, // M4
-];
-const R2_ROUTES = {
-  "polfinalA_1-4": { win: "final",  lose: "trzecie" },
-  "polfinalB_1-4": { win: "final",  lose: "trzecie" },
-  "polfinalA_5-8": { win: "piate",  lose: "siodme"  },
-  "polfinalB_5-8": { win: "piate",  lose: "siodme"  },
-};
-// Mecz fazy finałowej → numery okienek (kolumna 4). Zwycięzca = wyższe miejsce.
-const FINAL_PLACE_ROUTES = {
-  final:   { win: 1, lose: 2 },
-  trzecie: { win: 3, lose: 4 },
-  piate:   { win: 5, lose: 6 },
-  siodme:  { win: 7, lose: 8 },
-};
-
-function mkBracketGap() {
-  const gap = document.createElement("div");
-  gap.className = "bracket-gap";
-  return gap;
-}
-
-// Buduje całą sekcję drabinki dla jednej grupy ("1-8" lub "9-16"):
-// Runda 1 w kolumnie 1, wygrani i przegrani przechodzą w prawo (Runda 2),
-// dokładnie tak jak w arkuszu — górna połowa kolumny to walka o miejsca
-// (baseRank+1)-(baseRank+4), dolna to walka o (baseRank+5)-(baseRank+8).
-function renderBracketGroup(group, color) {
-  const baseRank = group.key === "9-16" ? 8 : 0;
-
-  const wrap = document.createElement("div");
-  wrap.className = "bracket-group";
-  wrap.appendChild(mkSectionTitle("Drabinka — " + group.label, color));
-
-  const scroll = document.createElement("div");
-  scroll.className = "bracket-scroll";
-
-  const tree = document.createElement("div");
-  tree.className = "bracket-tree";
-
-  // Kolumna 1 — Runda 1
-  const col1 = document.createElement("div");
-  col1.className = "bracket-column";
-  (group.round1 || []).forEach((m, i) => {
-    col1.appendChild(mkMatchCard(m, color, { title: "RUNDA 1", sub: "" }, "r1-" + i));
-  });
-
-  // Kolumna 2 — Runda 2 (półfinały): najpierw walka o górne miejsca, niżej o dolne
-  const col2 = document.createElement("div");
-  col2.className = "bracket-column";
-  const r2ByTag = {};
-  (group.round2 || []).forEach(m => { r2ByTag[m.tag] = m; });
-  ["polfinalA_1-4", "polfinalB_1-4", "polfinalA_5-8", "polfinalB_5-8"].forEach((tag, idx) => {
-    if (idx === 2) col2.appendChild(mkBracketGap());
-    const m = r2ByTag[tag];
-    if (!m) return;
-    const info = TOUR_LABELS[tag] ? TOUR_LABELS[tag](baseRank) : null;
-    col2.appendChild(mkMatchCard(m, color, info, tag));
-  });
-
-  // Kolumna 3 — faza finałowa
-  const col3 = document.createElement("div");
-  col3.className = "bracket-column";
-  const finByTag = {};
-  (group.final || []).forEach(m => { finByTag[m.tag] = m; });
-  ["final", "trzecie", "piate", "siodme"].forEach((tag, idx) => {
-    if (idx === 2) col3.appendChild(mkBracketGap());
-    const m = finByTag[tag];
-    if (!m) return;
-    const info = TOUR_LABELS[tag] ? TOUR_LABELS[tag](baseRank) : null;
-    col3.appendChild(mkMatchCard(m, color, info, tag));
-  });
-
-  // Kolumna 4 — osobne okienko na każde miejsce, odczytane z kol. X arkusza
-  const col4 = document.createElement("div");
-  col4.className = "bracket-column";
-  const standings = group.standings || [];
-  for (let i = 0; i < 8; i++) {
-    if (i === 4) col4.appendChild(mkBracketGap());
-    col4.appendChild(mkPlaceCard(baseRank + i + 1, standings[i], color, "place-" + (i + 1)));
-  }
-
-  tree.appendChild(col1);
-  tree.appendChild(col2);
-  tree.appendChild(col3);
-  tree.appendChild(col4);
-  scroll.appendChild(tree);
-  wrap.appendChild(scroll);
-
-  // Łączniki rysowane po wstawieniu do DOM — potrzebują realnych wymiarów kart.
-  requestAnimationFrame(() => drawBracketConnectors(tree, group));
-
-  return wrap;
-}
-
-// Rysuje SVG z liniami łączącymi mecze: zwycięzca → w prawo (ten sam poziom),
-// przegrany → w prawo, niżej. Współrzędne liczone są z realnego layoutu (getBoundingClientRect),
-// więc linie trafiają poprawnie niezależnie od wysokości kart (różna długość nazwisk itp).
-function drawBracketConnectors(tree, group) {
-  const old = tree.querySelector(".bracket-lines");
-  if (old) old.remove();
-
-  const svgNS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgNS, "svg");
-  svg.setAttribute("class", "bracket-lines");
-
-  const rect0 = tree.getBoundingClientRect();
-  const w = tree.scrollWidth;
-  const h = tree.scrollHeight;
-  svg.setAttribute("width", w);
-  svg.setAttribute("height", h);
-
-  function findCard(key) {
-    return tree.querySelector('[data-match-key="' + key + '"]');
-  }
-
-  // rowIndex: 0 (górny gracz), 1 (dolny gracz) lub null (środek karty)
-  function anchor(cardEl, side, rowIndex) {
-    const r = cardEl.getBoundingClientRect();
-    const x = side === "right" ? (r.right - rect0.left) : (r.left - rect0.left);
-    let y;
-    if (rowIndex === null || rowIndex === undefined) {
-      y = r.top - rect0.top + r.height / 2;
-    } else {
-      const rows = cardEl.querySelectorAll(".match-card-player");
-      const rowEl = rows[rowIndex] || cardEl;
-      const rr = rowEl.getBoundingClientRect();
-      y = rr.top - rect0.top + rr.height / 2;
-    }
-    return [x, y];
-  }
-
-  function drawElbow(p1, p2, cls) {
-    const midX = (p1[0] + p2[0]) / 2;
-    const path = document.createElementNS(svgNS, "path");
-    path.setAttribute("d", `M ${p1[0]} ${p1[1]} H ${midX} V ${p2[1]} H ${p2[0]}`);
-    path.setAttribute("class", "bracket-line " + cls);
-    svg.appendChild(path);
-  }
-
-  // Rysujemy tylko ścieżkę zwycięzcy — linie przegranych są celowo pominięte.
-  function connect(sourceMatch, sourceKey, routes) {
-    if (!routes) return;
-    const sourceCard = findCard(sourceKey);
-    if (!sourceCard) return;
-
-    const winner = tourWinnerSide(sourceMatch);
-    const winRow = winner === 1 ? 0 : winner === 2 ? 1 : null;
-
-    const winCard = findCard(routes.win);
-    if (winCard) drawElbow(anchor(sourceCard, "right", winRow), anchor(winCard, "left", null), "bracket-line-win");
-  }
-
-  // Mecz fazy finałowej → okienko z miejscem zwycięzcy (przegrany bez linii).
-  function connectToPlace(sourceMatch, sourceKey, winPlaceKey) {
-    const sourceCard = findCard(sourceKey);
-    if (!sourceCard) return;
-
-    const winner = tourWinnerSide(sourceMatch);
-    const winRow = winner === 1 ? 0 : winner === 2 ? 1 : null;
-
-    const winCard = findCard(winPlaceKey);
-    if (winCard) drawElbow(anchor(sourceCard, "right", winRow), anchor(winCard, "left", null), "bracket-line-win");
-  }
-
-  (group.round1 || []).forEach((m, i) => connect(m, "r1-" + i, R1_ROUTES[i]));
-  (group.round2 || []).forEach(m => connect(m, m.tag, R2_ROUTES[m.tag]));
-  (group.final  || []).forEach(m => {
-    const routes = FINAL_PLACE_ROUTES[m.tag];
-    if (routes) connectToPlace(m, m.tag, "place-" + routes.win);
-  });
-
-  tree.appendChild(svg);
-}
-
-// Renderuje całą zakładkę Turniej: najpierw grupa "1-8", pod nią "9-16".
-let lastTournamentData = null;
-
-function renderTournament(data) {
-  lastTournamentData = data;
-
-  const area = document.getElementById("contentArea");
-  area.innerHTML = "";
-
-  if (!data.groups || data.groups.length === 0) {
-    showError("Brak danych turnieju");
-    return;
-  }
-
-  data.groups.forEach(group => {
-    area.appendChild(renderBracketGroup(group, TOURNAMENT_COLOR));
-  });
-}
-
-// Po zmianie rozmiaru okna przerysuj drzewko, żeby linie łączące zostały poprawnie przeliczone.
-let tourResizeTimer = null;
-window.addEventListener("resize", () => {
-  if (state.mode !== "tournament" || !lastTournamentData) return;
-  clearTimeout(tourResizeTimer);
-  tourResizeTimer = setTimeout(() => renderTournament(lastTournamentData), 250);
-});
 
 // ══════════════════════════════════════════════════════════════
 //  POMOCNICZE
@@ -1460,9 +1008,7 @@ init();
 
  // ── AUTO-ODŚWIEŻANIE WYNIKÓW co 8 sekund ────────────────────────
 setInterval(() => {
-  if (state.mode === "tournament") {
-    loadTournament(true);
-  } else if (state.activeDay && state.activeSeason && state.activeRound && state.activeGroup) {
+  if (state.activeDay && state.activeSeason && state.activeRound && state.activeGroup) {
     loadResults(true);
   }
 }, 8000);
