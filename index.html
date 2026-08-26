@@ -1354,7 +1354,7 @@ function mkCard(sec) {
 
   const inp = document.createElement("input");
   inp.className   = "field"; inp.type = "text";
-  inp.placeholder = isClosed ? "Zapisy zamknięte" : "Nazwisko i Imię";
+  inp.placeholder = isClosed ? "Zapisy zamknięte" : "Nazwisko i Imię lub nr tel.";
   inp.value       = state.inputs[sec.key] || "";
   inp.disabled    = isClosed;
   inp.autocomplete = "off";
