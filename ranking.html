@@ -127,9 +127,18 @@
 <!-- ═══ KONFIGURACJA ══════════════════════════════════════════ -->
 <script>
   // ⬇ Wklej URL swojego Web Appa (Kod Ranking Odlewnicza.gs)
-  const RANKING_URL = "https://script.google.com/macros/s/AKfycbzXcZqJwDFu153dCorbG_IknoU4bWvaX26T8l5mQKQrmwe-uHKowlKOl8PcpYsZsZlRlw/exec";
+  const RANKING_URL = "https://script.google.com/macros/s/WKLEJ_TU_URL_WDROZENIA/exec";
 
   const RANKING_COLOR = "#c96f00"; // kolor akcentu tabeli
+
+  // Numer sezonu = ROK*10 + PORA_ROKU (1=Zima,2=Wiosna,3=Lato,4=Jesień)
+  // — patrz komentarz w Kod Ranking Odlewnicza.gs. Etykieta liczona automatycznie.
+  const SEASON_QUARTERS = ["", "Zima", "Wiosna", "Lato", "Jesień"];
+  function seasonLabel(season) {
+    const year = Math.floor(season / 10);
+    const q = season % 10;
+    return (SEASON_QUARTERS[q] || "Sezon") + " " + year;
+  }
 </script>
 <!-- ══════════════════════════════════════════════════════════ -->
 
@@ -146,7 +155,7 @@
   <div class="header">
     <div class="pill">📊 Ranking Sezonu</div>
     <h1>RANKING <span>LIGI</span></h1>
-    <p class="sub">Wspólny ranking wszystkich grup</p>
+    <p class="sub">Wspólny ranking wszystkich grup — wybierz sezon</p>
   </div>
 
   <!-- Selektor sezonu -->
@@ -233,7 +242,7 @@ function renderSeasonTabs() {
     btn.className = "tab-btn"
       + (s === activeSeason ? " active" : "")
       + (s === latest ? " latest" : "");
-    btn.textContent = "Sezon " + s;
+    btn.textContent = seasonLabel(s);
     if (s === activeSeason) btn.style.background = RANKING_COLOR;
     btn.addEventListener("click", async () => {
       activeSeason = s;
