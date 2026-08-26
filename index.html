@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head> 
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Niedzielna Liga Squasha — Zapisy</title>
@@ -1290,7 +1290,24 @@ function mkCard(sec) {
   inp.placeholder = isClosed ? "Zapisy zamknięte" : "Nazwisko i Imię";
   inp.value       = state.inputs[sec.key] || "";
   inp.disabled    = isClosed;
-  inp.addEventListener("input",   e => state.inputs[sec.key] = e.target.value);
+  let lastPhoneLookup = "";
+  inp.addEventListener("input", async e => {
+    const val = e.target.value;
+    state.inputs[sec.key] = val;
+    const digits = val.replace(/\D/g, "");
+    const looksLikePhone = digits.length >= 9 && /^[+\d\s()-]+$/.test(val.trim());
+    if (looksLikePhone && digits !== lastPhoneLookup) {
+      lastPhoneLookup = digits;
+      const core = digits.slice(-9);
+      try {
+        const res = await api({ action: "lookupPhone", phone: core });
+        if (res.ok && (state.inputs[sec.key] || "").replace(/\D/g, "") === digits) {
+          inp.value = res.name;
+          state.inputs[sec.key] = res.name;
+        }
+      } catch (err) {}
+    }
+  });
   inp.addEventListener("keydown", e => { if(e.key==="Enter" && !isClosed) addPlayer(sec.key); });
   const addB = document.createElement("button");
   addB.className = "add-btn"; addB.style.background = sec.color;
@@ -1401,7 +1418,7 @@ if (state.gateInput) { tryUnlock(); }
 
    <div class="modal-section">
       <h3>Koszt</h3>
-      <p>70 zł lub 55 zł z multisportem </p>
+      <p>70 zł lub 55 zł z multisportem</p>
     </div>
 
     <div class="modal-section">
