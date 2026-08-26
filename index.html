@@ -1019,7 +1019,7 @@ function renderGate() {
     <form class="login-box gate-box" id="gateForm" autocomplete="on">
       <p>Podaj hasło administratora, aby zobaczyć zapisy:</p>
       <div class="login-row">
-        <input class="visually-hidden" type="text" name="username" autocomplete="username" value="widz-wpc" readonly tabindex="-1" aria-hidden="true" />
+        <input class="visually-hidden" type="text" name="username" autocomplete="username" value="widz" readonly tabindex="-1" aria-hidden="true" />
         <input class="field${state.gateErr?" err":""}" id="gateInp" name="password" type="password" autocomplete="current-password" placeholder="Wpisz hasło…" value="${esc(state.gateInput)}" />
         <button class="btn btn-yellow" id="gateOk" type="submit">Odblokuj</button>
       </div>
