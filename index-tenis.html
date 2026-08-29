@@ -128,28 +128,29 @@
     border-bottom-color: var(--accent-dk);
   }
 
-  /* ── PRZEŁĄCZNIK DYSCYPLINY (SQUASH / TENIS STOŁOWY) ── */
-  .nav-disc {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2px 16px 12px;
-  }
+  /* ── PRZEŁĄCZNIK DYSCYPLINY (SQUASH / TENIS STOŁOWY) — w pasku nav ── */
   .disc-switch {
     position: relative;
     display: inline-flex;
+    align-self: center;
+    flex-shrink: 0;
+    order: 1;
     gap: 2px;
     padding: 3px;
-    border-radius: 11px;
+    margin-left: auto;
+    margin-right: 6px;
+    border-radius: 10px;
     background: rgba(0,0,0,0.05);
     border: 1px solid var(--border);
   }
+  .nav-inner .nav-link { order: 2; }
   .disc-tile {
     position: absolute;
     top: 3px;
     bottom: 3px;
     left: 0;
     width: 0;
-    border-radius: 8px;
+    border-radius: 7px;
     background: #fab400;
     transition: transform .22s ease, width .22s ease, background .22s ease;
     z-index: 0;
@@ -164,12 +165,12 @@
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 12px;
-    letter-spacing: 1.2px;
+    font-size: 10px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     white-space: nowrap;
-    padding: 7px 16px;
-    border-radius: 8px;
+    padding: 6px 11px;
+    border-radius: 7px;
     color: var(--muted);
     transition: color .2s ease;
   }
@@ -869,8 +870,6 @@
     <a class="nav-link active" data-sec="index"   href="index-tenis.html">📋 Zapisy</a>
     <a class="nav-link"        data-sec="wyniki"  href="wyniki-tenis.html">🏆 Wyniki</a>
     <a class="nav-link"        data-sec="ranking" href="ranking-tenis.html">📊 Ranking</a>
-  </div>
-  <div class="nav-disc">
     <div class="disc-switch">
       <span class="disc-tile"></span>
       <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
