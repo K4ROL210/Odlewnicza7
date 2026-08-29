@@ -49,12 +49,12 @@
   .nav-link.active { color: var(--accent-dk); border-bottom-color: var(--accent-dk); }
 
   /* ── PRZEŁĄCZNIK DYSCYPLINY (SQUASH / TENIS STOŁOWY) ── */
-  .nav-disc { max-width: 1200px; margin: 0 auto; padding: 2px 16px 12px; }
-  .disc-switch { position: relative; display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: rgba(0,0,0,0.05); border: 1px solid var(--border); }
-  .disc-tile { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 8px; background: #fab400; transition: transform .22s ease, width .22s ease, background .22s ease; z-index: 0; }
+  .disc-switch { position: relative; display: inline-flex; align-self: center; flex-shrink: 0; order: 1; gap: 2px; padding: 3px; margin-left: auto; margin-right: 6px; border-radius: 10px; background: rgba(0,0,0,0.05); border: 1px solid var(--border); }
+  .nav-inner .nav-link { order: 2; }
+  .disc-tile { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 7px; background: #fab400; transition: transform .22s ease, width .22s ease, background .22s ease; z-index: 0; }
+  .disc-opt { position: relative; z-index: 1; border: none; background: transparent; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; padding: 6px 11px; border-radius: 7px; color: var(--muted); transition: color .2s ease; }
   .disc-switch[data-active="squash"] .disc-tile { background: #fab400; }
   .disc-switch[data-active="tenis"]  .disc-tile { background: #2f7d5c; }
-  .disc-opt { position: relative; z-index: 1; border: none; background: transparent; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; white-space: nowrap; padding: 7px 16px; border-radius: 8px; color: var(--muted); transition: color .2s ease; }
   .disc-opt:hover { color: var(--accent2); }
   .disc-switch[data-active="squash"] .disc-opt[data-disc="squash"] { color: #1a1200; }
   .disc-switch[data-active="tenis"]  .disc-opt[data-disc="tenis"]  { color: #ffffff; }
@@ -301,7 +301,7 @@
   //    strona zadziała bez zmian. UWAGA: w tenisie gramy do 5 setów — jeśli struktura
   //    arkusza wyników się zmieni (S1..S5 zamiast S1..S3), trzeba dostosować
   //    SETS_PER_MATCH poniżej oraz renderMatchGrid().
-  const WYNIKI_TENIS_URL = "";
+  const WYNIKI_TENIS_URL = "https://script.google.com/macros/s/AKfycbyLAiYHaXKjs0dCsjy-OPQ3dZh8sqfeccteLjiVznkWi3fHQMaeizCrcUMacEEQnYpe/exec";
   const WYNIKI_URL = WYNIKI_TENIS_URL;
 
   // Liczba setów w meczu tenisa (squash miał 3). Wpływa na siatkę wyników.
@@ -331,8 +331,6 @@
     <a class="nav-link"        data-sec="index"   href="index-tenis.html">📋 Zapisy</a>
     <a class="nav-link active" data-sec="wyniki"  href="wyniki-tenis.html">🏆 Wyniki</a>
     <a class="nav-link"        data-sec="ranking" href="ranking-tenis.html">📊 Ranking</a>
-  </div>
-  <div class="nav-disc">
     <div class="disc-switch">
       <span class="disc-tile"></span>
       <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
@@ -800,10 +798,10 @@ function renderResults(data) {
 //  renderMatchGrid — siatka wyników meczów
 //
 //  Buduje tabelę HTML odzwierciedlającą strukturę arkusza:
-//   • Nagłówki kolumn: nazwy graczy (colspan=4 każdy)
+//   • Nagłówki kolumn: nazwy graczy (colspan = COLS_PER_MATCH)
 //   • Podkolumny: S1 S2 S3 W (wynik setów)
 //   • Wiersze: każdy gracz zajmuje 2 wiersze (rowspan=2 dla nazwy)
-//   • Przekątna (gracz vs siebie): wyróżniony kolor, colspan=4 rowspan=2
+//   • Przekątna (gracz vs siebie): wyróżniony kolor, colspan = COLS_PER_MATCH, rowspan=2
 //   • Komórki wyników setów: ciemniejsze tło
 //   • Komórka z liczbą wygranych setów (W): jasniejsze tło, pogrubiona
 //   • Nierozegrany mecz: szary myślnik
@@ -842,7 +840,7 @@ function renderMatchGrid(matchData, color) {
   for (const name of playerNames) {
     const th = document.createElement("th");
     th.className = "mg-header-player";
-    th.colSpan = 4;
+    th.colSpan = COLS_PER_MATCH;
     th.style.color = color;
     // imię i nazwisko jedno pod drugim, stała szerokość bloku
    /* NOWE */
@@ -924,7 +922,7 @@ nameTd.style.fontWeight = "900";
       if (i === j) {
         const diag = document.createElement("td");
         diag.className = "mg-diagonal";
-        diag.colSpan = 4;
+        diag.colSpan = COLS_PER_MATCH;
         diag.rowSpan = 2;
         tr1.appendChild(diag);
       } else {
@@ -934,7 +932,7 @@ nameTd.style.fontWeight = "900";
         if (notPlayed) {
           const ph = document.createElement("td");
           ph.className = "mg-empty";
-          ph.colSpan = 4;
+          ph.colSpan = COLS_PER_MATCH;
           ph.rowSpan = 2;
           ph.textContent = "—";
           ph.style.background = isEven
