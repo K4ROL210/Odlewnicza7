@@ -128,6 +128,55 @@
     border-bottom-color: var(--accent-dk);
   }
 
+  /* ── PRZEŁĄCZNIK DYSCYPLINY (SQUASH / TENIS STOŁOWY) ── */
+  .nav-disc {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2px 16px 12px;
+  }
+  .disc-switch {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 11px;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+  .disc-tile {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 0;
+    width: 0;
+    border-radius: 8px;
+    background: #fab400;
+    transition: transform .22s ease, width .22s ease, background .22s ease;
+    z-index: 0;
+  }
+  .disc-switch[data-active="squash"] .disc-tile { background: #fab400; }
+  .disc-switch[data-active="tenis"]  .disc-tile { background: #2f7d5c; }
+  .disc-opt {
+    position: relative;
+    z-index: 1;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 7px 16px;
+    border-radius: 8px;
+    color: var(--muted);
+    transition: color .2s ease;
+  }
+  .disc-opt:hover { color: var(--accent2); }
+  .disc-switch[data-active="squash"] .disc-opt[data-disc="squash"] { color: #1a1200; }
+  .disc-switch[data-active="tenis"]  .disc-opt[data-disc="tenis"]  { color: #ffffff; }
+
   /* ── PAGE WRAP ── */
   .page-wrap {
     padding: 36px 16px 0;
@@ -817,11 +866,75 @@
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo" id="navLogo" style="cursor:default;touch-action:manipulation;">🎾 Odlewnicza</div>
-    <a class="nav-link active" href="index.html">📋 Zapisy</a>
-    <a class="nav-link"        href="wyniki.html">🏆 Wyniki</a>
-    <a class="nav-link"        href="ranking.html">📊 Ranking</a>
+    <a class="nav-link active" data-sec="index"   href="index.html">📋 Zapisy</a>
+    <a class="nav-link"        data-sec="wyniki"  href="wyniki.html">🏆 Wyniki</a>
+    <a class="nav-link"        data-sec="ranking" href="ranking.html">📊 Ranking</a>
+  </div>
+  <div class="nav-disc">
+    <div class="disc-switch">
+      <span class="disc-tile"></span>
+      <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
+      <button type="button" class="disc-opt" data-disc="tenis">TENIS STOŁOWY</button>
+    </div>
   </div>
 </nav>
+
+<!-- ═══ PRZEŁĄCZNIK DYSCYPLINY ══════════════════════════════════ -->
+<script>
+  window.__PAGE_DISC = "squash";
+  window.__PAGE_SEC  = "index";
+</script>
+<script>
+(function () {
+  var KEY = "odlewnicza_disc";
+  var PAGE_DISC = window.__PAGE_DISC;   // "squash" | "tenis"
+  var PAGE_SEC  = window.__PAGE_SEC;    // "index" | "wyniki" | "ranking"
+  var MAP = {
+    squash: { index: "index.html",       wyniki: "wyniki.html",       ranking: "ranking.html" },
+    tenis:  { index: "index-tenis.html", wyniki: "wyniki-tenis.html", ranking: "ranking-tenis.html" }
+  };
+
+  // Zapamiętany wybór dyscypliny — jeśli inny niż ta strona, przejdź na właściwy wariant.
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch (e) {}
+  if ((stored === "squash" || stored === "tenis") && stored !== PAGE_DISC) {
+    location.replace(MAP[stored][PAGE_SEC]);
+    return;
+  }
+  try { localStorage.setItem(KEY, PAGE_DISC); } catch (e) {}
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Linki nav -> właściwa dyscyplina
+    document.querySelectorAll(".nav-link[data-sec]").forEach(function (a) {
+      a.setAttribute("href", MAP[PAGE_DISC][a.dataset.sec]);
+    });
+
+    var sw = document.querySelector(".disc-switch");
+    if (!sw) return;
+    sw.dataset.active = PAGE_DISC;
+
+    var tile = sw.querySelector(".disc-tile");
+    function place() {
+      var act = sw.querySelector('.disc-opt[data-disc="' + sw.dataset.active + '"]');
+      if (!act) return;
+      tile.style.width = act.offsetWidth + "px";
+      tile.style.transform = "translateX(" + act.offsetLeft + "px)";
+    }
+    place();
+    window.addEventListener("resize", place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+
+    sw.querySelectorAll(".disc-opt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var d = btn.dataset.disc;
+        if (d === PAGE_DISC) return;
+        try { localStorage.setItem(KEY, d); } catch (e) {}
+        location.href = MAP[d][PAGE_SEC];
+      });
+    });
+  });
+})();
+</script>
 
 <!-- ═══ KONFIGURACJA ════════════════════════════════════════════ -->
 <script>
