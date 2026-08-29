@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liga Tenisa Stołowego — Ranking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   rgba(0,0,0,0.03);
+    --glass:     rgba(0,0,0,0.04);
+    --border:    rgba(0,0,0,0.12);
+    --border-hi: rgba(0,0,0,0.24);
+    --muted:     #7b7b7b;
+    --text:      #242424;
+    --accent:    #2f7d5c;
+    --accent-dk: #1f5b42;
+    --accent2:   #1a1a1a;
+    --red: #d64545;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Poppins', 'Arial', sans-serif;
+    min-height: 100vh; padding: 0 0 80px; position: relative;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse 90% 45% at 50% -5%, rgba(47,125,92,0.08) 0%, transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  .nav { background: rgba(224,242,234,0.94); border-bottom: 1px solid rgba(47,125,92,0.3); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav-inner { max-width: 1900px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 1px; color: var(--accent2); padding: 14px 16px 14px 0; margin-right: 8px; border-right: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
+  .nav-link { display: flex; align-items: center; gap: 6px; padding: 14px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; }
+  .nav-link:hover { color: var(--accent2); }
+  .nav-link.active { color: var(--accent-dk); border-bottom-color: var(--accent-dk); }
+
+  /* ── PRZEŁĄCZNIK DYSCYPLINY (SQUASH / TENIS STOŁOWY) ── */
+  .nav-disc { max-width: 1900px; margin: 0 auto; padding: 2px 16px 12px; }
+  .disc-switch { position: relative; display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: rgba(0,0,0,0.05); border: 1px solid var(--border); }
+  .disc-tile { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 8px; background: #fab400; transition: transform .22s ease, width .22s ease, background .22s ease; z-index: 0; }
+  .disc-switch[data-active="squash"] .disc-tile { background: #fab400; }
+  .disc-switch[data-active="tenis"]  .disc-tile { background: #2f7d5c; }
+  .disc-opt { position: relative; z-index: 1; border: none; background: transparent; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; white-space: nowrap; padding: 7px 16px; border-radius: 8px; color: var(--muted); transition: color .2s ease; }
+  .disc-opt:hover { color: var(--accent2); }
+  .disc-switch[data-active="squash"] .disc-opt[data-disc="squash"] { color: #1a1200; }
+  .disc-switch[data-active="tenis"]  .disc-opt[data-disc="tenis"]  { color: #ffffff; }
+
+  /* ── PAGE ── */
+  .page-wrap { padding: 36px 24px 0; position: relative; z-index: 1; max-width: 1900px; margin: 0 auto; }
+
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 36px; }
+  .pill { display: inline-block; background: var(--accent); color: #1a1200; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 3px; padding: 5px 14px; border-radius: 100px; margin-bottom: 14px; text-transform: uppercase; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(32px, 6.5vw, 54px); line-height: 1.05; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent2); }
+  h1 span { color: var(--accent); }
+  .sub { font-size: 15px; font-weight: 500; color: var(--muted); margin-top: 10px; }
+
+  /* ── SELECTOR ROWS ── */
+  .selector-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  .selector-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-right: 4px; white-space: nowrap; font-family: 'Poppins', sans-serif; }
+
+  /* ── TABS (sezon) ── */
+  .tab-btn {
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 7px 16px; border-radius: 9px; cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent; color: var(--muted);
+    transition: all .15s; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--accent2); border-color: var(--border-hi); }
+  .tab-btn.active { color: #ffffff; border-color: transparent; }
+  .tab-btn.latest::after { content: " ●"; font-size: 9px; color: var(--accent); }
+
+  /* ── SEKCJA ── */
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 16px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted);
+    margin: 28px 0 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── TABLE CARD ── */
+  .table-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+    position: relative; margin-bottom: 20px;
+  }
+  .table-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-day); }
+  .table-scroll { overflow-x: auto; }
+
+  /* ── RANKING TABLE ── */
+  .rank-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .rank-table th { padding: 11px 13px; text-align: left; font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.02); white-space: nowrap; }
+  .rank-table th.c { text-align: center; }
+  .rank-table td { padding: 10px 13px; border-bottom: 1px solid rgba(0,0,0,0.05); font-weight: 500; white-space: nowrap; color: var(--text); }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table tr:hover td { background: rgba(0,0,0,0.015); }
+  .rank-table td.c { text-align: center; }
+  .pos-1 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#c9960a; }
+  .pos-2 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#8a8a8a; }
+  .pos-3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#a05a2c; }
+  .pos-n { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; color:var(--muted); }
+  .pname { font-size:14px; font-weight:600; }
+  .pname.t1 { color:#c9960a; }
+  .pname.t2 { color:#7c7c7c; }
+  .pname.t3 { color:#a05a2c; }
+  .pts-cell { font-weight:800; text-align:center; }
+  .ratio-cell { text-align:center; color:var(--muted); font-size:13px; }
+
+  /* ── LOADING / ERROR ── */
+  .state-box { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .state-box .icon { font-size: 48px; margin-bottom: 14px; }
+  .state-box p { font-size: 14px; font-weight: 500; }
+  .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid rgba(47,125,92,0.15); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; font-size: 11px; font-weight: 500; color: rgba(0,0,0,0.32); margin-top: 40px; letter-spacing: 0.4px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<!-- ═══ KONFIGURACJA ══════════════════════════════════════════ -->
+<script>
+  // ⬇ TODO: Wklej URL wdrożonego Web Appa z RANKINGIEM tenisa stołowego.
+  //    Dopóki jest pusty, strona pokazuje komunikat „backend w przygotowaniu".
+  //    Jeśli API tenisa ma ten sam kształt co squash (action=meta/ranking) — zadziała bez zmian.
+  //    Jeśli kolumny rankingu będą inne, dostosuj HEADERS w Kod Ranking (tenis).gs.
+  const RANKING_TENIS_URL = "";
+  const RANKING_URL = RANKING_TENIS_URL;
+
+  const RANKING_COLOR = "#2f7d5c"; // kolor akcentu tabeli (zieleń „Środy" / tenisa)
+
+  // Numer sezonu = ROK*10 + PORA_ROKU (1=Zima,2=Wiosna,3=Lato,4=Jesień)
+  // — patrz komentarz w Kod Ranking Odlewnicza.gs. Etykieta liczona automatycznie.
+  const SEASON_QUARTERS = ["", "Zima", "Wiosna", "Lato", "Jesień"];
+  function seasonLabel(season) {
+    const year = Math.floor(season / 10);
+    const q = season % 10;
+    return (SEASON_QUARTERS[q] || "Sezon") + " " + year;
+  }
+</script>
+<!-- ══════════════════════════════════════════════════════════ -->
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">🏓 Odlewnicza</div>
+    <a class="nav-link"        data-sec="index"   href="index-tenis.html">📋 Zapisy</a>
+    <a class="nav-link"        data-sec="wyniki"  href="wyniki-tenis.html">🏆 Wyniki</a>
+    <a class="nav-link active" data-sec="ranking" href="ranking-tenis.html">📊 Ranking</a>
+  </div>
+  <div class="nav-disc">
+    <div class="disc-switch">
+      <span class="disc-tile"></span>
+      <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
+      <button type="button" class="disc-opt" data-disc="tenis">TENIS STOŁOWY</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ PRZEŁĄCZNIK DYSCYPLINY ══════════════════════════════════ -->
+<script>
+  window.__PAGE_DISC = "tenis";
+  window.__PAGE_SEC  = "ranking";
+</script>
+<script>
+(function () {
+  var KEY = "odlewnicza_disc";
+  var PAGE_DISC = window.__PAGE_DISC;
+  var PAGE_SEC  = window.__PAGE_SEC;
+  var MAP = {
+    squash: { index: "index.html",       wyniki: "wyniki.html",       ranking: "ranking.html" },
+    tenis:  { index: "index-tenis.html", wyniki: "wyniki-tenis.html", ranking: "ranking-tenis.html" }
+  };
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch (e) {}
+  if ((stored === "squash" || stored === "tenis") && stored !== PAGE_DISC) {
+    location.replace(MAP[stored][PAGE_SEC]);
+    return;
+  }
+  try { localStorage.setItem(KEY, PAGE_DISC); } catch (e) {}
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".nav-link[data-sec]").forEach(function (a) {
+      a.setAttribute("href", MAP[PAGE_DISC][a.dataset.sec]);
+    });
+    var sw = document.querySelector(".disc-switch");
+    if (!sw) return;
+    sw.dataset.active = PAGE_DISC;
+    var tile = sw.querySelector(".disc-tile");
+    function place() {
+      var act = sw.querySelector('.disc-opt[data-disc="' + sw.dataset.active + '"]');
+      if (!act) return;
+      tile.style.width = act.offsetWidth + "px";
+      tile.style.transform = "translateX(" + act.offsetLeft + "px)";
+    }
+    place();
+    window.addEventListener("resize", place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    sw.querySelectorAll(".disc-opt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var d = btn.dataset.disc;
+        if (d === PAGE_DISC) return;
+        try { localStorage.setItem(KEY, d); } catch (e) {}
+        location.href = MAP[d][PAGE_SEC];
+      });
+    });
+  });
+})();
+</script>
+
+<div class="page-wrap">
+  <div class="header">
+    <div class="pill">🏓 Ranking — Tenis Stołowy</div>
+    <h1>RANKING <span>LIGI</span></h1>
+    <p class="sub">Wspólny ranking wszystkich grup — wybierz sezon</p>
+  </div>
+
+  <!-- Selektor sezonu -->
+  <div class="selector-row" id="seasonRow" style="display:none">
+    <span class="selector-label">Sezon:</span>
+    <div id="seasonTabs" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+  </div>
+
+  <div id="tableArea">
+    <div class="state-box">
+      <div class="icon">📊</div>
+      <p>Wybierz sezon aby zobaczyć ranking</p>
+    </div>
+  </div>
+
+  <footer>Made by Karol Kreczmański</footer>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+let meta         = { seasons: [], latest: 1 };
+let activeSeason = null;
+
+// ══════════════════════════════════════════════════════════════
+//  API (JSONP — omija CORS przy wywołaniu z pliku lokalnego)
+// ══════════════════════════════════════════════════════════════
+function api(params) {
+  return new Promise((resolve, reject) => {
+    const cb = "jsonp_" + Math.random().toString(36).slice(2);
+    let script;
+    const t = setTimeout(() => {
+      delete window[cb];
+      if (script) script.remove();
+      reject(new Error("timeout"));
+    }, 12000);
+    window[cb] = data => {
+      clearTimeout(t);
+      delete window[cb];
+      if (script) script.remove();
+      resolve(data);
+    };
+    script = document.createElement("script");
+    script.src = RANKING_URL + "?" + new URLSearchParams({ ...params, callback: cb });
+    script.onerror = () => { clearTimeout(t); delete window[cb]; reject(new Error("błąd sieci")); };
+    document.head.appendChild(script);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+async function init() {
+  if (!RANKING_TENIS_URL) {
+    document.getElementById("seasonRow").style.display = "none";
+    document.getElementById("tableArea").innerHTML =
+      `<div class="state-box"><div class="icon">🏓</div>
+         <p>Ranking tenisa stołowego pojawi się tu wkrótce.<br>
+         Backend jest w przygotowaniu.</p></div>`;
+    return;
+  }
+  showLoading();
+  try {
+    const res = await api({ action: "meta" });
+    if (!res.ok) { showError(res.error); return; }
+    meta = res.meta;
+    activeSeason = meta.latest || 1;
+
+    await loadRanking();
+  } catch (e) {
+    showError("Nie można połączyć się z serwerem: " + e.message);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RENDER: zakładki sezonu
+// ══════════════════════════════════════════════════════════════
+function renderSeasonTabs() {
+  const row = document.getElementById("seasonRow");
+  const el  = document.getElementById("seasonTabs");
+  if (!meta.seasons || meta.seasons.length <= 1) { row.style.display = "none"; return; }
+
+  el.innerHTML = "";
+  row.style.display = "flex";
+
+  const seasons = [...meta.seasons].sort((a, b) => b - a);
+  const latest  = meta.latest;
+
+  for (const s of seasons) {
+    const btn = document.createElement("button");
+    btn.className = "tab-btn"
+      + (s === activeSeason ? " active" : "")
+      + (s === latest ? " latest" : "");
+    btn.textContent = seasonLabel(s);
+    if (s === activeSeason) btn.style.background = RANKING_COLOR;
+    btn.addEventListener("click", async () => {
+      activeSeason = s;
+      renderSeasonTabs();
+      await loadRanking();
+    });
+    el.appendChild(btn);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  LOAD: ranking sezonu
+// ══════════════════════════════════════════════════════════════
+async function loadRanking() {
+  showLoading();
+  renderSeasonTabs();
+
+  try {
+    const res = await api({ action: "ranking", season: activeSeason });
+    if (!res.ok) { showError(res.error); return; }
+    renderTable(res.rows, res.headers);
+  } catch (e) {
+    showError("Błąd pobierania danych: " + e.message);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RENDER: tabela rankingu
+// ══════════════════════════════════════════════════════════════
+function renderTable(rows, headers) {
+  const area  = document.getElementById("tableArea");
+  const color = RANKING_COLOR;
+
+  if (!rows || rows.length === 0) {
+    area.innerHTML = `<div class="state-box"><div class="icon">📭</div><p>Brak danych dla tego sezonu</p></div>`;
+    return;
+  }
+
+  const title = mkSectionTitle("Ranking sezonu", color);
+
+  const card = document.createElement("div");
+  card.className = "table-card";
+  card.style.setProperty("--accent-day", color);
+
+  const scroll = document.createElement("div");
+  scroll.className = "table-scroll";
+
+  const table = document.createElement("table");
+  table.className = "rank-table";
+
+  // Nagłówek
+  const thead = document.createElement("thead");
+  const hr    = document.createElement("tr");
+  headers.forEach((h, i) => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    if (i !== 1) th.className = "c"; // wyśrodkuj wszystko poza "Gracz"
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  table.appendChild(thead);
+
+  // Wiersze
+  const tbody = document.createElement("tbody");
+  rows.forEach(row => {
+    const pos = parseInt(row[0]) || 0;
+    const tr  = document.createElement("tr");
+
+    row.forEach((val, i) => {
+      const td = document.createElement("td");
+
+      if (i === 0) {
+        // Pozycja — medal
+        td.className = "c";
+        const posMap = { 1: "pos-1", 2: "pos-2", 3: "pos-3" };
+        const sp = document.createElement("span");
+        sp.className = posMap[pos] || "pos-n";
+        sp.textContent = pos === 1 ? "🥇" : pos === 2 ? "🥈" : pos === 3 ? "🥉" : pos;
+        td.appendChild(sp);
+
+      } else if (i === 1) {
+        // Gracz — kolorowe imię dla top 3
+        const nameMap = { 1: "t1", 2: "t2", 3: "t3" };
+        const sp = document.createElement("span");
+        sp.className = "pname " + (nameMap[pos] || "");
+        sp.textContent = val;
+        td.appendChild(sp);
+
+      } else if (i === 9) {
+        // Suma punktów — wyróżniona kolorem grupy
+        td.className = "pts-cell c";
+        td.style.color = color;
+        td.textContent = typeof val === "number" ? val.toFixed(2) : val;
+
+      } else if (i >= 11) {
+        // Ratio
+        td.className = "ratio-cell c";
+        td.textContent = typeof val === "number" ? val.toFixed(3) : val;
+
+      } else {
+        td.className = "c";
+        td.textContent = typeof val === "number" ? (Number.isInteger(val) ? val : val.toFixed(2)) : val;
+      }
+
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  scroll.appendChild(table);
+  card.appendChild(scroll);
+
+  area.innerHTML = "";
+  area.appendChild(title);
+  area.appendChild(card);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  POMOCNICZE
+// ══════════════════════════════════════════════════════════════
+function mkSectionTitle(text, color) {
+  const div = document.createElement("div");
+  div.className  = "section-title";
+  div.style.color = color;
+  div.textContent = text;
+  return div;
+}
+
+function showLoading() {
+  document.getElementById("tableArea").innerHTML =
+    `<div class="state-box"><div class="spinner"></div><p>Ładowanie rankingu…</p></div>`;
+}
+
+function showError(msg) {
+  document.getElementById("tableArea").innerHTML =
+    `<div class="state-box"><div class="icon">❌</div><p>${msg}</p></div>`;
+}
+
+// ── START ──────────────────────────────────────────────────────
+init();
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>
