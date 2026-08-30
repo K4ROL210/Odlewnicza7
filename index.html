@@ -177,6 +177,16 @@
   .disc-switch[data-active="squash"] .disc-opt[data-disc="squash"] { color: #1a1200; }
   .disc-switch[data-active="tenis"]  .disc-opt[data-disc="tenis"]  { color: #ffffff; }
 
+  .nav-break { display: none; }
+
+  /* ── MOBILE: WYNIKI / RANKING pod logo i przełącznikiem dyscypliny ── */
+  @media (max-width: 640px) {
+    .nav-inner { flex-wrap: wrap; overflow-x: visible; justify-content: center; row-gap: 0; }
+    .nav-logo { border-right: none; margin-right: 0; padding-right: 0; }
+    .nav-break { display: block; flex-basis: 100%; height: 0; order: 2; }
+    .nav-inner .nav-link { order: 3; padding: 12px 9px; font-size: 12px; gap: 4px; }
+  }
+
   /* ── PAGE WRAP ── */
   .page-wrap {
     padding: 36px 16px 0;
@@ -871,6 +881,7 @@
       <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
       <button type="button" class="disc-opt" data-disc="tenis">TENIS STOŁOWY</button>
     </div>
+    <span class="nav-break"></span>
     <a class="nav-link active" data-sec="index"   href="index.html">📋 Zapisy</a>
     <a class="nav-link"        data-sec="wyniki"  href="wyniki.html">🏆 Wyniki</a>
     <a class="nav-link"        data-sec="ranking" href="ranking.html">📊 Ranking</a>
