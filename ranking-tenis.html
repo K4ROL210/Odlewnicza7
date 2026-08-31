@@ -119,14 +119,14 @@
   .rank-table tr:last-child td { border-bottom: none; }
   .rank-table tr:hover td { background: rgba(0,0,0,0.015); }
   .rank-table td.c { text-align: center; }
-  .pos-1 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#c9960a; }
-  .pos-2 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#8a8a8a; }
-  .pos-3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#a05a2c; }
+  .pos-1 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:16px; color:#f5c518; }
+  .pos-2 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:16px; color:#c8c8c8; }
+  .pos-3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:16px; color:#d98a4b; }
   .pos-n { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; color:var(--muted); }
   .pname { font-size:14px; font-weight:600; }
-  .pname.t1 { color:#c9960a; }
-  .pname.t2 { color:#7c7c7c; }
-  .pname.t3 { color:#a05a2c; }
+  .pname.t1 { color:#f5c518; }
+  .pname.t2 { color:#c8c8c8; }
+  .pname.t3 { color:#d98a4b; }
   .pts-cell { font-weight:800; text-align:center; }
   .ratio-cell { text-align:center; color:var(--muted); font-size:13px; }
 
@@ -408,7 +408,7 @@ function renderTable(rows, headers) {
         const posMap = { 1: "pos-1", 2: "pos-2", 3: "pos-3" };
         const sp = document.createElement("span");
         sp.className = posMap[pos] || "pos-n";
-        sp.textContent = pos === 1 ? "🥇" : pos === 2 ? "🥈" : pos === 3 ? "🥉" : pos;
+        sp.textContent = pos;
         td.appendChild(sp);
 
       } else if (i === 1) {
