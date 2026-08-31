@@ -975,8 +975,8 @@ nameTd.style.fontWeight = "900";
           ph.rowSpan = 2;
           ph.textContent = "—";
           ph.style.background = isEven
-            ? "rgba(0,0,0,0.03)"
-            : "rgba(0,0,0,0.07)";
+            ? "rgba(0,0,0,0.04)"
+            : "rgba(0,0,0,0.13)";
           tr1.appendChild(ph);
         } else {
           for (let c = 0; c < SETS_PER_MATCH; c++) {
@@ -985,8 +985,8 @@ nameTd.style.fontWeight = "900";
             td.textContent = fmtVal(rowA[colStart + c]);
             td.style.width = "22px";
             td.style.background = isEven
-              ? "rgba(0,0,0,0.035)"
-              : "rgba(0,0,0,0.08)";
+              ? "rgba(0,0,0,0.04)"
+              : "rgba(0,0,0,0.13)";
             tr1.appendChild(td);
           }
           const wTd = document.createElement("td");
@@ -994,14 +994,7 @@ nameTd.style.fontWeight = "900";
           wTd.style.color = color;
           wTd.style.width = "22px";
           wTd.textContent = fmtVal(rowA[colStart + SETS_PER_MATCH]);
-          if (setWon(rowA[colStart + SETS_PER_MATCH], rowB[colStart + SETS_PER_MATCH])) {
-            wTd.style.background = mgTint(color, 0.24);
-            wTd.style.fontWeight = "800";
-          } else {
-            wTd.style.background = isEven
-              ? "rgba(0,0,0,0.10)"
-              : "rgba(0,0,0,0.15)";
-          }
+          wTd.style.background = mgTint(color, 0.18);
           tr1.appendChild(wTd);
         }
       }
@@ -1025,8 +1018,8 @@ nameTd.style.fontWeight = "900";
         td.textContent = fmtVal(rowB[colStart + c]);
         td.style.width = "22px";
         td.style.background = isEven
-          ? "rgba(0,0,0,0.035)"
-          : "rgba(0,0,0,0.08)";
+          ? "rgba(0,0,0,0.04)"
+          : "rgba(0,0,0,0.13)";
         tr2.appendChild(td);
       }
       const wTd = document.createElement("td");
@@ -1034,14 +1027,7 @@ nameTd.style.fontWeight = "900";
       wTd.style.color = color;
       wTd.style.width = "22px";
       wTd.textContent = fmtVal(rowB[colStart + SETS_PER_MATCH]);
-      if (setWon(rowB[colStart + SETS_PER_MATCH], rowA[colStart + SETS_PER_MATCH])) {
-        wTd.style.background = mgTint(color, 0.24);
-        wTd.style.fontWeight = "800";
-      } else {
-        wTd.style.background = isEven
-          ? "rgba(0,0,0,0.10)"
-          : "rgba(0,0,0,0.15)";
-      }
+      wTd.style.background = mgTint(color, 0.18);
       tr2.appendChild(wTd);
     }
     tbody.appendChild(tr2);
@@ -1075,12 +1061,6 @@ function mgTint(hex, a) {
   const g = parseInt(f.slice(2, 4), 16) || 0;
   const b = parseInt(f.slice(4, 6), 16) || 0;
   return `rgba(${r}, ${g}, ${b}, ${a})`;
-}
-
-// Czy w tym secie "mine" pokonał "theirs"?
-function setWon(mine, theirs) {
-  const a = Number(mine), b = Number(theirs);
-  return Number.isFinite(a) && Number.isFinite(b) && a > b;
 }
 
 // Formatowanie wartości w siatce meczów (liczba lub pusty string)
