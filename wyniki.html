@@ -149,14 +149,14 @@
   .rank-table tr:last-child td { border-bottom: none; }
   .rank-table tr:hover td { background: rgba(0,0,0,0.015); }
   .rank-table td.c { text-align: center; }
-  .pos-1 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:16px; color:#f5c518; }
-  .pos-2 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:16px; color:#c8c8c8; }
-  .pos-3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:16px; color:#d98a4b; }
+  .pos-1 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#c9960a; }
+  .pos-2 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#8a8a8a; }
+  .pos-3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px; color:#a05a2c; }
   .pos-n { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; color:var(--muted); }
   .pname { font-size:14px; font-weight:600; }
-  .pname.t1 { color:#f5c518; }
-  .pname.t2 { color:#c8c8c8; }
-  .pname.t3 { color:#d98a4b; }
+  .pname.t1 { color:#c9960a; }
+  .pname.t2 { color:#7c7c7c; }
+  .pname.t3 { color:#a05a2c; }
   .pts-cell { font-weight:800; text-align:center; }
 
   /* ── LOADING / ERROR ── */
@@ -175,7 +175,7 @@
   .match-grid-table {
     border-collapse: collapse;
     font-family: 'Poppins', sans-serif;
-    font-size: 15px;
+    font-size: 13px;
     min-width: 100%;
   }
   /* Nagłówek z nazwą gracza (kolumna) */
@@ -185,7 +185,7 @@
  /* PO */
 .mg-header-player {
   padding: 8px 4px;
-  font-size: 14px; font-weight: 800; font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 800; font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.3px; text-transform: uppercase; text-align: center;
   background: rgba(0,0,0,0.03);
   border: 1px solid var(--border);
@@ -204,7 +204,7 @@
   /* PO */
 .mg-sub-header {
   padding: 4px 2px;
-  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
   text-align: center; color: var(--muted);
   background: rgba(0,0,0,0.02);
   border: 1px solid var(--border);
@@ -217,7 +217,7 @@
   /* PO */
 .mg-row-player {
   padding: 8px 14px;
-  font-size: 17px; font-weight: 800;
+  font-size: 15px; font-weight: 800;
   white-space: nowrap; vertical-align: middle;
   border: 1px solid var(--border);
   font-family: 'Poppins', sans-serif;
@@ -232,6 +232,7 @@
   .mg-score {
   padding: 6px 4px;
   text-align: center; font-weight: 600;
+  font-size: 15px;
   background: rgba(0,0,0,0.015);
   border: 1px solid var(--border);
   color: var(--text);
@@ -242,6 +243,7 @@
 .mg-result {
   padding: 6px 4px;
   text-align: center; font-weight: 800;
+  font-size: 15px;
   background: rgba(0,0,0,0.045);
   border: 1px solid var(--border-hi);
   width: 20px;
@@ -251,7 +253,7 @@
   .mg-empty {
     padding: 8px;
     text-align: center; color: var(--muted);
-    font-size: 20px;
+    font-size: 18px;
     background: rgba(0,0,0,0.02);
     border: 1px solid var(--border);
     vertical-align: middle;
@@ -260,7 +262,7 @@
   /* PO */
 .mg-corner {
   padding: 8px 12px;
-  font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
   color: var(--muted); text-align: center; vertical-align: middle;
   background: rgba(0,0,0,0.05);
   border: 1px solid var(--border);
@@ -921,7 +923,7 @@ th.appendChild(inner);
    nameTd.style.textAlign = "center"; // wyśrodkuj
     nameTd.style.overflow = "hidden";
     nameTd.style.textOverflow = "ellipsis";
-   nameTd.style.fontSize = "17px";
+   nameTd.style.fontSize = "15px";
 nameTd.style.fontWeight = "900";
     nameTd.textContent = playerNames[i];
     tr1.appendChild(nameTd);
