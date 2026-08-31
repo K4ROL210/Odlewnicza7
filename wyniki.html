@@ -335,6 +335,7 @@
     <a class="nav-link"        data-sec="index"   href="index.html">📋 Zapisy</a>
     <a class="nav-link active" data-sec="wyniki"  href="wyniki.html">🏆 Wyniki</a>
     <a class="nav-link"        data-sec="ranking" href="ranking.html">📊 Ranking</a>
+    <a class="nav-link"        data-sec="punktacja" href="punktacja.html">📄 Punktacja</a>
     <div class="disc-switch">
       <span class="disc-tile"></span>
       <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
@@ -354,8 +355,8 @@
   var PAGE_DISC = window.__PAGE_DISC;
   var PAGE_SEC  = window.__PAGE_SEC;
   var MAP = {
-    squash: { index: "index.html",       wyniki: "wyniki.html",       ranking: "ranking.html" },
-    tenis:  { index: "index-tenis.html", wyniki: "wyniki-tenis.html", ranking: "ranking-tenis.html" }
+    squash: { index: "index.html",       wyniki: "wyniki.html",       ranking: "ranking.html",       punktacja: "punktacja.html" },
+    tenis:  { index: "index-tenis.html", wyniki: "wyniki-tenis.html", ranking: "ranking-tenis.html", punktacja: "punktacja-tenis.html" }
   };
   var stored = null;
   try { stored = localStorage.getItem(KEY); } catch (e) {}

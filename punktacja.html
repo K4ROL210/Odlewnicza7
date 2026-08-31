@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liga Squasha Odlewnicza — Punktacja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   rgba(0,0,0,0.03);
+    --glass:     rgba(0,0,0,0.04);
+    --border:    rgba(0,0,0,0.12);
+    --border-hi: rgba(0,0,0,0.24);
+    --muted:     #7b7b7b;
+    --text:      #242424;
+    --accent:    #fab400;
+    --accent-dk: #c96f00;
+    --accent2:   #1a1a1a;
+    --red: #d64545;
+    --accent-day: #c96f00;   /* akcent dyscypliny — squash */
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Poppins', 'Arial', sans-serif;
+    min-height: 100vh; padding: 0 0 80px; position: relative;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse 90% 45% at 50% -5%, rgba(250,180,0,0.07) 0%, transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  .nav { background: rgba(255,241,214,0.94); border-bottom: 1px solid rgba(250,180,0,0.3); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 1px; color: var(--accent2); padding: 14px 16px 14px 0; margin-right: 8px; border-right: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
+  .nav-link { display: flex; align-items: center; gap: 6px; padding: 14px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; }
+  .nav-link:hover { color: var(--accent2); }
+  .nav-link.active { color: var(--accent-dk); border-bottom-color: var(--accent-dk); }
+
+  /* ── PRZEŁĄCZNIK DYSCYPLINY (SQUASH / TENIS STOŁOWY) ── */
+  .disc-switch { position: relative; display: inline-flex; align-self: center; flex-shrink: 0; order: 1; gap: 2px; padding: 3px; margin: 0 4px; border-radius: 10px; background: rgba(0,0,0,0.05); border: 1px solid var(--border); }
+  .nav-inner .nav-link { order: 2; }
+  .disc-tile { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 7px; background: #fab400; transition: transform .22s ease, width .22s ease, background .22s ease; z-index: 0; }
+  .disc-opt { position: relative; z-index: 1; border: none; background: transparent; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; padding: 7px 13px; border-radius: 7px; color: var(--muted); transition: color .2s ease; }
+  .disc-switch[data-active="squash"] .disc-tile { background: #fab400; }
+  .disc-switch[data-active="tenis"]  .disc-tile { background: #2f7d5c; }
+  .disc-opt:hover { color: var(--accent2); }
+  .disc-switch[data-active="squash"] .disc-opt[data-disc="squash"] { color: #1a1200; }
+  .disc-switch[data-active="tenis"]  .disc-opt[data-disc="tenis"]  { color: #ffffff; }
+  .nav-break { display: none; }
+  /* ── MOBILE: linki pod logo i przełącznikiem dyscypliny ── */
+  @media (max-width: 640px) {
+    .nav-inner { flex-wrap: wrap; overflow-x: visible; justify-content: center; row-gap: 0; }
+    .nav-logo { border-right: none; margin-right: 0; padding-right: 0; }
+    .nav-break { display: block; flex-basis: 100%; height: 0; order: 2; }
+    .nav-inner .nav-link { order: 3; padding: 12px 9px; font-size: 12px; gap: 4px; }
+  }
+
+  /* ── PAGE ── */
+  .page-wrap { padding: 36px 24px 0; position: relative; z-index: 1; max-width: 1900px; margin: 0 auto; }
+
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 36px; }
+  .pill { display: inline-block; background: var(--accent); color: #1a1200; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 3px; padding: 5px 14px; border-radius: 100px; margin-bottom: 14px; text-transform: uppercase; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(32px, 6.5vw, 54px); line-height: 1.05; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent2); }
+  h1 span { color: var(--accent); }
+  .sub { font-size: 15px; font-weight: 500; color: var(--muted); margin-top: 10px; }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; font-size: 11px; font-weight: 500; color: rgba(0,0,0,0.32); margin-top: 40px; letter-spacing: 0.4px; text-transform: uppercase; }
+
+  /* ── PUNKTACJA (regulamin) ─────────────────────────────────── */
+  .rules { max-width: 760px; margin: 0 auto; }
+
+  .rules-intro { font-size: 15px; line-height: 1.7; color: var(--text); background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--accent-day); border-radius: 12px; padding: 16px 18px; margin-bottom: 30px; }
+  .rules-intro b { color: var(--accent-day); font-weight: 700; }
+
+  .step { display: flex; gap: 16px; margin-bottom: 26px; }
+  .step-num { flex-shrink: 0; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent-day); width: 34px; line-height: 1.3; }
+  .step-body { flex: 1; min-width: 0; }
+  .step-body h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--accent2); margin-bottom: 6px; }
+  .step-body p { font-size: 14px; line-height: 1.65; color: var(--muted); margin-bottom: 12px; }
+
+  .r-table { width: 100%; max-width: 340px; border-collapse: collapse; font-size: 14px; background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .r-table th { text-align: left; font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); padding: 9px 14px; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border); }
+  .r-table td { padding: 9px 14px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+  .r-table tr:last-child td { border-bottom: none; }
+  .r-table th:last-child, .r-table td:last-child { text-align: right; }
+  .r-table td:last-child { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--accent-day); white-space: nowrap; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 12px; border-radius: 8px; background: #fff; border: 1px solid var(--border); white-space: nowrap; }
+  .chip b { color: var(--accent-day); font-weight: 700; }
+  .chip.muted { color: var(--muted); font-style: italic; }
+
+  .formula { background: #1c2b3a; color: #eaf1f8; border-radius: 14px; padding: 18px 20px; margin: 30px 0; }
+  .formula .label { font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .formula .eq { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; line-height: 1.7; }
+  .formula .eq b { color: var(--accent); }
+
+  .example { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 30px; }
+  .example-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .example-head strong { font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--accent2); }
+  .example-head span { font-family: 'Poppins', sans-serif; font-size: 11px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); }
+  .example-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 16px; font-size: 14px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+  .example-row .k { color: var(--muted); }
+  .example-row .v { font-family: 'Montserrat', sans-serif; font-weight: 700; white-space: nowrap; }
+  .example-row.total { border-bottom: none; background: rgba(0,0,0,0.02); }
+  .example-row.total .k { color: var(--accent2); font-weight: 700; }
+  .example-row.total .v { color: var(--accent-day); font-size: 18px; font-weight: 800; }
+
+  .season-note { background: rgba(0,0,0,0.03); border-radius: 14px; padding: 18px 20px; }
+  .season-note h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; color: var(--accent2); margin-bottom: 6px; }
+  .season-note p { font-size: 14px; line-height: 1.65; color: var(--muted); }
+  .season-note p b { color: var(--accent2); }
+  .dots { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; align-items: center; }
+  .dot { width: 13px; height: 13px; border-radius: 50%; background: var(--accent-day); }
+  .dot.off { background: transparent; border: 1.5px solid var(--border-hi); }
+  .dots span { font-family: 'Poppins', sans-serif; font-size: 12px; color: var(--muted); margin-left: 6px; }
+
+  .dl-row { text-align: center; margin: 34px 0 6px; }
+  .dl-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .5px; text-transform: uppercase; text-decoration: none; color: var(--accent2); background: #fff; border: 1.5px solid var(--border-hi); border-radius: 10px; padding: 11px 22px; transition: border-color .15s, color .15s; }
+  .dl-btn:hover { border-color: var(--accent-day); color: var(--accent-day); }
+
+  @media (max-width: 640px) {
+    .step { gap: 10px; }
+    .step-num { width: 24px; font-size: 17px; }
+    .page-wrap { padding: 28px 16px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">🎾 Odlewnicza</div>
+    <span class="nav-break"></span>
+    <a class="nav-link"        data-sec="index"     href="index.html">📋 Zapisy</a>
+    <a class="nav-link"        data-sec="wyniki"    href="wyniki.html">🏆 Wyniki</a>
+    <a class="nav-link"        data-sec="ranking"   href="ranking.html">📊 Ranking</a>
+    <a class="nav-link active" data-sec="punktacja" href="punktacja.html">📄 Punktacja</a>
+    <div class="disc-switch">
+      <span class="disc-tile"></span>
+      <button type="button" class="disc-opt" data-disc="squash">SQUASH</button>
+      <button type="button" class="disc-opt" data-disc="tenis">TENIS STOŁOWY</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ PRZEŁĄCZNIK DYSCYPLINY ══════════════════════════════════ -->
+<script>
+  window.__PAGE_DISC = "squash";
+  window.__PAGE_SEC  = "punktacja";
+</script>
+<script>
+(function () {
+  var KEY = "odlewnicza_disc";
+  var PAGE_DISC = window.__PAGE_DISC;
+  var PAGE_SEC  = window.__PAGE_SEC;
+  var MAP = {
+    squash: { index: "index.html",       wyniki: "wyniki.html",       ranking: "ranking.html",       punktacja: "punktacja.html" },
+    tenis:  { index: "index-tenis.html", wyniki: "wyniki-tenis.html", ranking: "ranking-tenis.html", punktacja: "punktacja-tenis.html" }
+  };
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch (e) {}
+  if ((stored === "squash" || stored === "tenis") && stored !== PAGE_DISC) {
+    location.replace(MAP[stored][PAGE_SEC]);
+    return;
+  }
+  try { localStorage.setItem(KEY, PAGE_DISC); } catch (e) {}
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".nav-link[data-sec]").forEach(function (a) {
+      a.setAttribute("href", MAP[PAGE_DISC][a.dataset.sec]);
+    });
+    var sw = document.querySelector(".disc-switch");
+    if (!sw) return;
+    sw.dataset.active = PAGE_DISC;
+    var tile = sw.querySelector(".disc-tile");
+    function place() {
+      var act = sw.querySelector('.disc-opt[data-disc="' + sw.dataset.active + '"]');
+      if (!act) return;
+      tile.style.width = act.offsetWidth + "px";
+      tile.style.transform = "translateX(" + act.offsetLeft + "px)";
+    }
+    place();
+    window.addEventListener("resize", place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    sw.querySelectorAll(".disc-opt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var d = btn.dataset.disc;
+        if (d === PAGE_DISC) return;
+        try { localStorage.setItem(KEY, d); } catch (e) {}
+        location.href = MAP[d][PAGE_SEC];
+      });
+    });
+  });
+})();
+</script>
+
+<div class="page-wrap">
+  <div class="header">
+    <div class="pill">📄 Regulamin</div>
+    <h1>PUNKTACJA <span>RANKINGOWA</span></h1>
+    <p class="sub">Jak liczone są punkty do rankingu sezonu — Liga Odlewnicza (squash)</p>
+  </div>
+
+  <div class="rules">
+
+    <p class="rules-intro">
+      Każda kolejka daje punkty w czterech krokach: <b>wynik meczu</b>, <b>miejsce w kolejce</b>,
+      <b>mnożnik grupy</b> i <b>punkty za grupę</b>. Do rankingu sezonowego liczy się
+      <b>8 najlepszych kolejek z 12</b>.
+    </p>
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h3>Punkty za wynik meczu</h3>
+        <p>Za każdy rozegrany mecz naliczane są punkty bazowe, bez mnożnika. Sumuje się je ze wszystkich meczów w kolejce.</p>
+        <table class="r-table">
+          <thead><tr><th>Wynik</th><th>Punkty</th></tr></thead>
+          <tbody>
+            <tr><td>2 : 0</td><td>3 pkt</td></tr>
+            <tr><td>2 : 1</td><td>2 pkt</td></tr>
+            <tr><td>1 : 2</td><td>1 pkt</td></tr>
+            <tr><td>0 : 2</td><td>0 pkt</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h3>Bonus za miejsce w kolejce</h3>
+        <p>Do sumy punktów meczowych dolicza się jednorazowy bonus za miejsce w klasyfikacji tej kolejki. Każde kolejne miejsce to o punkt mniej.</p>
+        <div class="chips">
+          <span class="chip">1. miejsce <b>+10</b></span>
+          <span class="chip">2. miejsce <b>+9</b></span>
+          <span class="chip">3. miejsce <b>+8</b></span>
+          <span class="chip">4. miejsce <b>+7</b></span>
+          <span class="chip muted">i tak dalej −1 / miejsce</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h3>Mnożnik grupy</h3>
+        <p>Suma punktów meczowych i bonusu za miejsce zostaje przemnożona przez mnożnik przypisany do grupy.</p>
+        <table class="r-table">
+          <thead><tr><th>Grupa</th><th>Mnożnik</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>×6</td></tr>
+            <tr><td>B</td><td>×5</td></tr>
+            <tr><td>C</td><td>×4</td></tr>
+            <tr><td>D</td><td>×3</td></tr>
+            <tr><td>E</td><td>×2</td></tr>
+            <tr><td>F</td><td>×1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <h3>Punkty za grupę</h3>
+        <p>Na koniec, do przemnożonego wyniku, dolicza się stałą pulę punktów za grę w danej grupie — niezależnie od wyników.</p>
+        <table class="r-table">
+          <thead><tr><th>Grupa</th><th>Punkty</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>200 pkt</td></tr>
+            <tr><td>B</td><td>160 pkt</td></tr>
+            <tr><td>C</td><td>120 pkt</td></tr>
+            <tr><td>D</td><td>80 pkt</td></tr>
+            <tr><td>E</td><td>40 pkt</td></tr>
+            <tr><td>F</td><td>0 pkt</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="label">Wzór podsumowujący</div>
+      <div class="eq">Punkty za kolejkę = ( suma punktów meczowych + bonus za miejsce ) <b>×</b> mnożnik grupy <b>+</b> punkty za grupę</div>
+    </div>
+
+    <div class="example">
+      <div class="example-head">
+        <strong>Przykład obliczenia</strong>
+        <span>gracz · grupa C · 3. miejsce w kolejce</span>
+      </div>
+      <div class="example-row"><span class="k">Mecze: 2:0, 2:1, 1:2, 2:0, 0:2</span><span class="v">3 + 2 + 1 + 3 + 0</span></div>
+      <div class="example-row"><span class="k">Suma punktów meczowych</span><span class="v">9 pkt</span></div>
+      <div class="example-row"><span class="k">Bonus za 3. miejsce</span><span class="v">+ 8 pkt</span></div>
+      <div class="example-row"><span class="k">Razem przed mnożnikiem</span><span class="v">17 pkt</span></div>
+      <div class="example-row"><span class="k">Mnożnik grupy C</span><span class="v">× 4</span></div>
+      <div class="example-row"><span class="k">Punkty za grupę C</span><span class="v">+ 120 pkt</span></div>
+      <div class="example-row total"><span class="k">Punkty za tę kolejkę</span><span class="v">188 pkt</span></div>
+    </div>
+
+    <div class="season-note">
+      <h3>Ranking ogólny sezonu</h3>
+      <p>Do klasyfikacji generalnej liczy się suma punktów z <b>8 najlepszych kolejek</b> spośród maksymalnie <b>12</b> rozegranych w sezonie. Najsłabsze cztery wyniki odpadają.</p>
+      <div class="dots">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="dot off"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span>
+        <span>8 liczonych kolejek / 4 odrzucone (najsłabsze wyniki)</span>
+      </div>
+    </div>
+
+    <div class="dl-row">
+      <a class="dl-btn" href="pliki/punktacja-odlewnicza.pdf" target="_blank" rel="noopener">📄 Pobierz regulamin (PDF)</a>
+    </div>
+
+  </div>
+
+  <footer>Made by Karol Kreczmański</footer>
+</div>
+
+<script src="chat-widget.js"></script>
+</body>
+</html>
