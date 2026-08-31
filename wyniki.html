@@ -710,7 +710,20 @@ async function loadResults(silent = false) {
 function renderResults(data) {
   const area  = document.getElementById("contentArea");
   const color = DAY_CONFIG[state.activeDay]?.color || "#c96f00";
+
+  // Pomiń przerysowanie, gdy dane są identyczne — bez migotania i bez gubienia
+  // pozycji przewinięcia tabel przy auto-odświeżaniu co kilka sekund.
+  const sig = JSON.stringify([data.rankingHeaders, data.rankingRows, data.matchData]);
+  if (area.dataset.sig === sig) return;
+
+  // Zapamiętaj poziome/pionowe przewinięcie tabel przed przebudową DOM
+  const scrollMem = {};
+  area.querySelectorAll(".table-scroll[data-scroll-key]").forEach(el => {
+    scrollMem[el.dataset.scrollKey] = { left: el.scrollLeft, top: el.scrollTop };
+  });
+
   area.innerHTML = "";
+  area.dataset.sig = sig;
 
   // ── Ranking kolejki ──────────────────────────────────────────
   if (data.rankingRows && data.rankingRows.length > 0) {
@@ -720,6 +733,7 @@ function renderResults(data) {
     const card   = mkCard(color);
     const scroll = document.createElement("div");
     scroll.className = "table-scroll";
+    scroll.dataset.scrollKey = "ranking";
 
     const table = document.createElement("table");
     table.className = "rank-table";
@@ -793,6 +807,7 @@ function renderResults(data) {
     const card2   = mkCard(color);
     const scroll2 = document.createElement("div");
     scroll2.className = "table-scroll";
+    scroll2.dataset.scrollKey = "matches";
 
     const matchGrid = renderMatchGrid(data.matchData, color);
     if (matchGrid) {
@@ -809,6 +824,16 @@ function renderResults(data) {
       (!data.matchData   || data.matchData.length === 0)) {
     showError("Brak danych w tym pliku");
   }
+
+  // Przywróć zapamiętane przewinięcie tabel po przebudowie
+  const restoreScroll = () => {
+    area.querySelectorAll(".table-scroll[data-scroll-key]").forEach(el => {
+      const m = scrollMem[el.dataset.scrollKey];
+      if (m) { el.scrollLeft = m.left; el.scrollTop = m.top; }
+    });
+  };
+  restoreScroll();
+  requestAnimationFrame(restoreScroll);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1097,17 +1122,23 @@ function mkCard(color) {
 
 // ── Stan UI ────────────────────────────────────────────────────
 function showContentLoading() {
-  document.getElementById("contentArea").innerHTML =
+  const el = document.getElementById("contentArea");
+  el.dataset.sig = "";               // wymuś pełne przerysowanie po załadowaniu
+  el.innerHTML =
     `<div class="state-box"><div class="spinner"></div><p>Ładowanie wyników…</p></div>`;
 }
 
 function showError(msg) {
-  document.getElementById("contentArea").innerHTML =
+  const el = document.getElementById("contentArea");
+  el.dataset.sig = "";
+  el.innerHTML =
     `<div class="state-box"><div class="icon">❌</div><p>${msg}</p></div>`;
 }
 
 function clearContent() {
-  document.getElementById("contentArea").innerHTML =
+  const el = document.getElementById("contentArea");
+  el.dataset.sig = "";
+  el.innerHTML =
     `<div class="state-box"><div class="icon">🏆</div><p>Wybierz kolejkę aby zobaczyć wyniki</p></div>`;
 }
 
