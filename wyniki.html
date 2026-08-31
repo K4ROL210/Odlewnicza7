@@ -986,15 +986,9 @@ nameTd.style.fontWeight = "900";
             td.className = "mg-score";
             td.textContent = fmtVal(rowA[colStart + c]);
             td.style.width = "22px";
-            if (setWon(rowA[colStart + c], rowB[colStart + c])) {
-              td.style.background = mgTint(color, 0.20);
-              td.style.color = color;
-              td.style.fontWeight = "800";
-            } else {
-              td.style.background = isEven
-                ? "rgba(0,0,0,0.035)"
-                : "rgba(0,0,0,0.08)";
-            }
+            td.style.background = isEven
+              ? "rgba(0,0,0,0.035)"
+              : "rgba(0,0,0,0.08)";
             tr1.appendChild(td);
           }
           const wTd = document.createElement("td");
@@ -1002,9 +996,14 @@ nameTd.style.fontWeight = "900";
           wTd.style.color = color;
           wTd.style.width = "22px";
           wTd.textContent = fmtVal(rowA[colStart + 3]);
-          wTd.style.background = isEven
-            ? "rgba(0,0,0,0.10)"
-            : "rgba(0,0,0,0.15)";
+          if (setWon(rowA[colStart + 3], rowB[colStart + 3])) {
+            wTd.style.background = mgTint(color, 0.24);
+            wTd.style.fontWeight = "800";
+          } else {
+            wTd.style.background = isEven
+              ? "rgba(0,0,0,0.10)"
+              : "rgba(0,0,0,0.15)";
+          }
           tr1.appendChild(wTd);
         }
       }
@@ -1027,15 +1026,9 @@ nameTd.style.fontWeight = "900";
         td.className = "mg-score";
         td.textContent = fmtVal(rowB[colStart + c]);
         td.style.width = "22px";
-        if (setWon(rowB[colStart + c], rowA[colStart + c])) {
-          td.style.background = mgTint(color, 0.20);
-          td.style.color = color;
-          td.style.fontWeight = "800";
-        } else {
-          td.style.background = isEven
-            ? "rgba(0,0,0,0.035)"
-            : "rgba(0,0,0,0.08)";
-        }
+        td.style.background = isEven
+          ? "rgba(0,0,0,0.035)"
+          : "rgba(0,0,0,0.08)";
         tr2.appendChild(td);
       }
       const wTd = document.createElement("td");
@@ -1043,9 +1036,14 @@ nameTd.style.fontWeight = "900";
       wTd.style.color = color;
       wTd.style.width = "22px";
       wTd.textContent = fmtVal(rowB[colStart + 3]);
-      wTd.style.background = isEven
-        ? "rgba(0,0,0,0.10)"
-        : "rgba(0,0,0,0.15)";
+      if (setWon(rowB[colStart + 3], rowA[colStart + 3])) {
+        wTd.style.background = mgTint(color, 0.24);
+        wTd.style.fontWeight = "800";
+      } else {
+        wTd.style.background = isEven
+          ? "rgba(0,0,0,0.10)"
+          : "rgba(0,0,0,0.15)";
+      }
       tr2.appendChild(wTd);
     }
     tbody.appendChild(tr2);
