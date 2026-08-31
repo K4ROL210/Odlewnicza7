@@ -177,7 +177,10 @@
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
     min-width: 100%;
+    outline: 2px solid var(--border-hi);
   }
+  /* Mocniejsze linie siatki dla lepszego kontrastu */
+  .match-grid-table td, .match-grid-table th { border-color: var(--border-hi); }
   /* Nagłówek z nazwą gracza (kolumna) */
  .mg-header-player div {
   display: block;
@@ -909,7 +912,7 @@ th.appendChild(inner);
 
     // ── Górny wiersz gracza i ──
     const tr1 = document.createElement("tr");
-    tr1.style.borderTop = "2px solid rgba(0,0,0,0.15)";
+    tr1.style.borderTop = "2px solid rgba(0,0,0,0.38)";
 
     // Pierwsza kolumna — imię i nazwisko w jednej linii, stała szerokość
     const nameTd = document.createElement("td");
@@ -949,8 +952,8 @@ nameTd.style.fontWeight = "900";
           ph.rowSpan = 2;
           ph.textContent = "—";
           ph.style.background = isEven
-            ? "rgba(0,0,0,0.015)"
-            : "rgba(0,0,0,0.05)";
+            ? "rgba(0,0,0,0.03)"
+            : "rgba(0,0,0,0.07)";
           tr1.appendChild(ph);
         } else {
           for (let c = 0; c < 3; c++) {
@@ -958,9 +961,15 @@ nameTd.style.fontWeight = "900";
             td.className = "mg-score";
             td.textContent = fmtVal(rowA[colStart + c]);
             td.style.width = "22px";
-            td.style.background = isEven
-              ? "rgba(0,0,0,0.02)"
-              : "rgba(0,0,0,0.05)";
+            if (setWon(rowA[colStart + c], rowB[colStart + c])) {
+              td.style.background = mgTint(color, 0.20);
+              td.style.color = color;
+              td.style.fontWeight = "800";
+            } else {
+              td.style.background = isEven
+                ? "rgba(0,0,0,0.035)"
+                : "rgba(0,0,0,0.08)";
+            }
             tr1.appendChild(td);
           }
           const wTd = document.createElement("td");
@@ -969,8 +978,8 @@ nameTd.style.fontWeight = "900";
           wTd.style.width = "22px";
           wTd.textContent = fmtVal(rowA[colStart + 3]);
           wTd.style.background = isEven
-            ? "rgba(0,0,0,0.045)"
-            : "rgba(0,0,0,0.08)";
+            ? "rgba(0,0,0,0.10)"
+            : "rgba(0,0,0,0.15)";
           tr1.appendChild(wTd);
         }
       }
@@ -993,9 +1002,15 @@ nameTd.style.fontWeight = "900";
         td.className = "mg-score";
         td.textContent = fmtVal(rowB[colStart + c]);
         td.style.width = "22px";
-        td.style.background = isEven
-          ? "rgba(0,0,0,0.02)"
-          : "rgba(0,0,0,0.05)";
+        if (setWon(rowB[colStart + c], rowA[colStart + c])) {
+          td.style.background = mgTint(color, 0.20);
+          td.style.color = color;
+          td.style.fontWeight = "800";
+        } else {
+          td.style.background = isEven
+            ? "rgba(0,0,0,0.035)"
+            : "rgba(0,0,0,0.08)";
+        }
         tr2.appendChild(td);
       }
       const wTd = document.createElement("td");
@@ -1004,8 +1019,8 @@ nameTd.style.fontWeight = "900";
       wTd.style.width = "22px";
       wTd.textContent = fmtVal(rowB[colStart + 3]);
       wTd.style.background = isEven
-        ? "rgba(0,0,0,0.045)"
-        : "rgba(0,0,0,0.08)";
+        ? "rgba(0,0,0,0.10)"
+        : "rgba(0,0,0,0.15)";
       tr2.appendChild(wTd);
     }
     tbody.appendChild(tr2);
@@ -1029,6 +1044,22 @@ function isNotPlayed(val) {
     if (isNaN(Number(s))) return true;
   }
   return false;
+}
+
+// Kolor dnia (hex) → rgba z zadaną przezroczystością — tło wygranych setów
+function mgTint(hex, a) {
+  const h = String(hex || "").trim().replace(/^#/, "");
+  const f = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
+  const r = parseInt(f.slice(0, 2), 16) || 0;
+  const g = parseInt(f.slice(2, 4), 16) || 0;
+  const b = parseInt(f.slice(4, 6), 16) || 0;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+// Czy w tym secie "mine" pokonał "theirs"?
+function setWon(mine, theirs) {
+  const a = Number(mine), b = Number(theirs);
+  return Number.isFinite(a) && Number.isFinite(b) && a > b;
 }
 
 // Formatowanie wartości w siatce meczów (liczba lub pusty string)
