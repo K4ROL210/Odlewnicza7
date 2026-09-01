@@ -221,7 +221,7 @@
 .mg-row-player {
   padding: 8px 14px;
   font-size: 15px; font-weight: 800;
-  white-space: nowrap; vertical-align: middle;
+  white-space: normal; overflow-wrap: break-word; word-break: break-word; vertical-align: middle;
   border: 1px solid var(--border);
   font-family: 'Poppins', sans-serif;
   width: 1%; /* kurczy się do minimalnej potrzebnej szerokości */
@@ -948,10 +948,10 @@ th.appendChild(inner);
     nameTd.style.width = "120px";
     nameTd.style.minWidth = "120px";
     nameTd.style.maxWidth = "120px";
-    nameTd.style.whiteSpace = "nowrap";
+    nameTd.style.whiteSpace = "normal";
+    nameTd.style.overflowWrap = "break-word";
+    nameTd.style.wordBreak = "break-word";
    nameTd.style.textAlign = "center"; // wyśrodkuj
-    nameTd.style.overflow = "hidden";
-    nameTd.style.textOverflow = "ellipsis";
    nameTd.style.fontSize = "15px";
 nameTd.style.fontWeight = "900";
     nameTd.textContent = playerNames[i];
