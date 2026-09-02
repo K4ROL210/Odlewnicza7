@@ -90,6 +90,22 @@
   .tab-btn.active { color: #ffffff; border-color: transparent; }
   .tab-btn.latest::after { content: " ●"; font-size: 9px; color: var(--accent); }
 
+  /* Przycisk ręcznego przeładowania */
+  .refresh-btn {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 8px; cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent; color: var(--muted);
+    transition: all .15s; white-space: nowrap;
+  }
+  .refresh-btn::before { content: "⟳"; display: inline-block; margin-right: 6px; font-size: 13px; }
+  .refresh-btn:hover:not(:disabled) { color: var(--accent2); border-color: var(--border-hi); }
+  .refresh-btn:disabled { opacity: .55; cursor: default; }
+  .refresh-btn.spin::before { animation: rfspin .8s linear infinite; }
+  @keyframes rfspin { to { transform: rotate(360deg); } }
+  .refresh-hint { font-size: 11px; color: var(--muted); font-family: 'Poppins', sans-serif; }
+
   /* ── SEKCJA ── */
   .section-title {
     font-family: 'Montserrat', sans-serif;
@@ -245,6 +261,12 @@
     <div id="seasonTabs" style="display:flex;gap:6px;flex-wrap:wrap"></div>
   </div>
 
+  <!-- Ręczne przeładowanie (omija cache serwera) -->
+  <div class="selector-row" id="refreshRow" style="display:none">
+    <button id="refreshBtn" class="refresh-btn" type="button">Przeładuj ranking</button>
+    <span id="refreshHint" class="refresh-hint"></span>
+  </div>
+
   <div id="tableArea">
     <div class="state-box">
       <div class="icon">📊</div>
@@ -265,7 +287,8 @@ let activeSeason = null;
 // ══════════════════════════════════════════════════════════════
 //  API (JSONP — omija CORS przy wywołaniu z pliku lokalnego)
 // ══════════════════════════════════════════════════════════════
-function api(params) {
+// Pojedyncza próba zapytania JSONP z własnym limitem czasu.
+function apiOnce(params, timeoutMs) {
   return new Promise((resolve, reject) => {
     const cb = "jsonp_" + Math.random().toString(36).slice(2);
     let script;
@@ -273,7 +296,7 @@ function api(params) {
       delete window[cb];
       if (script) script.remove();
       reject(new Error("timeout"));
-    }, 12000);
+    }, timeoutMs);
     window[cb] = data => {
       clearTimeout(t);
       delete window[cb];
@@ -282,9 +305,32 @@ function api(params) {
     };
     script = document.createElement("script");
     script.src = RANKING_URL + "?" + new URLSearchParams({ ...params, callback: cb });
-    script.onerror = () => { clearTimeout(t); delete window[cb]; reject(new Error("błąd sieci")); };
+    script.onerror = () => {
+      clearTimeout(t);
+      delete window[cb];
+      if (script) script.remove();
+      reject(new Error("błąd sieci"));
+    };
     document.head.appendChild(script);
   });
+}
+
+// Google Apps Script bywa wolny (zimny start, wielu widzów naraz), więc
+// ponawiamy zapytanie z rosnącym limitem czasu, zanim pokażemy błąd.
+async function api(params) {
+  const timeouts = [12000, 18000, 25000]; // ms — kolejne próby
+  let lastErr;
+  for (let i = 0; i < timeouts.length; i++) {
+    try {
+      return await apiOnce(params, timeouts[i]);
+    } catch (e) {
+      lastErr = e;
+      if (i < timeouts.length - 1) {
+        await new Promise(r => setTimeout(r, 700));
+      }
+    }
+  }
+  throw lastErr;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -345,16 +391,39 @@ function renderSeasonTabs() {
 // ══════════════════════════════════════════════════════════════
 //  LOAD: ranking sezonu
 // ══════════════════════════════════════════════════════════════
-async function loadRanking() {
-  showLoading();
+let rankingInFlight = false;
+async function loadRanking(silent = false, fresh = false) {
+  if (silent && rankingInFlight) return;
+  rankingInFlight = true;
+  if (!silent) showLoading();
   renderSeasonTabs();
 
   try {
-    const res = await api({ action: "ranking", season: activeSeason });
-    if (!res.ok) { showError(res.error); return; }
+    const res = await api({
+      action: "ranking",
+      season: activeSeason,
+      ...(fresh ? { fresh: 1 } : {}),
+    });
+    if (!res.ok) { if (!silent) showError(res.error); return; }
     renderTable(res.rows, res.headers);
+    updateRefreshRow();
   } catch (e) {
-    showError("Błąd pobierania danych: " + e.message);
+    if (!silent) showError("Błąd pobierania danych: " + e.message);
+  } finally {
+    rankingInFlight = false;
+  }
+}
+
+// Ranking odświeża się automatycznie tylko dla aktualnego sezonu.
+function updateRefreshRow() {
+  const row  = document.getElementById("refreshRow");
+  const hint = document.getElementById("refreshHint");
+  if (!row) return;
+  row.style.display = "flex";
+  if (hint) {
+    hint.textContent = (activeSeason === meta.latest)
+      ? "Aktualny sezon odświeża się automatycznie co 30 s."
+      : "Zakończony sezon — nie odświeża się sam. Kliknij, jeśli zmieniałeś plik.";
   }
 }
 
@@ -471,9 +540,30 @@ function showError(msg) {
     `<div class="state-box"><div class="icon">❌</div><p>${msg}</p></div>`;
 }
 
+// ── AUTO-ODŚWIEŻANIE (tylko aktualny sezon, tylko aktywna karta) ─
+setInterval(() => {
+  if (document.hidden) return;
+  if (activeSeason && activeSeason === meta.latest) loadRanking(true);
+}, 30000);
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && activeSeason && activeSeason === meta.latest) loadRanking(true);
+});
+
+// Przycisk „Przeładuj ranking" — pomija cache serwera.
+(function () {
+  const btn = document.getElementById("refreshBtn");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    btn.classList.add("spin");
+    btn.disabled = true;
+    try { await loadRanking(false, true); }
+    finally { btn.classList.remove("spin"); btn.disabled = false; }
+  });
+})();
+
 // ── START ──────────────────────────────────────────────────────
 init();
 </script>
-<script src="chat-widget.js"></script>
 </body>
 </html>

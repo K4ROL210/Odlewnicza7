@@ -120,6 +120,22 @@
   .group-btn:hover  { color: var(--accent2); border-color: var(--border-hi); }
   .group-btn.active { color: #ffffff; border-color: transparent; }
 
+  /* Przycisk ręcznego przeładowania */
+  .refresh-btn {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 8px; cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent; color: var(--muted);
+    transition: all .15s; white-space: nowrap;
+  }
+  .refresh-btn::before { content: "⟳"; display: inline-block; margin-right: 6px; font-size: 13px; }
+  .refresh-btn:hover:not(:disabled) { color: var(--accent2); border-color: var(--border-hi); }
+  .refresh-btn:disabled { opacity: .55; cursor: default; }
+  .refresh-btn.spin::before { animation: rfspin .8s linear infinite; }
+  @keyframes rfspin { to { transform: rotate(360deg); } }
+  .refresh-hint { font-size: 11px; color: var(--muted); font-family: 'Poppins', sans-serif; }
+
   /* ── SEKCJA WYNIKÓW ── */
   .section-title {
     font-family: 'Montserrat', sans-serif;
@@ -442,6 +458,12 @@
     <div id="groupTabs"></div>
   </div>
 
+  <!-- Ręczne przeładowanie (omija cache serwera) -->
+  <div class="selector-row" id="refreshRow" style="display:none">
+    <button id="refreshBtn" class="refresh-btn" type="button">Przeładuj kolejki</button>
+    <span id="refreshHint" class="refresh-hint"></span>
+  </div>
+
   <!-- Obszar wyników -->
   <div id="contentArea">
     <div class="state-box">
@@ -469,7 +491,8 @@ let state = {
 // ══════════════════════════════════════════════════════════════
 //  API (JSONP — omija CORS przy wywołaniu z pliku lokalnego)
 // ══════════════════════════════════════════════════════════════
-function api(params) {
+// Pojedyncza próba zapytania JSONP z własnym limitem czasu.
+function apiOnce(params, timeoutMs) {
   return new Promise((resolve, reject) => {
     const cb = "jsonp_" + Math.random().toString(36).slice(2);
     let script;
@@ -477,7 +500,7 @@ function api(params) {
       delete window[cb];
       if (script) script.remove();
       reject(new Error("timeout"));
-    }, 15000);
+    }, timeoutMs);
     window[cb] = data => {
       clearTimeout(t);
       delete window[cb];
@@ -486,9 +509,32 @@ function api(params) {
     };
     script = document.createElement("script");
     script.src = WYNIKI_URL + "?" + new URLSearchParams({ ...params, callback: cb });
-    script.onerror = () => { clearTimeout(t); delete window[cb]; reject(new Error("błąd sieci")); };
+    script.onerror = () => {
+      clearTimeout(t);
+      delete window[cb];
+      if (script) script.remove();
+      reject(new Error("błąd sieci"));
+    };
     document.head.appendChild(script);
   });
+}
+
+// Google Apps Script bywa wolny (zimny start, wielu widzów naraz), więc
+// ponawiamy zapytanie z rosnącym limitem czasu, zanim pokażemy błąd.
+async function api(params) {
+  const timeouts = [12000, 18000, 25000]; // ms — kolejne próby
+  let lastErr;
+  for (let i = 0; i < timeouts.length; i++) {
+    try {
+      return await apiOnce(params, timeouts[i]);
+    } catch (e) {
+      lastErr = e;
+      if (i < timeouts.length - 1) {
+        await new Promise(r => setTimeout(r, 700)); // krótka przerwa przed ponowieniem
+      }
+    }
+  }
+  throw lastErr;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -597,7 +643,7 @@ function renderSeasonTabs() {
 // ══════════════════════════════════════════════════════════════
 //  LOAD: lista kolejek
 // ══════════════════════════════════════════════════════════════
-async function loadRounds() {
+async function loadRounds(fresh = false) {
   showContentLoading();
   renderSeasonTabs();
   document.getElementById("roundRow").style.display = "none";
@@ -607,6 +653,7 @@ async function loadRounds() {
       action:  "rounds",
       dayKey:  state.activeDay,
       season:  state.activeSeason,
+      ...(fresh ? { fresh: 1 } : {}),
     });
     if (!res.ok) { showError(res.error); return; }
 
@@ -618,7 +665,7 @@ async function loadRounds() {
       state.activeGroup = state.rounds[0].groups[0];
       renderRoundTabs();
       renderGroupTabs(state.rounds[0].groups);
-      await loadResults();
+      await loadResults(false, fresh);
     } else {
       showError("Brak kolejek w tym sezonie");
     }
@@ -688,7 +735,32 @@ function hideGroupRow() {
 // ══════════════════════════════════════════════════════════════
 //  LOAD: wyniki kolejki
 // ══════════════════════════════════════════════════════════════
-async function loadResults(silent = false) {
+// Czy oglądana kolejka jest „na żywo" — tylko wtedy odświeżamy automatycznie.
+// Na żywo = aktualny sezon + jedna z dwóch ostatnio rozegranych kolejek.
+function isLiveView() {
+  const latestSeason = state.meta[state.activeDay] && state.meta[state.activeDay].latest;
+  if (!latestSeason || state.activeSeason !== latestSeason) return false;
+  const liveRounds = state.rounds.slice(0, 2).map(r => r.round); // rounds są posortowane malejąco
+  return liveRounds.includes(state.activeRound);
+}
+
+function updateRefreshRow() {
+  const row  = document.getElementById("refreshRow");
+  const hint = document.getElementById("refreshHint");
+  if (!row) return;
+  row.style.display = "flex";
+  if (hint) {
+    hint.textContent = isLiveView()
+      ? "Ta kolejka odświeża się automatycznie co 20 s."
+      : "Starsza kolejka — nie odświeża się sama. Kliknij, jeśli zmieniałeś plik.";
+  }
+}
+
+let resultsInFlight = false;
+async function loadResults(silent = false, fresh = false) {
+  // Auto-odświeżanie nie nakłada się na trwające zapytanie.
+  if (silent && resultsInFlight) return;
+  resultsInFlight = true;
   if (!silent) showContentLoading();
   try {
     const res = await api({
@@ -697,11 +769,15 @@ async function loadResults(silent = false) {
       season:  state.activeSeason,
       round:   state.activeRound,
       group:   state.activeGroup,
+      ...(fresh ? { fresh: 1 } : {}),
     });
     if (!res.ok) { if (!silent) showError(res.error); return; }
     renderResults(res);
+    updateRefreshRow();
   } catch(e) {
     if (!silent) showError("Błąd ładowania wyników: " + e.message);
+  } finally {
+    resultsInFlight = false;
   }
 }
 
@@ -1125,14 +1201,35 @@ function clearContent() {
  console.log("Wersja 1");
 init();
 
- // ── AUTO-ODŚWIEŻANIE WYNIKÓW co 8 sekund ────────────────────────
+ // ── AUTO-ODŚWIEŻANIE WYNIKÓW co 20 sekund ───────────────────────
+// Tylko dla kolejek „na żywo" (aktualny sezon, 2 ostatnie kolejki)
+// i tylko gdy karta jest na wierzchu. Starsze kolejki wczytują się raz.
 setInterval(() => {
-  if (state.activeDay && state.activeSeason && state.activeRound && state.activeGroup) {
+  if (document.hidden) return;
+  if (state.activeRound && state.activeGroup && isLiveView()) {
     loadResults(true);
   }
-}, 8000);
+}, 20000);
+
+// Po powrocie do karty odśwież od razu (jeśli to kolejka na żywo).
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && state.activeRound && state.activeGroup && isLiveView()) {
+    loadResults(true);
+  }
+});
+
+// Przycisk „Przeładuj kolejki" — pełne odświeżenie z pominięciem cache serwera.
+(function () {
+  const btn = document.getElementById("refreshBtn");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    btn.classList.add("spin");
+    btn.disabled = true;
+    try { await loadRounds(true); }
+    finally { btn.classList.remove("spin"); btn.disabled = false; }
+  });
+})();
  
 </script>
-<script src="chat-widget.js"></script>
 </body>
 </html>
