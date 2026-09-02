@@ -179,7 +179,7 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-logo">🎾 Odlewnicza</div>
+    <div class="nav-logo" id="navLogo" style="cursor:default;touch-action:manipulation;">🎾 Odlewnicza</div>
     <span class="nav-break"></span>
     <a class="nav-link"        data-sec="index"   href="index.html">📋 Zapisy</a>
     <a class="nav-link"        data-sec="wyniki"  href="wyniki.html">🏆 Wyniki</a>
@@ -279,6 +279,11 @@
 // ══════════════════════════════════════════════════════════════
 let meta         = { seasons: [], latest: 1 };
 let activeSeason = null;
+
+// Przycisk „Przeładuj ranking" jest domyślnie ukryty — odblokowuje go
+// potrójne kliknięcie w logo „Odlewnicza" (patrz na dole skryptu).
+let refreshUnlocked = false;
+try { refreshUnlocked = sessionStorage.getItem("odlewnicza_refresh") === "1"; } catch (e) {}
 
 // ══════════════════════════════════════════════════════════════
 //  API (JSONP — omija CORS przy wywołaniu z pliku lokalnego)
@@ -407,6 +412,7 @@ function updateRefreshRow() {
   const row  = document.getElementById("refreshRow");
   const hint = document.getElementById("refreshHint");
   if (!row) return;
+  if (!refreshUnlocked) { row.style.display = "none"; return; }
   row.style.display = "flex";
   if (hint) {
     hint.textContent = (activeSeason === meta.latest)
@@ -547,6 +553,24 @@ document.addEventListener("visibilitychange", () => {
     btn.disabled = true;
     try { await loadRanking(false, true); }
     finally { btn.classList.remove("spin"); btn.disabled = false; }
+  });
+})();
+
+// Potrójne kliknięcie w logo „Odlewnicza" pokazuje/ukrywa przycisk „Przeładuj ranking".
+(function () {
+  const logo = document.getElementById("navLogo");
+  if (!logo) return;
+  let clicks = 0, timer;
+  logo.addEventListener("click", () => {
+    clicks++;
+    if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 800);
+    if (clicks >= 3) {
+      clearTimeout(timer);
+      clicks = 0;
+      refreshUnlocked = !refreshUnlocked;
+      try { sessionStorage.setItem("odlewnicza_refresh", refreshUnlocked ? "1" : "0"); } catch (e) {}
+      updateRefreshRow();
+    }
   });
 })();
 
