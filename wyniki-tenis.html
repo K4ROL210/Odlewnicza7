@@ -645,7 +645,12 @@ function renderSeasonTabs() {
 // ══════════════════════════════════════════════════════════════
 //  LOAD: lista kolejek
 // ══════════════════════════════════════════════════════════════
-async function loadRounds(fresh = false) {
+// keep=true → zachowaj bieżącą kolejkę/grupę (przycisk „Przeładuj kolejki").
+// keep=false → wskocz na najnowszą kolejkę (wejście na stronę / zmiana sezonu).
+async function loadRounds(fresh = false, keep = false) {
+  const keepRound = keep ? state.activeRound : null;
+  const keepGroup = keep ? state.activeGroup : null;
+
   showContentLoading();
   renderSeasonTabs();
   document.getElementById("roundRow").style.display = "none";
@@ -660,13 +665,19 @@ async function loadRounds(fresh = false) {
     if (!res.ok) { showError(res.error); return; }
 
     state.rounds = res.rounds; // posortowane malejąco
-    renderRoundTabs();
 
     if (state.rounds.length > 0) {
-      state.activeRound = state.rounds[0].round;
-      state.activeGroup = state.rounds[0].groups[0];
+      const cur = keepRound != null ? state.rounds.find(r => r.round === keepRound) : null;
+      if (cur) {
+        state.activeRound = cur.round;
+        state.activeGroup = cur.groups.includes(keepGroup) ? keepGroup : cur.groups[0];
+      } else {
+        state.activeRound = state.rounds[0].round;
+        state.activeGroup = state.rounds[0].groups[0];
+      }
+      const active = state.rounds.find(r => r.round === state.activeRound) || state.rounds[0];
       renderRoundTabs();
-      renderGroupTabs(state.rounds[0].groups);
+      renderGroupTabs(active.groups);
       await loadResults(false, fresh);
     } else {
       showError("Brak kolejek w tym sezonie");
@@ -1240,7 +1251,7 @@ document.addEventListener("visibilitychange", () => {
   btn.addEventListener("click", async () => {
     btn.classList.add("spin");
     btn.disabled = true;
-    try { await loadRounds(true); }
+    try { await loadRounds(true, true); }
     finally { btn.classList.remove("spin"); btn.disabled = false; }
   });
 })();
