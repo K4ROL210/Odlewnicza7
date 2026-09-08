@@ -117,6 +117,16 @@
   .example-row.total .k { color: var(--accent2); font-weight: 700; }
   .example-row.total .v { color: var(--accent-day); font-size: 18px; font-weight: 800; }
 
+  .ex-scroll { overflow-x: auto; }
+  .ex-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px; }
+  .ex-table th { text-align: left; font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); padding: 9px 14px; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border); }
+  .ex-table td { padding: 8px 14px; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--muted); }
+  .ex-table tbody tr:last-child td { border-bottom: none; }
+  .ex-table td:first-child { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent2); }
+  .ex-table td:last-child { text-align: right; font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--accent-day); white-space: nowrap; }
+  .ex-note { font-size: 13px; line-height: 1.6; color: var(--muted); padding: 12px 16px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.02); }
+  .ex-note b { color: var(--accent2); }
+
   .season-note { background: rgba(0,0,0,0.03); border-radius: 14px; padding: 18px 20px; }
   .season-note h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; color: var(--accent2); margin-bottom: 6px; }
   .season-note p { font-size: 14px; line-height: 1.65; color: var(--muted); }
@@ -216,111 +226,74 @@
   <div class="rules">
 
     <p class="rules-intro">
-      Każda kolejka daje punkty w czterech krokach: <b>wynik meczu</b>, <b>miejsce w kolejce</b>,
-      <b>mnożnik grupy</b> i <b>punkty za grupę</b>. Do rankingu sezonowego liczy się
-      <b>8 najlepszych kolejek z 12</b>.
+      Podstawą wyniku jest <b>liczba wygranych setów</b>. Wynik jest przeliczany tak, żeby
+      można było uczciwie porównywać grupy o różnej liczbie zawodników. Do rankingu sezonowego
+      liczy się <b>8 najlepszych kolejek</b>.
     </p>
 
     <div class="step">
       <div class="step-num">01</div>
       <div class="step-body">
-        <h3>Punkty za wynik meczu</h3>
-        <p>Mecz gra się do 3 wygranych setów. Za każdy rozegrany mecz naliczane są punkty bazowe, bez mnożnika. Sumuje się je ze wszystkich meczów w kolejce.</p>
-        <table class="r-table">
-          <thead><tr><th>Wynik</th><th>Punkty</th></tr></thead>
-          <tbody>
-            <tr><td>3 : 0</td><td>5 pkt</td></tr>
-            <tr><td>3 : 1</td><td>4 pkt</td></tr>
-            <tr><td>3 : 2</td><td>3 pkt</td></tr>
-            <tr><td>2 : 3</td><td>2 pkt</td></tr>
-            <tr><td>1 : 3</td><td>1 pkt</td></tr>
-            <tr><td>0 : 3</td><td>0 pkt</td></tr>
-          </tbody>
-        </table>
+        <h3>Wynik znormalizowany</h3>
+        <p>W grupie każdy gra z każdym, mecz do 3 wygranych setów. Liczbę setów wygranych przez
+        zawodnika w całej kolejce dzielimy przez maksymalną możliwą liczbę setów w tej grupie.</p>
+        <p><b>n</b> to liczba zawodników, którzy zagrali w danej grupie. Maksymalna liczba setów
+        wynosi <b>3 × (n − 1)</b> — komplet wygranych daje wynik znormalizowany równy 1.</p>
       </div>
+    </div>
+
+    <div class="formula">
+      <div class="label">Krok 1 — normalizacja</div>
+      <div class="eq">wynik znormalizowany = <b>wygrane sety</b> ÷ ( 3 × (n − 1) )</div>
     </div>
 
     <div class="step">
       <div class="step-num">02</div>
       <div class="step-body">
-        <h3>Bonus za miejsce w kolejce</h3>
-        <p>Do sumy punktów meczowych dolicza się jednorazowy bonus za miejsce w klasyfikacji tej kolejki. Każde kolejne miejsce to o punkt mniej.</p>
-        <div class="chips">
-          <span class="chip">1. miejsce <b>+10</b></span>
-          <span class="chip">2. miejsce <b>+9</b></span>
-          <span class="chip">3. miejsce <b>+8</b></span>
-          <span class="chip">4. miejsce <b>+7</b></span>
-          <span class="chip muted">i tak dalej −1 / miejsce</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">03</div>
-      <div class="step-body">
-        <h3>Mnożnik grupy</h3>
-        <p>Suma punktów meczowych i bonusu za miejsce zostaje przemnożona przez mnożnik przypisany do grupy.</p>
-        <table class="r-table">
-          <thead><tr><th>Grupa</th><th>Mnożnik</th></tr></thead>
-          <tbody>
-            <tr><td>A</td><td>×6</td></tr>
-            <tr><td>B</td><td>×5</td></tr>
-            <tr><td>C</td><td>×4</td></tr>
-            <tr><td>D</td><td>×3</td></tr>
-            <tr><td>E</td><td>×2</td></tr>
-            <tr><td>F</td><td>×1</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">04</div>
-      <div class="step-body">
-        <h3>Punkty za grupę</h3>
-        <p>Na koniec, do przemnożonego wyniku, dolicza się stałą pulę punktów za grę w danej grupie — niezależnie od wyników.</p>
-        <table class="r-table">
-          <thead><tr><th>Grupa</th><th>Punkty</th></tr></thead>
-          <tbody>
-            <tr><td>A</td><td>200 pkt</td></tr>
-            <tr><td>B</td><td>160 pkt</td></tr>
-            <tr><td>C</td><td>120 pkt</td></tr>
-            <tr><td>D</td><td>80 pkt</td></tr>
-            <tr><td>E</td><td>40 pkt</td></tr>
-            <tr><td>F</td><td>0 pkt</td></tr>
-          </tbody>
-        </table>
+        <h3>Punkty za kolejkę</h3>
+        <p>Zawodnicy wyższej grupy startują z przewagą równą liczbie osób grających w grupach
+        niższych. Dzięki temu najsłabszy wynik w wyższej grupie nie wypada gorzej niż najlepszy
+        wynik w grupie niższej. Najniższa grupa zaczyna od zera.</p>
+        <p>Do tej przewagi dolicza się <b>n × wynik znormalizowany</b>.</p>
       </div>
     </div>
 
     <div class="formula">
-      <div class="label">Wzór podsumowujący</div>
-      <div class="eq">Punkty za kolejkę = ( suma punktów meczowych + bonus za miejsce ) <b>×</b> mnożnik grupy <b>+</b> punkty za grupę</div>
+      <div class="label">Krok 2 — punkty za kolejkę</div>
+      <div class="eq">punkty = <b>zawodnicy w niższych grupach</b> + n × wynik znormalizowany</div>
     </div>
 
     <div class="example">
       <div class="example-head">
-        <strong>Przykład obliczenia</strong>
-        <span>gracz · grupa C · 3. miejsce w kolejce</span>
+        <strong>Przykład — kolejka z 2 września 2026</strong>
+        <span>grupa A: 5 zawodników, max 12 setów · grupa B: 4 zawodników, max 9 setów</span>
       </div>
-      <div class="example-row"><span class="k">Mecze: 3:1, 3:2, 2:3, 3:0, 0:3</span><span class="v">4 + 3 + 2 + 5 + 0</span></div>
-      <div class="example-row"><span class="k">Suma punktów meczowych</span><span class="v">14 pkt</span></div>
-      <div class="example-row"><span class="k">Bonus za 3. miejsce</span><span class="v">+ 8 pkt</span></div>
-      <div class="example-row"><span class="k">Razem przed mnożnikiem</span><span class="v">22 pkt</span></div>
-      <div class="example-row"><span class="k">Mnożnik grupy C</span><span class="v">× 4</span></div>
-      <div class="example-row"><span class="k">Punkty za grupę C</span><span class="v">+ 120 pkt</span></div>
-      <div class="example-row total"><span class="k">Punkty za tę kolejkę</span><span class="v">208 pkt</span></div>
+      <div class="ex-scroll">
+        <table class="ex-table">
+          <thead><tr><th>Grupa</th><th>Zawodnik</th><th>Wygrane sety</th><th>Obliczenie</th><th>Punkty</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>Maciej Smyl</td><td>12 / 12</td><td>4 + 5 × 12/12</td><td>9,00</td></tr>
+            <tr><td>A</td><td>Tomek Kania</td><td>9 / 12</td><td>4 + 5 × 9/12</td><td>7,75</td></tr>
+            <tr><td>A</td><td>Daniel Mikosz</td><td>9 / 12</td><td>4 + 5 × 9/12</td><td>7,75</td></tr>
+            <tr><td>A</td><td>Piotr Bednarski</td><td>9 / 12</td><td>4 + 5 × 9/12</td><td>7,75</td></tr>
+            <tr><td>A</td><td>Grzegorz Dajnowicz</td><td>3 / 12</td><td>4 + 5 × 3/12</td><td>5,25</td></tr>
+            <tr><td>B</td><td>Piotr Janicki</td><td>9 / 9</td><td>4 × 9/9</td><td>4,00</td></tr>
+            <tr><td>B</td><td>Szymon Kosiński</td><td>6 / 9</td><td>4 × 6/9</td><td>2,67</td></tr>
+            <tr><td>B</td><td>Arkadiusz Kuich</td><td>2 / 9</td><td>4 × 2/9</td><td>0,89</td></tr>
+            <tr><td>B</td><td>Jakub Lementowicz</td><td>2 / 9</td><td>4 × 2/9</td><td>0,89</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ex-note">
+        <b>Kontrola granicy grup:</b> komplet setów w grupie B daje 4,00 pkt — tyle samo
+        otrzyma zawodnik grupy A, który nie wygrał żadnego seta.
+      </p>
     </div>
 
     <div class="season-note">
       <h3>Ranking ogólny sezonu</h3>
-      <p>Do klasyfikacji generalnej liczy się suma punktów z <b>8 najlepszych kolejek</b> spośród maksymalnie <b>12</b> rozegranych w sezonie. Najsłabsze cztery wyniki odpadają.</p>
-      <div class="dots">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="dot off"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span>
-        <span>8 liczonych kolejek / 4 odrzucone (najsłabsze wyniki)</span>
-      </div>
+      <p>Do klasyfikacji generalnej liczy się suma punktów z <b>8 najlepszych kolejek</b> w sezonie.
+      Wyniki liczymy z pełną dokładnością, a w tabeli zaokrąglamy do dwóch miejsc po przecinku.</p>
     </div>
 
     <div class="dl-row">
