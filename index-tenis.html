@@ -1056,6 +1056,7 @@ let state = {
   passErr:       false,
   adminPassword: "",
   viewUnlocked:  false,
+  viewPassword:  "",
   gateInput:     "",
   gateErr:       false,
   addListConfirm: null,
@@ -1164,6 +1165,7 @@ async function tryUnlock() {
   const res = await api({ action: "checkPassword", password: state.gateInput });
   if (res.ok) {
     state.viewUnlocked = true;
+    state.viewPassword = state.gateInput;
     try { localStorage.setItem(GATE_STORAGE_KEY, state.gateInput); } catch(e) {}
     state.gateInput = ""; state.gateErr = false;
     render();
@@ -1178,7 +1180,7 @@ async function tryUnlock() {
 
 async function loadAllowedPlayers() {
   try {
-    const res = await api({ action: "getAllowedPlayers" });
+    const res = await api({ action: "getAllowedPlayers", password: state.viewPassword });
     if (res.ok) state.allowedPlayers = res.players || [];
   } catch (e) {}
 }
@@ -1302,7 +1304,7 @@ async function confirmAddToList() {
   state.addListConfirm.phone = phone;
   state.addListSaving = true; render();
   try {
-    const res = await api({ action: "addToAllowedList", name, phone });
+    const res = await api({ action: "addToAllowedList", name, phone, password: state.viewPassword });
     if (res.ok) {
       state.addListConfirm = null;
       state.addListSaving  = false;
@@ -1472,7 +1474,7 @@ function mkCard(sec) {
         lastPhoneLookup = digits;
         const core = digits.slice(-9);
         try {
-          const res = await api({ action: "lookupPhone", phone: core });
+          const res = await api({ action: "lookupPhone", phone: core, password: state.viewPassword });
           if (res.ok && (state.inputs[sec.key] || "").replace(/\D/g, "") === digits) {
             inp.value = res.name;
             state.inputs[sec.key] = res.name;
