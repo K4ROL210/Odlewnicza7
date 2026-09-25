@@ -1161,19 +1161,29 @@ function renderGate() {
 
 const GATE_STORAGE_KEY = "wpc_view_password";
 
+let unlockInFlight = false;
 async function tryUnlock() {
-  const res = await api({ action: "checkPassword", password: state.gateInput });
+  // Hasło zapamiętujemy PRZED await — równoległe wywołanie (auto-odblokowanie + Enter/podwójny klik)
+  // czytało wyczyszczone pole i nadpisywało viewPassword pustym tekstem → "Brak uprawnień".
+  if (unlockInFlight || state.viewUnlocked) return;
+  const pw = state.gateInput;
+  if (!pw) { state.gateErr = true; render(); return; }
+  unlockInFlight = true;
+  let res;
+  try { res = await api({ action: "checkPassword", password: pw }); }
+  catch (e) { res = { ok: false, netErr: true }; }
+  finally { unlockInFlight = false; }
   if (res.ok) {
     state.viewUnlocked = true;
-    state.viewPassword = state.gateInput;
-    try { localStorage.setItem(GATE_STORAGE_KEY, state.gateInput); } catch(e) {}
+    state.viewPassword = pw;
+    try { localStorage.setItem(GATE_STORAGE_KEY, pw); } catch(e) {}
     state.gateInput = ""; state.gateErr = false;
     render();
     Promise.all(SECTIONS.map(loadSection));
     loadAllowedPlayers();
   } else {
     state.gateErr = true;
-    try { localStorage.removeItem(GATE_STORAGE_KEY); } catch(e) {}
+    if (!res.netErr) { try { localStorage.removeItem(GATE_STORAGE_KEY); } catch(e) {} }
     render();
   }
 }
@@ -1584,9 +1594,10 @@ window.addEventListener("scroll", hideSuggestions, true);
 window.addEventListener("resize", hideSuggestions);
 
 async function tryLogin() {
-  const res = await api({ action:"checkPassword", password:state.passInput });
+  const pw = state.passInput;
+  const res = await api({ action:"checkPassword", password:pw });
   if (res.ok) {
-    state.adminMode=true; state.adminPassword=state.passInput;
+    state.adminMode=true; state.adminPassword=pw;
     state.showLogin=false; state.passInput=""; state.passErr=false;
   } else { state.passErr=true; }
   render();
