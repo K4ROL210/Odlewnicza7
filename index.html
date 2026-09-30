@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
 <title>Niedzielna Liga Squasha — Zapisy</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="pliki/fonts/fonts.css" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -868,6 +868,8 @@
     cursor: pointer;
     font-weight: 600;
   }
+  footer a.privacy-link { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  footer a.privacy-link:hover { color: var(--accent-dk); }
 </style>
 </head>
 <body>
@@ -986,7 +988,7 @@
   <div class="section-heading gated">Tenis stołowy</div>
   <div class="grid grid-tenis gated" id="gridTenis"></div>
 
-  <footer>Administratorem danych jest Karol Kreczmański. Dane (imię i nazwisko) są zbierane w celu organizacji ligi i będą publicznie widoczne na liście uczestników. Uczestnik może żądać ich usunięcia. <br> Made by Karol Kreczmański</footer>
+  <footer><a class="privacy-link" href="polityka-prywatnosci.html">Polityka prywatności (RODO)</a> · Made by Karol Kreczmański</footer>
 </div>
 
 <script>
@@ -1284,8 +1286,8 @@ function renderAddListModal() {
   const saving = state.addListSaving;
   overlay.innerHTML = `
     <div class="modal" style="max-width:400px;text-align:center;">
-      <h2>Potwierdź dane</h2>
-      <p style="margin-bottom:14px;">Podaj dane, aby dodać się do listy graczy:</p>
+      <h2>Nowy gracz – potwierdź dane</h2>
+      <p style="margin-bottom:14px;">Podaj dane, aby dodać gracza do listy:</p>
       <div style="text-align:left;margin-bottom:12px;">
         <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Nazwisko i Imię</label>
         <input class="field" id="addListName" type="text" value="${esc(state.addListConfirm.name)}" ${saving?"disabled":""} />
@@ -1295,10 +1297,11 @@ function renderAddListModal() {
         <input class="field" id="addListPhone" type="tel" placeholder="np. 888 222 811" value="${esc(state.addListConfirm.phone || "")}" ${saving?"disabled":""} />
       </div>
       <p class="err-msg" id="addListErr" style="display:none;text-align:left;margin-bottom:8px;"></p>
-      <p style="font-size:13px;color:var(--muted);margin:10px 0 18px;">Sprawdź, czy dane są poprawne (Nazwisko Imię), zanim potwierdzisz.</p>
+      <p style="font-size:13px;color:var(--muted);margin:10px 0 12px;">Sprawdź, czy dane są poprawne (Nazwisko Imię), zanim potwierdzisz.</p>
+      <p style="font-size:12px;line-height:1.5;color:var(--muted);text-align:left;margin:0 0 18px;padding:9px 11px;border-radius:8px;background:rgba(0,0,0,0.04);">ⓘ Poinformuj gracza, że jego nazwisko i wyniki będą publikowane na stronie ligi, a telefon służy tylko do kontaktu w sprawach ligi (szczegóły na kartce / kod QR przy recepcji, <a href="polityka-prywatnosci.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">polityka prywatności</a>).</p>
       <div style="display:flex;gap:10px;justify-content:center;">
         <button class="btn btn-dark" id="addListCancel" ${saving?"disabled":""}>Anuluj</button>
-        <button class="btn btn-yellow" id="addListOk" ${saving?"disabled":""}>${saving ? '<span class="spinner"></span>' : "Tak, dodaj mnie"}</button>
+        <button class="btn btn-yellow" id="addListOk" ${saving?"disabled":""}>${saving ? '<span class="spinner"></span>' : "Tak, dodaj gracza"}</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);

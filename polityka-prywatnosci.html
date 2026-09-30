@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liga Odlewnicza — Polityka prywatności</title>
+<link href="pliki/fonts/fonts.css" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #ffffff;
+    --border:    rgba(0,0,0,0.12);
+    --border-hi: rgba(0,0,0,0.24);
+    --muted:     #7b7b7b;
+    --text:      #242424;
+    --accent:    #fab400;
+    --accent-dk: #c96f00;
+    --accent2:   #1a1a1a;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Poppins', 'Arial', sans-serif;
+    min-height: 100vh; padding: 0 0 80px; position: relative;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse 90% 45% at 50% -5%, rgba(250,180,0,0.07) 0%, transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  .nav { background: rgba(255,241,214,0.94); border-bottom: 1px solid rgba(250,180,0,0.3); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 1px; color: var(--accent2); padding: 14px 16px 14px 0; margin-right: 8px; border-right: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
+  .nav-link { display: flex; align-items: center; gap: 6px; padding: 14px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; }
+  .nav-link:hover { color: var(--accent2); }
+  .nav-break { display: none; }
+  @media (max-width: 640px) {
+    .nav-inner { flex-wrap: wrap; overflow-x: visible; justify-content: center; row-gap: 0; }
+    .nav-logo { border-right: none; margin-right: 0; padding-right: 0; }
+    .nav-break { display: block; flex-basis: 100%; height: 0; }
+    .nav-inner .nav-link { padding: 12px 9px; font-size: 12px; gap: 4px; }
+  }
+
+  /* ── PAGE ── */
+  .page-wrap { padding: 36px 24px 0; position: relative; z-index: 1; max-width: 1900px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 36px; }
+  .pill { display: inline-block; background: var(--accent); color: #1a1200; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 3px; padding: 5px 14px; border-radius: 100px; margin-bottom: 14px; text-transform: uppercase; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(30px, 6vw, 50px); line-height: 1.05; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent2); }
+  h1 span { color: var(--accent); }
+  .sub { font-size: 15px; font-weight: 500; color: var(--muted); margin-top: 10px; }
+
+  /* ── TREŚĆ ── */
+  .doc { max-width: 760px; margin: 0 auto; }
+  .intro { font-size: 15px; line-height: 1.7; background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--accent-dk); border-radius: 12px; padding: 16px 18px; margin-bottom: 30px; }
+  .intro b { color: var(--accent-dk); font-weight: 700; }
+  .step { display: flex; gap: 16px; margin-bottom: 26px; }
+  .step-num { flex-shrink: 0; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent-dk); width: 34px; line-height: 1.3; }
+  .step-body { flex: 1; min-width: 0; }
+  .step-body h2 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--accent2); margin-bottom: 6px; }
+  .step-body p, .step-body li { font-size: 14px; line-height: 1.65; color: #555; }
+  .step-body p { margin-bottom: 10px; }
+  .step-body ul { padding-left: 18px; margin-bottom: 10px; }
+  .step-body li { margin-bottom: 5px; }
+  .step-body b { color: var(--accent2); font-weight: 600; }
+  .step-body a, .intro a { color: var(--accent-dk); }
+  .t { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+  .t th { text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); padding: 9px 12px; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border); }
+  .t td { padding: 9px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); vertical-align: top; line-height: 1.5; color: #555; }
+  .t tr:last-child td { border-bottom: none; }
+  .t td:first-child { color: var(--accent2); font-weight: 600; }
+  .table-scroll { overflow-x: auto; }
+  .updated { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  footer { text-align: center; font-size: 11px; font-weight: 500; color: rgba(0,0,0,0.32); margin-top: 40px; letter-spacing: 0.4px; text-transform: uppercase; }
+
+  @media (max-width: 640px) {
+    .step { gap: 10px; }
+    .step-num { width: 24px; font-size: 17px; }
+    .page-wrap { padding: 28px 16px 0; }
+    .t { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">🎾 Odlewnicza</div>
+    <span class="nav-break"></span>
+    <a class="nav-link" data-sec="index"     href="index.html">📋 Zapisy</a>
+    <a class="nav-link" data-sec="wyniki"    href="wyniki.html">🏆 Wyniki</a>
+    <a class="nav-link" data-sec="ranking"   href="ranking.html">📊 Ranking</a>
+    <a class="nav-link" data-sec="punktacja" href="punktacja.html">📄 Punktacja</a>
+  </div>
+</nav>
+
+<script>
+  // Linki w menu prowadzą do ostatnio wybranej dyscypliny (squash / tenis stołowy)
+  (function () {
+    var MAP = { index: "index-tenis.html", wyniki: "wyniki-tenis.html", ranking: "ranking-tenis.html", punktacja: "punktacja-tenis.html" };
+    var d = null;
+    try { d = localStorage.getItem("odlewnicza_disc"); } catch (e) {}
+    if (d !== "tenis") return;
+    document.querySelectorAll(".nav-link[data-sec]").forEach(function (a) { a.setAttribute("href", MAP[a.dataset.sec]); });
+  })();
+</script>
+
+<div class="page-wrap">
+  <div class="header">
+    <div class="pill">🔒 RODO</div>
+    <h1>POLITYKA <span>PRYWATNOŚCI</span></h1>
+    <p class="sub">Informacja o przetwarzaniu danych osobowych — Liga Odlewnicza (squash i tenis stołowy)</p>
+  </div>
+
+  <div class="doc">
+
+    <p class="intro">
+      Ta strona wyjaśnia, <b>jakie dane</b> uczestników ligi przetwarzamy, <b>po co</b>, <b>kto ma do nich dostęp</b>
+      i <b>jakie masz prawa</b>. Informacja jest przekazywana na podstawie art. 13 i 14 Rozporządzenia Parlamentu
+      Europejskiego i Rady (UE) 2016/679 (RODO).
+    </p>
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h2>Administrator danych</h2>
+        <p>Administratorem danych osobowych przetwarzanych w systemie ligi (zapisy, wyniki, ranking) jest
+          <b>Karol Kreczmański</b>, kontakt: <a href="mailto:karol.kreczmanski@gmail.com">karol.kreczmanski@gmail.com</a>.
+          We wszystkich sprawach dotyczących Twoich danych pisz na ten adres.</p>
+        <p>Rozgrywki ligowe odbywają się w obiekcie <b>Odlewnicza 7 Squash &amp; Tenis Stołowy</b>
+          (<a href="mailto:kontakt@odlewnicza7.pl">kontakt@odlewnicza7.pl</a>). Odlewnicza 7 może prezentować
+          publiczne wyniki i ranking na swojej stronie, ale nie prowadzi bazy danych uczestników. Bazę prowadzi
+          i przechowuje administrator.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h2>Jakie dane przetwarzamy</h2>
+        <ul>
+          <li><b>Imię i nazwisko</b>: przy zapisach na kolejki oraz w wynikach i rankingu.</li>
+          <li><b>Numer telefonu</b>: na liście graczy ligi, wyłącznie do kontaktu.</li>
+          <li><b>Wyniki sportowe</b>: wyniki meczów, grupa, miejsce, punkty rankingowe.</li>
+          <li><b>Dane techniczne</b>: adres IP i informacje o przeglądarce, które automatycznie trafiają
+            do dostawców hostingu przy odwiedzaniu strony (patrz pkt 05).</li>
+        </ul>
+        <p>Dane podajesz sam przy zapisie na ligę w recepcji obiektu. Recepcja wprowadza je do systemu ligi
+          (listy zapisów, lista graczy). Wyniki meczów wprowadza prowadzący ligę na podstawie rozegranych spotkań.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h2>Cele i podstawy prawne</h2>
+        <div class="table-scroll">
+        <table class="t">
+          <thead><tr><th>Cel</th><th>Dane</th><th>Podstawa prawna</th></tr></thead>
+          <tbody>
+            <tr><td>Organizacja ligi: zapisy, podział na grupy, rozgrywki</td><td>imię i nazwisko, wyniki</td><td>art. 6 ust. 1 lit. f RODO: prawnie uzasadniony interes w organizacji ligi, w której uczestniczysz</td></tr>
+            <tr><td>Publikacja list zapisów, wyników i rankingu</td><td>imię i nazwisko, wyniki</td><td>art. 6 ust. 1 lit. f RODO: jawność wyników jest istotą rywalizacji sportowej</td></tr>
+            <tr><td>Kontakt w sprawach ligi (terminy, zmiany, odwołanie kolejki)</td><td>numer telefonu</td><td>art. 6 ust. 1 lit. f RODO: prawnie uzasadniony interes w sprawnej komunikacji z uczestnikami</td></tr>
+            <tr><td>Archiwum ligi: historia sezonów i statystyki</td><td>imię i nazwisko, wyniki</td><td>art. 6 ust. 1 lit. f RODO: zachowanie historii rozgrywek</td></tr>
+            <tr><td>Działanie i bezpieczeństwo strony</td><td>dane techniczne</td><td>art. 6 ust. 1 lit. f RODO</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>Nie podejmujemy wobec Ciebie decyzji opartych wyłącznie na zautomatyzowanym przetwarzaniu, które
+          wywoływałyby skutki prawne. Ranking liczony jest automatycznie według jawnych zasad (zakładka „Punktacja”)
+          i ma wyłącznie charakter sportowy.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <h2>Co jest publiczne, a co nie</h2>
+        <ul>
+          <li><b>Publiczne:</b> imię i nazwisko na listach zapisów, w wynikach i rankingu (także archiwalnych sezonów).</li>
+          <li><b>Niepubliczne:</b> numer telefonu. Widzi go tylko administrator i upoważnione osoby prowadzące zapisy (recepcja).
+            Numery nie są nikomu udostępniane ani używane do celów marketingowych.</li>
+        </ul>
+        <p>Jeśli nie chcesz, aby Twoje nazwisko było widoczne publicznie, napisz do nas. Możemy wyświetlać je
+          w formie skróconej (np. imię i inicjał nazwiska).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-body">
+        <h2>Odbiorcy danych</h2>
+        <p>Dostęp do danych mają administrator oraz upoważnione przez niego osoby: pracownicy recepcji
+          Odlewnicza 7 prowadzący zapisy i osoby wprowadzające wyniki. Działają one wyłącznie na polecenie
+          administratora i są zobowiązane do zachowania danych w tajemnicy. Dane są przechowywane i przetwarzane
+          przy użyciu usług:</p>
+        <ul>
+          <li><b>Google</b> (Arkusze Google, Google Apps Script): przechowywanie bazy zapisów, graczy, wyników i rankingu.
+            Przy wyświetlaniu zapisów, wyników i rankingu Twoja przeglądarka łączy się z serwerami Google
+            (script.google.com), które otrzymują Twój adres IP.</li>
+          <li><b>GitHub</b> (GitHub Pages): hosting strony, który rejestruje techniczne logi odwiedzin (m.in. adres IP).</li>
+        </ul>
+        <p>Google i GitHub mogą przetwarzać dane także w USA. Przekazanie odbywa się na podstawie decyzji Komisji
+          Europejskiej w sprawie adekwatności (EU-US Data Privacy Framework), w którym obie firmy uczestniczą,
+          lub na podstawie standardowych klauzul umownych.</p>
+        <p>Czcionki strony są hostowane lokalnie. Strona nie korzysta z narzędzi analitycznych, reklamowych
+          ani śledzących. Strony z zapisami, wynikami i rankingiem są oznaczone jako niewidoczne dla wyszukiwarek
+          (noindex), dlatego nazwiska uczestników nie powinny pojawiać się w wynikach wyszukiwania Google.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">06</div>
+      <div class="step-body">
+        <h2>Jak długo przechowujemy dane</h2>
+        <ul>
+          <li><b>Imię i nazwisko oraz wyniki:</b> przez czas trwania ligi, a po zakończeniu sezonu w archiwum ligi
+            bezterminowo, do czasu wniesienia skutecznego sprzeciwu. Po sprzeciwie dane w archiwum są usuwane
+            lub zastępowane inicjałami. Wyniki innych graczy pozostają bez zmian.</li>
+          <li><b>Numer telefonu:</b> przez czas Twojego udziału w lidze (obecności na liście graczy).
+            Usuwamy go na Twoje żądanie, a także po 3 latach bez udziału w rozgrywkach.</li>
+          <li><b>Dane techniczne:</b> zgodnie z zasadami retencji logów dostawców (Google, GitHub).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">07</div>
+      <div class="step-body">
+        <h2>Twoje prawa</h2>
+        <p>Masz prawo do:</p>
+        <ul>
+          <li>dostępu do swoich danych i otrzymania ich kopii (art. 15 RODO),</li>
+          <li>sprostowania danych (art. 16),</li>
+          <li>usunięcia danych (art. 17),</li>
+          <li>ograniczenia przetwarzania (art. 18),</li>
+          <li><b>sprzeciwu</b> wobec przetwarzania, w tym wobec publikacji nazwiska (art. 21),</li>
+          <li>wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa,
+            <a href="https://uodo.gov.pl" target="_blank" rel="noopener">uodo.gov.pl</a>).</li>
+        </ul>
+        <p>Aby skorzystać z praw, napisz na <a href="mailto:karol.kreczmanski@gmail.com">karol.kreczmanski@gmail.com</a>.
+          Odpowiemy bez zbędnej zwłoki, najpóźniej w ciągu miesiąca.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">08</div>
+      <div class="step-body">
+        <h2>Czy musisz podać dane</h2>
+        <p>Podanie danych jest dobrowolne, ale bez imienia i nazwiska nie można wziąć udziału w lidze
+          ani być klasyfikowanym w rankingu. Numer telefonu jest potrzebny do kontaktu w sprawach rozgrywek.
+          Liga jest przeznaczona dla osób, które ukończyły 16 lat.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">09</div>
+      <div class="step-body">
+        <h2>Pliki cookies i pamięć przeglądarki</h2>
+        <p>Strona <b>nie używa plików cookies</b>. Korzysta wyłącznie z pamięci przeglądarki (localStorage / sessionStorage)
+          w zakresie niezbędnym do działania, bez celów analitycznych i marketingowych:</p>
+        <ul>
+          <li><code>odlewnicza_disc</code>: zapamiętanie wybranej dyscypliny (squash / tenis stołowy),</li>
+          <li><code>odlewnicza_refresh</code>: ustawienie odświeżania wyników w bieżącej sesji,</li>
+          <li><code>wpc_view_password</code>: zapamiętanie zalogowania, dotyczy tylko recepcji i osób prowadzących zapisy.</li>
+        </ul>
+        <p>Możesz w każdej chwili wyczyścić te dane w ustawieniach przeglądarki. Usługi zewnętrzne (Google) mogą
+          stosować własne pliki cookies zgodnie ze swoimi politykami prywatności.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">10</div>
+      <div class="step-body">
+        <h2>Zmiany polityki</h2>
+        <p>Polityka może być aktualizowana, np. przy zmianie sposobu działania strony. Aktualna wersja jest zawsze dostępna
+          pod tym adresem.</p>
+      </div>
+    </div>
+
+    <p class="updated">Ostatnia aktualizacja: 29 września 2026 r.</p>
+  </div>
+
+  <footer>Made by Karol Kreczmański</footer>
+</div>
+
+</body>
+</html>
