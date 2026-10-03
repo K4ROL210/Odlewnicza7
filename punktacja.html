@@ -129,6 +129,21 @@
   .dl-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .5px; text-transform: uppercase; text-decoration: none; color: var(--accent2); background: #fff; border: 1.5px solid var(--border-hi); border-radius: 10px; padding: 11px 22px; transition: border-color .15s, color .15s; }
   .dl-btn:hover { border-color: var(--accent-day); color: var(--accent-day); }
 
+  /* ── ZASADY I REGULAMIN ── */
+  .rules-link { display: inline-block; margin-top: 16px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .5px; text-transform: uppercase; color: var(--accent-day); text-decoration: none; border: 1.5px solid var(--accent-day); border-radius: 10px; padding: 9px 18px; transition: background .15s, color .15s; }
+  .rules-link:hover { background: var(--accent-day); color: #fff; }
+  .reg { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); scroll-margin-top: 60px; }
+  .reg-head { text-align: center; margin-bottom: 30px; }
+  .reg-head h2 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(26px, 5vw, 40px); line-height: 1.05; letter-spacing: 0.5px; color: var(--accent2); }
+  .reg-head h2 span { color: var(--accent); }
+  .reg-list { list-style: none; display: grid; gap: 6px; margin-bottom: 10px; }
+  .reg-list li { font-size: 14px; line-height: 1.5; color: var(--muted); padding: 8px 12px; background: #fff; border: 1px solid var(--border); border-radius: 8px; }
+  .reg-list b, .reg .step-body p b { color: var(--accent2); font-weight: 700; }
+  .reg .step-body a { color: var(--accent-day); }
+  .reg-final { border-left: 4px solid var(--accent-day); }
+  .reg-final p + p { margin-top: 8px; }
+  .reg-invite { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--accent-day) !important; }
+
   @media (max-width: 640px) {
     .step { gap: 10px; }
     .step-num { width: 24px; font-size: 17px; }
@@ -212,6 +227,7 @@
     <div class="pill">📄 Regulamin</div>
     <h1>PUNKTACJA <span>RANKINGOWA</span></h1>
     <p class="sub">Jak liczone są punkty do rankingu sezonu — Liga Odlewnicza (squash)</p>
+    <a class="rules-link" href="#regulamin">📋 Zasady i regulamin ↓</a>
   </div>
 
   <div class="rules">
@@ -323,8 +339,104 @@
     </div>
 
     <div class="dl-row">
-      <a class="dl-btn" href="pliki/punktacja-odlewnicza.pdf" target="_blank" rel="noopener">📄 Pobierz regulamin (PDF)</a>
+      <a class="dl-btn" href="pliki/punktacja-odlewnicza.pdf" target="_blank" rel="noopener">📄 Pobierz zasady punktacji (PDF)</a>
     </div>
+
+    <!-- ═══ ZASADY I REGULAMIN ═══════════════════════════════════════ -->
+    <section class="reg" id="regulamin">
+      <div class="reg-head">
+        <div class="pill">📋 Regulamin</div>
+        <h2>ZASADY <span>I REGULAMIN</span></h2>
+        <p class="sub">Liga Squasha Odlewnicza</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Terminy i grupy</h3>
+          <p>Gramy zawsze w niedziele:</p>
+          <ul class="reg-list">
+            <li><b>20:00</b>: grupy A i B, gracze zaawansowani</li>
+            <li><b>17:30</b>: grupy C i D, gracze średniozaawansowani</li>
+            <li><b>15:00</b>: grupy E i F, gracze o najniższym stopniu zaawansowania</li>
+            <li><b>13:00</b>: grupy G i H, jeśli jest więcej chętnych</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Sezon</h3>
+          <p>Każdy sezon ligi trwa 12 niedziel, a każda niedziela to osobny mini turniej. Można grać cyklicznie
+            lub przyjść jednorazowo. Dopisać się można w dowolnym momencie sezonu, jeśli są wolne miejsca.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Koszt</h3>
+          <p>Jednorazowy koszt uczestnictwa to <b>70 zł</b>, z kartą zniżkową <b>55 zł</b>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Zgłoszenia</h3>
+          <p>Zgłoszenia przyjmujemy mailowo: <a href="mailto:kontakt@odlewnicza7.pl">kontakt@odlewnicza7.pl</a>
+            lub telefonicznie: <a href="tel:888222811">888 222 811</a>. Listę otwieramy w czwartki.
+            Decyduje kolejność zgłoszeń.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h3>Przebieg kolejki, awanse i spadki</h3>
+          <p>Każdy mini turniej to 5–6 meczów do rozegrania (ok. 2 godziny). Po każdej niedzieli dwie najlepsze
+            osoby w grupie awansują do grupy wyżej, a dwie najsłabsze spadają do grupy niżej.</p>
+          <p>Awanse są przyznawane z tygodnia na tydzień. Jeśli ktoś awansował, a w kolejną niedzielę jest
+            nieobecny, za dwa tygodnie nie ma gwarancji „zaległego” awansu. W pierwszej kolejności zawsze
+            zapewniamy awanse i spadki z poprzedniej kolejki.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">06</div>
+        <div class="step-body">
+          <h3>Klasyfikacja w rankingu</h3>
+          <p>Aby zostać sklasyfikowanym w rankingu, trzeba rozegrać co najmniej <b>7 niedziel</b>. Do rankingu
+            liczy się <b>8 najlepszych występów z 12</b> (szczegóły punktacji powyżej).</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">07</div>
+        <div class="step-body">
+          <h3>Nagrody</h3>
+          <p>Na zakończenie każdego sezonu na najlepszych czekają puchary! 🏆</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">08</div>
+        <div class="step-body">
+          <h3>Dane uczestników</h3>
+          <p>Zgłoszenie do ligi oznacza, że imię i nazwisko uczestnika oraz jego wyniki będą publikowane na stronie
+            ligi (listy zapisów, wyniki, ranking, archiwum sezonów). Zasady przetwarzania danych opisuje
+            <a href="polityka-prywatnosci.html">Polityka prywatności</a> dostępna na stronie ligi.</p>
+        </div>
+      </div>
+
+      <div class="season-note reg-final">
+        <h3>❗ Najważniejsze</h3>
+        <p>To amatorska liga, w której celem nadrzędnym jest <b>zabawa</b>. W sytuacjach spornych o podziale
+          grup zawsze decyduje organizator.</p>
+        <p class="reg-invite">Zapraszamy serdecznie!</p>
+      </div>
+    </section>
 
   </div>
 
