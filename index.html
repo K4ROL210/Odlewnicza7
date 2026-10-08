@@ -1092,7 +1092,8 @@ function api(params) {
     const cbName = "jsonp_" + Math.random().toString(36).slice(2);
     let script;
     const timeout = setTimeout(() => {
-      delete window[cbName]; if (script) script.remove();
+      // Spóźniona odpowiedź może jeszcze przyjść — zostawiamy pustą funkcję.
+      window[cbName] = () => { delete window[cbName]; }; if (script) script.remove();
       reject(new Error("timeout"));
     }, 10000);
     window[cbName] = (data) => {

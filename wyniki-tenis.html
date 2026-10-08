@@ -501,7 +501,9 @@ function apiOnce(params, timeoutMs) {
     const cb = "jsonp_" + Math.random().toString(36).slice(2);
     let script;
     const t = setTimeout(() => {
-      delete window[cb];
+      // Spóźniona odpowiedź może jeszcze przyjść — zostawiamy pustą funkcję,
+      // żeby nie było „ReferenceError: jsonp_… is not defined".
+      window[cb] = () => { delete window[cb]; };
       if (script) script.remove();
       reject(new Error("timeout"));
     }, timeoutMs);
