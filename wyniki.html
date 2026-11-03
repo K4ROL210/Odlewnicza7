@@ -339,6 +339,7 @@
   // — patrz komentarz w Kod wyniki.gs. Etykieta liczona automatycznie.
   const SEASON_QUARTERS = ["", "Zima", "Wiosna", "Lato", "Jesień"];
   function seasonLabel(season) {
+    if (season === 1) return "WYDARZENIA SPECJALNE";
     const year = Math.floor(season / 10);
     const q = season % 10;
     return (SEASON_QUARTERS[q] || "Sezon") + " " + year;
