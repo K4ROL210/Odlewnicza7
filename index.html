@@ -985,8 +985,6 @@
   <div id="adminBar" class="gated"></div>
   <div class="section-heading gated">Squash</div>
   <div class="grid gated" id="gridSquash"></div>
-  <div class="section-heading gated">Tenis stołowy</div>
-  <div class="grid grid-tenis gated" id="gridTenis"></div>
 
   <footer><a class="privacy-link" href="polityka-prywatnosci.html">Polityka prywatności (RODO)</a> · Made by Karol Kreczmański</footer>
 </div>
@@ -1022,16 +1020,6 @@ const SECTIONS = [
     color:  "#a13d2b",
     group:  "squash",
     dow:    0,
-  },
-  {
-    key:    "sr_tenis",
-    label:  "Środa · 18:30 i 20:00",
-    sub:    "",
-    level:  "Zapisy otwarte",
-    color:  "#2f7d5c",
-    group:  "tenis",
-    dow:    3,
-    panelUrl: "https://script.google.com/macros/s/AKfycbwCGx8QaRz0gAs0ps4gj-d_6vwyxMplll_P4r0yzgf8TWPf-NxeErOnMGg8aIX3qRf67A/exec?liga=pingpong",
   },
 ];
 
@@ -1265,12 +1253,8 @@ function renderAdminBar() {
 
 function renderGrid() {
   const gridSquash = document.getElementById("gridSquash");
-  const gridTenis  = document.getElementById("gridTenis");
-  gridSquash.innerHTML = ""; gridTenis.innerHTML = "";
-  for (const sec of SECTIONS) {
-    const target = sec.group === "tenis" ? gridTenis : gridSquash;
-    target.appendChild(mkCard(sec));
-  }
+  gridSquash.innerHTML = "";
+  for (const sec of SECTIONS) gridSquash.appendChild(mkCard(sec));
 }
 
 // ── Modal: dodaj do listy graczy ──────────────────────────────
