@@ -695,6 +695,12 @@ async function loadRounds(fresh = false, keep = false) {
 // ══════════════════════════════════════════════════════════════
 //  RENDER: przyciski kolejek
 // ══════════════════════════════════════════════════════════════
+// Własne nazwy przycisków kolejek (tylko wyświetlanie — numer kolejki w danych bez zmian).
+// Format: { dayKey: { numerKolejki: "Napis" } }
+const ROUND_LABELS = {
+  turniej: { 1: "TURNIEJ" },
+};
+
 function renderRoundTabs() {
   const row   = document.getElementById("roundRow");
   const el    = document.getElementById("roundTabs");
@@ -705,7 +711,8 @@ function renderRoundTabs() {
   for (const r of state.rounds) {
     const btn = document.createElement("button");
     btn.className = "round-btn" + (r.round === state.activeRound ? " active" : "");
-    btn.innerHTML = `<span class="r-num">${r.round}</span><span class="r-date">${r.date}</span>`;
+    const label = ROUND_LABELS[state.activeDay]?.[r.round] ?? r.round;
+    btn.innerHTML = `<span class="r-num">${label}</span><span class="r-date">${r.date}</span>`;
     if (r.round === state.activeRound) btn.style.background = color;
     btn.addEventListener("click", async () => {
       state.activeRound = r.round;
